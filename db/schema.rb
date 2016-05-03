@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160503063543) do
+ActiveRecord::Schema.define(version: 20160503174037) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,8 +22,8 @@ ActiveRecord::Schema.define(version: 20160503063543) do
     t.string   "cpf"
     t.date     "data_nascimento"
     t.string   "matricula"
-    t.string   "expeditor_rg"
-    t.string   "uf_expeditor_rg"
+    t.string   "expedidor_rg"
+    t.string   "uf_expedidor_rg"
     t.string   "instituicao_ensino"
     t.string   "cidade_inst_ensino"
     t.string   "escolaridade"
@@ -93,9 +93,19 @@ ActiveRecord::Schema.define(version: 20160503063543) do
     t.datetime "oauth_expires_at"
     t.datetime "created_at",                                      null: false
     t.datetime "updated_at",                                      null: false
+    t.string   "encrypted_password",                 default: "", null: false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",                      default: 0,  null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.inet     "current_sign_in_ip"
+    t.inet     "last_sign_in_ip"
   end
 
   add_index "estudantes", ["email"], name: "index_estudantes_on_email", unique: true, using: :btree
+  add_index "estudantes", ["reset_password_token"], name: "index_estudantes_on_reset_password_token", unique: true, using: :btree
 
   create_table "layout_carteirinhas", force: :cascade do |t|
     t.string   "anverso_file_name"
@@ -108,6 +118,18 @@ ActiveRecord::Schema.define(version: 20160503063543) do
     t.datetime "verso_updated_at"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
+  end
+
+  create_table "noticias", force: :cascade do |t|
+    t.string   "foto_file_name"
+    t.string   "foto_content_type"
+    t.integer  "foto_file_size"
+    t.datetime "foto_updated_at"
+    t.string   "titulo"
+    t.string   "autor"
+    t.text     "body"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
   end
 
   create_table "solicitacaos", force: :cascade do |t|

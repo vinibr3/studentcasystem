@@ -17,4 +17,9 @@ class PagesController < ApplicationController
   def autenticacao
   
   end
+
+  def login
+  	redirect_to new_estudante_session_path
+  end
+
 end

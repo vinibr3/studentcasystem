@@ -23,8 +23,13 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 # Bootstrap gem
 gem 'bootstrap-sass', '~> 3.3.6'
-#paperclip
+# Arquivos em anexo
 gem 'paperclip', '~> 4.3', '>= 4.3.6'
+# Login/Logoff
+
+gem 'devise', '~> 4.1'
+# Internacionaliza views pt-BR
+gem 'devise-i18n'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

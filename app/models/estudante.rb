@@ -1,5 +1,9 @@
 
 class Estudante < ActiveRecord::Base
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
 	has_many :carteirinhas
 
 	has_attached_file :foto
@@ -27,8 +31,7 @@ class Estudante < ActiveRecord::Base
 	validates :setor, length:{maximum: 50}, allow_blank: true
 	validates :cep, length:{is: 8}, numericality: true, allow_blank: true
 	validates :cidade, length:{maximum: 30, too_long:"Máximo de 70 carectetes é permitidos!"}, format:{with: STRING_REGEX}, allow_blank: true
-	validates :cidade_inst_ensino, length:{maximum: 30, too_long: too_long:"Máximo de 70 carectetes é permitidos!"}, format:{with: STRING_REGEX}, allow_blank: true
-	validates :estado, length:{is: 2}, format:{with: STRING_REGEX}, allow_blank: true
+	validates :cidade_inst_ensino, length:{maximum: 30, too_long:"Máximo de 70 carectetes é permitidos!"}, format:{with: STRING_REGEX}, allow_blank: true
 	validates :instituicao_ensino, length:{maximum: 50, too_long: "Máximo de 50 caracteres permitidos!."}, allow_blank: true
 	validates :curso_serie, length:{maximum: 40, too_long: "Máximo de 40 caracteres permitidos!."}, allow_blank: true
 	validates :matricula, numericality: true, length:{maximum: 30}, allow_blank: true
@@ -41,9 +44,9 @@ class Estudante < ActiveRecord::Base
 	validates :uf_expedidor_rg, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
 	validates :uf, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
 	validates :uf_inst_ensino, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
-	validates :escolaridade, length:{maximum: 30, too_long: "Máximo de 30 caracteres permitidos!"}
+	validates :escolaridade, length:{maximum: 30, too_long: "Máximo de 30 caracteres permitidos!"},
 							 format:{with:STRING_REGEX, message:"Somente letras é permitido"}, allow_blank: true
-	validates :chave_acesso, length:{is: 10, too_long: "Necessário 10 caracteres", too_short: "Necessário 10 caracteres"}
+	validates :chave_acesso, length:{is: 10, too_long: "Necessário 10 caracteres", too_short: "Necessário 10 caracteres"},
 							 format:{with:STRING_REGEX, message:"Somente letras é permitido"}, allow_blank: true
 	validates_attachment_size :foto, :less_than => 1.megabytes
 	validates_attachment_size :xerox_rg, :less_than => 1.megabytes
