@@ -1,11 +1,6 @@
 
 class Estudante < ActiveRecord::Base
-	has_many :carteirinha
-	# Include default devise modules. Others available are:
-	# :confirmable, :lockable, :timeoutable and :omniauthable
-	devise :database_authenticatable, :registerable,
-		   :recoverable, :rememberable, :trackable, :validatable,
-		   :omniauthable, :omniauth_providers => [:facebook]
+	has_many :carteirinhas
 
 	has_attached_file :foto
 	has_attached_file :comprovante_matricula
@@ -25,20 +20,31 @@ class Estudante < ActiveRecord::Base
 	                 		   format:{with: STRING_REGEX, message:"Somente letras é permitido!"},
 	                 		   allow_blank: true
 	validates :email, uniqueness: {message: "Email já utilizado!"}, format: {with: EMAIL_REGEX , on: :create}
-	validates :sexo, inclusion: %w(M F), allow_blank: true
+	validates :sexo, inclusion: %w(masculino feminino), allow_blank: true
 	validates :telefone, length:{in: 10..11}, numericality: true, allow_blank: true
 	validates :logradouro, length:{maximum: 50}, allow_blank: true
 	validates :complemento, length:{maximum: 50}, allow_blank: true
 	validates :setor, length:{maximum: 50}, allow_blank: true
 	validates :cep, length:{is: 8}, numericality: true, allow_blank: true
-	validates :cidade, length:{maximum: 30}, format:{with: STRING_REGEX}, allow_blank: true
+	validates :cidade, length:{maximum: 30, too_long:"Máximo de 70 carectetes é permitidos!"}, format:{with: STRING_REGEX}, allow_blank: true
+	validates :cidade_inst_ensino, length:{maximum: 30, too_long: too_long:"Máximo de 70 carectetes é permitidos!"}, format:{with: STRING_REGEX}, allow_blank: true
 	validates :estado, length:{is: 2}, format:{with: STRING_REGEX}, allow_blank: true
-	validates :instituicao_ensino, length:{maximum: 50}, allow_blank: true
-	validates :curso_serie, length:{maximum: 30}, allow_blank: true
-	validates :matricula, length:{maximum: 30}, allow_blank: true
+	validates :instituicao_ensino, length:{maximum: 50, too_long: "Máximo de 50 caracteres permitidos!."}, allow_blank: true
+	validates :curso_serie, length:{maximum: 40, too_long: "Máximo de 40 caracteres permitidos!."}, allow_blank: true
+	validates :matricula, numericality: true, length:{maximum: 30}, allow_blank: true
 	validates :celular, length:{in: 10..11}, numericality: true, allow_blank: true
 	validates :numero, length:{maximum: 5}, numericality: true, allow_blank: true
-	validates :rg_certidao, numericality: true, allow_blank: true
+	validates :rg, numericality: true, allow_blank: true
+	validates :cpf, numericality: true, length:{is: 11, too_long: "Necessário 11 caracteres.",  too_short: "Necessário 11 caracteres."}, allow_blank: true
+	validates :expedidor_rg, length:{maximum: 10, too_long:"Máximo de 10 caracteres permitidos!"}, 
+							 format:{with:STRING_REGEX, message: "Somente letras é permitido!"}, allow_blank: true
+	validates :uf_expedidor_rg, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
+	validates :uf, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
+	validates :uf_inst_ensino, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
+	validates :escolaridade, length:{maximum: 30, too_long: "Máximo de 30 caracteres permitidos!"}
+							 format:{with:STRING_REGEX, message:"Somente letras é permitido"}, allow_blank: true
+	validates :chave_acesso, length:{is: 10, too_long: "Necessário 10 caracteres", too_short: "Necessário 10 caracteres"}
+							 format:{with:STRING_REGEX, message:"Somente letras é permitido"}, allow_blank: true
 	validates_attachment_size :foto, :less_than => 1.megabytes
 	validates_attachment_size :xerox_rg, :less_than => 1.megabytes
 	validates_attachment_size :comprovante_matricula, :less_than => 1.megabytes
