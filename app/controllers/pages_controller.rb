@@ -6,7 +6,15 @@ class PagesController < ApplicationController
   	 
   end
 
-  def validate
+  def meia_entrada
+
+  end
+
+  def noticias 
+
+  end
+
+  def autenticacao
   
   end
 end

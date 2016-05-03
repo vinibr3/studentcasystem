@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
-  get 'pages/index'
-
-  get 'pages/validate'
+  
+  get 'pages/index',          to:"pages#index",          as: :home
+  get 'pages/mei_entrada',    to:"pages#meia_entrada",   as: :meia_entrada
+  get 'pages/noticias',       to:"pages#noticias",       as: :noticias
+  get 'pages/autenticacao',    to:"pages#autenticacao",  as: :autenticacao
+  get 'pages/contato',         to:"pages#contato",       as: :contato
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
