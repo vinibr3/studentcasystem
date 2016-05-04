@@ -1,9 +1,5 @@
 Rails.application.routes.draw do
   
-  get 'estudantes/show'
-
-  get 'estudantes/update'
-
   devise_for :estudantes, path: "auth", path_names: { sign_in: 'login', sign_out: 'logout', password: 'secret', 
                                                                 confirmation: 'verification', unlock: 'unblock', 
                                                                 registration: 'register', sign_up: 'cmon_let_me_in' }
@@ -16,7 +12,7 @@ Rails.application.routes.draw do
 
 
   resources :estudantes, only: [:show, :update] do 
-
+    resources :carteirinhas, only: [:new, :show, :autenticacao, :create]
   end
 
   # The priority is based upon order of creation: first created -> highest priority.

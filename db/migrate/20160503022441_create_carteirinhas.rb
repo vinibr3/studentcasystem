@@ -17,7 +17,7 @@ class CreateCarteirinhas < ActiveRecord::Migration
     	t.string   :numero_serie
     	t.date     :nao_antes
     	t.date     :nao_depois
-    	t.string   :qr_code
+    	t.string   :qr_code  #
     	t.string   :status_versao_digital,             null: false
     	t.string   :status_versao_impressa,            null: false
     	t.string   :foto_file_name

@@ -60,13 +60,6 @@ class Estudante < ActiveRecord::Base
     # validates_associated :carteirinha, allow_blank: true
 
 	public
-		def carteirinha_vence_em dias
-			if !self.carteirinha.nil?
-				self.carteirinha.last.dias_validade <= dias 	
-			else
-				raise "Não há carteirinhas."
-			end
-		end
 
 		def tem_carteirinha
 			!self.carteirinha.last.nil?

@@ -1,11 +1,11 @@
 class LayoutCarteirinha < ActiveRecord::Base
 	has_many :carteirinhas
 
-	@@last_layout = LayoutCarteirinha.last
-	@@instance = LayoutCarteirinha.new
-
 	has_attached_file :verso
 	has_attached_file :anverso
+
+	@@instance = LayoutCarteirinha.new
+	@@last_layout = LayoutCarteirinha.last
 
 	FILES_NAME_PERMIT = [/png\Z/, /jpe?g\Z/]
 	FILES_CONTENT_TYPE = ['image/jpeg', 'image/png']
@@ -13,24 +13,25 @@ class LayoutCarteirinha < ActiveRecord::Base
 	validates_attachment_size :verso, :less_than=> 2.megabytes
 	validates_attachment_file_name :verso, :matches => FILES_NAME_PERMIT
 	validates_attachment_content_type :verso, :content_type => FILES_CONTENT_TYPE
-	validates_attachment_size :anversi, :less_than=> 2.megabytes
+	validates_attachment_size :anverso, :less_than=> 2.megabytes
 	validates_attachment_file_name :anverso, :matches => FILES_NAME_PERMIT
 	validates_attachment_content_type :anverso, :content_type => FILES_CONTENT_TYPE
 
 	def self.instance
 		 if @@last_layout.nil? 
-		 	return @@instance	
+		 	return 0	
 		 else
-		 	@@last_layout
+		 	return @@last_layout
 		 end
 	end
 
-	# def layout
-	# 	if self[:layout].nil?
-	# 		return "nenhum-layout-definido.png"
-	# 	else
-	# 		return self[:layout]
-	# 	end
-	# end
+	def self.last_layput_id
+		last = LayoutCarteirinha.last
+		last.nil? ? 0 : last.id
+	end
+
+	def self.anverso
+		LayoutCarteirinha.last ? LayoutCarteirinha.last.anverso : nil
+	end
 
 end

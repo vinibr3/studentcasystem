@@ -1,0 +1,61 @@
+<%= form_for(@estudante, html:{method: :put, class:'form-vertical', :multipart => true}) do |f| %>
+	<div class="modal fade" id="edit-dados-cadastrais-modal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header bg-primary">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title"> Editar Dados Cadastrais</h4>
+				</div>
+				<div class="modal-body>" style="margin-top: 15px;">
+					<div class="field form-group">
+						<div class="col-md-3 form-text-modal"><%= f.label :nome %></div>
+						<%= f.text_field :nome, :class=>'form-control', :style=>'width: 40%;' %>
+					</div>
+					<div class="field form-group">
+						<div class="col-md-3 form-text-modal" style="margin-top: 10px;"><%= f.label :email %></div>
+						<%= f.email_field :email, :class=>'form-control', :style=>'width: 40%;' %>
+					</div>
+					<div class="field form-group">
+						<div class="col-md-3 form-text-modal"><%= f.label :data_nascimento %></div>
+						<%= f.date_field :data_nascimento, :class=>'form-control', :style=>'width: 40%;' %>
+					</div>
+					<div class="field form-group">
+						<div class="col-md-3 form-text-modal"><%= f.label :rg %></div>
+						<%= f.text_field :rg, :class=>'form-control', :style=>'width: 40%;' %>
+					</div>
+					<div class="field form-group">
+						<div class="col-md-3 form-text-modal"><%= f.label :cpf %></div>
+						<%= f.text_field :cpf, :class=>'form-control', :style=>'width: 40%;' %>
+					</div>
+					<div class="field form-group">
+						<div class="col-md-3"><%= f.label :sexo %></div>
+						<%= f.radio_button :sexo, 'masculino' %>Masculino &nbsp;</span>
+						<%= f.radio_button :sexo, 'feminino' %>Feminino </span>
+					</div>
+					<div class="field form-group">
+						<div class="col-md-3 form-text-modal"><%= f.label :telefone %></div>
+						<%= f.phone_field :telefone, :class=>'form-control', :style=>'width: 40%;' %>
+					</div>
+					<div class="field form-group">
+						<div class="col-md-3 form-text-modal"><%= f.label :celular %></div>
+						<%= f.phone_field :celular, :class=>'form-control', :style=>'width: 40%;' %>
+					</div>
+					<div class="field form-group">
+						<div class="col-md-3"><%= f.label :foto %></div>
+						<%= f.file_field :foto, :style=>'width: 60%;' %>
+					</div>
+					<div class="field form-group">
+						<div class="col-md-3"><%= f.label :xerox_rg %></div>
+						<%= f.file_field :xerox_rg, :style=>'width: 60%;' %>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+					<%= f.submit 'Salvar', :class=>'btn btn-success'%>
+				</div>
+			</div>
+		</div>
+	</div>
+<%end%>

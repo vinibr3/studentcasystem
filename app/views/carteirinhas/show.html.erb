@@ -1,0 +1,22 @@
+	<div class="col-md-12">
+		<div class="col-md-12">
+			<%= image_tag(LayoutCarteirinha.anverso, :class=>'img img-responsive')%>
+		</div>
+		<div class="col-md-12">
+			<p>Status da solicitação: <small style="float: right"> Código de Rastreio: </small></p>
+			<div class="progress">
+				<% if carteirinha.status_versao_impressa_to_i >= 0 %>
+					<div class="progress-bar progress-bar-success" role="progress-bar" style="width:25%;">Pagamento </div>
+				<%end%>
+				<%if carteirinha.status_versao_impressa_to_i >= 1 %>
+					<div class="progress-bar progress-bar-warning" role="progress-bar" style="width:25%;">Documentação </div>
+				<%end%>
+				<%if carteirinha.status_versao_impressa_to_i >= 2 %>
+					<div class="progress-bar progress-bar-info" role="progress-bar" style="width:25%;">Enviado</div>
+				<%end%>
+				<%if carteirinha.status_versao_impressa_to_i == 3 %>
+					<div class="progress-bar progress-bar-danger" role="progress-bar" style="width:25%;">Entregue</div>
+				<%end%>
+			</div>
+		</div>
+	</div>

@@ -1,0 +1,36 @@
+<%= form_for(@estudante, html:{method: :put, class:'form-vertical'}) do |f| %>
+	<div class="modal fade" id="edit-dados-estudantis-modal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header bg-primary">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title"> Editar Dados Cadastrais</h4>
+				</div>
+				<div class="modal-body>" style="margin-top: 23px;">
+					<div class="field form-group">
+						<div class="col-md-3 form-text-modal"><%= f.label 'Inst Ensino' %></div>
+						<%= f.text_field :instituicao_ensino, :class=>'form-control', :style=>'width: 40%;' %>
+					</div>
+					<div class="field form-group">
+						<div class="col-md-3 form-text-modal" style="margin-top: 10px;"><%= f.label :curso_serie %></div>
+						<%= f.text_field :curso_serie, :class=>'form-control', :style=>'width: 40%;' %>
+					</div>
+					<div class="field form-group">
+						<div class="col-md-3 form-text-modal"><%= f.label :matricula %></div>
+						<%= f.text_field :matricula, :class=>'form-control', :style=>'width: 40%;' %>
+					</div>
+					<div class="field form-group">
+						<div class="col-md-3"><%= f.label "Comp Matrícula" %></div>
+						<%= f.file_field :comprovante_matricula %>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+					<%= f.submit 'Salvar', :class=>'btn btn-success'%>
+				</div>
+			</div>
+		</div>
+	</div>
+<%end%>

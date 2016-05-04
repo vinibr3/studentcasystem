@@ -14,7 +14,7 @@ class Carteirinha < ActiveRecord::Base
 	@@VALOR = 20;
 	@@FRETE = 6.5;
 
-	before_create :config_attributes
+	before_update :config_attributes
 	before_validation :set_status_inicial
 
 	# validações
@@ -24,24 +24,20 @@ class Carteirinha < ActiveRecord::Base
 	validates :matricula, numericality: true, length:{maximum: 30}, allow_blank: true
 	validates :rg, numericality: {only_integer: true}
 	validates :instituicao_ensino, length:{maximum: 50, too_long: "Máximo de 50 caracteres permitidos!."}, allow_blank: true
-	validates :cidade_inst_ensino, length:{maximum: 30, too_long: too_long:"Máximo de 70 carectetes é permitidos!"}, format:{with: STRING_REGEX}, allow_blank: true
+	validates :cidade_inst_ensino, length:{maximum: 30, too_long:"Máximo de 70 carectetes é permitidos!"}, format:{with: STRING_REGEX}, allow_blank: true
 	validates :curso_serie, length:{maximum: 40, too_long: "Máximo de 40 caracteres permitidos!."}, allow_blank: true
-	validates :codigo_uso, allow_blank: true;
+	#validates :codigo_uso, allow_blank: true
 	validates :termos, acceptance: true
-	validates :versao_digital, length:{is: 1}, inclusion:{in: %w(0 1)}
-	validates :versao_impressa, length:{is: 1}, inclusion:{in: %w(0 1)}
 	validates :status_versao_impressa, inclusion:{in: %w(Pagamento Documentação Enviada Entregue)}
 	validates :status_versao_digital, inclusion:{in: %w(Pagamento Documentação Download Baixada)}
 	validates :valor, length:{maximum: 4}, numericality: {only_float: true}
-	validates :numero_serie, numericality: true, uniqueness: true
+	validates :numero_serie, numericality: true, uniqueness: true, allow_blank: true
 	validates :cpf, numericality: true, length:{is: 11, too_long: "Necessário 11 caracteres.",  too_short: "Necessário 11 caracteres."}, allow_blank: true
-	validates :certificado, format:{with: [:alnum:]}
 	validates :expedidor_rg, length:{maximum: 10, too_long:"Máximo de 10 caracteres permitidos!"}, 
 							 format:{with:STRING_REGEX, message: "Somente letras é permitido!"}, allow_blank: true
 	validates :uf_expedidor_rg, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
-	validates :uf, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
 	validates :uf_inst_ensino, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
-	validates :escolaridade, length:{maximum: 30, too_long: "Máximo de 30 caracteres permitidos!"}
+	validates :escolaridade, length:{maximum: 30, too_long: "Máximo de 30 caracteres permitidos!"},
 							 format:{with:STRING_REGEX, message:"Somente letras é permitido"}, allow_blank: true
 	validates_attachment_size :foto, :less_than => 1.megabytes
 	validates_attachment_file_name :foto, :matches => [/png\Z/, /jpe?g\Z/]
@@ -65,8 +61,16 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def dias_validade 
-		seconds = self.validade - Time.now.to_date
-		dias = seconds*1000/24*60*60
+		nao_depois  = self.nao_depois
+		seconds = nil
+		dias = nil
+		if nao_depois 
+			seconds = self[:nao_depois] - Time.now.to_date
+			dias = seconds*1000/24*60*60
+		else
+			dias = 1000;
+		end
+		dias.days
 	end
 
 	def valid
@@ -106,16 +110,27 @@ class Carteirinha < ActiveRecord::Base
 			self.vencimento == "1"	
 		end
 
-		def set_status_inicial
-			self.status_versao_impressa = STATUS_VERSAO_IMPRESSA[0] if !self.versao_impressa.nil?  
-			self.status_versao_digital = STATUS_VERSAO_DIGITAL[0] if !self.versao_digital.nil?
+		def set_status_inicial  
+			self.status_versao_impressa = STATUS_VERSAO_IMPRESSA[0]
+			self.status_versao_digital = STATUS_VERSAO_DIGITAL[0] 
 		end
 
 		def config_attributes
-			self.layout_carteirinha_id = LayoutCarteirinha::instance.id
-			self.validade = Time.new(Time.new.year+1,3,31).to_date
-			self.numero_serie = (Time.new - Time.new(2015,1,1)).to_i
-			self.qr_code = "http://localhost:3000/carteirinhas/".concat(self.numero_serie)
+			carteirinha = where(self)
+			pagamento = STATUS_VERSAO_IMPRESSA[0]
+			documentacao = STATUS_VERSAO_IMPRESSA[1]
+			if (carteirinha.status_versao_impressa == pagamento & self.status_versao_impressa = documentacao) 
+				self.layout_carteirinha_id = LayoutCarteirinha.last_layout_id
+				self.not_after = Time.new(Time.new.year+1,3,31).to_date
+				self.numero_serie = config_numero_serie
+				self.qr_code = "http://localhost:3000/carteirinhas/validacao/chave_acesso"
+			end
+		end
+
+	private
+		def config_numero_serie
+			carteirinha = Carteirinha.last
+			carteirina.nil? ? 1 : carteirinha.numero_serie+1
 		end
 
 end

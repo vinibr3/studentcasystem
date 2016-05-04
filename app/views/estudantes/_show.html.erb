@@ -1,0 +1,73 @@
+<div class="panel panel-primary">
+	<div class="panel-heading">
+					Dados Cadastrais 
+					<%= link_to '',:class=>'btn btn-link pull-right', :style=>'margin-top: -7px;', 'data-toggle'=>'modal', "data-target"=>"#edit-dados-cadastrais-modal" do %>
+						<span class="glyphicon glyphicon-pencil"> </span>
+					<%end%>
+					<%= link_to '', :class=>'btn btn-link pull-right', :style=>'margin-top: -7px', 'data-toggle'=>'modal', "data-target"=>"#edit-modal-password" do %>
+						<span class="glyphicon glyphicon-star"> </span>
+					<%end%>
+				</div>			
+				<div class="panel-body" style="margin: 20px 0px 12px 20px;">
+					<table>
+						<tr><td colspan="3"><strong>Nome completo:</strong><%=@estudante.nome %></td></tr>
+						<tr><td colspan="3"><strong>E-mail: </strong><%=@estudante.email %> </td></tr>
+						<tr><td colspan="3"><strong>Data Nascimento:</strong><%=@estudante.data_nascimento %> </td></tr>
+						<tr><td><strong>RG: </strong><%=@estudante.rg %></td>
+							<td><strong>Expedidor: </strong><%=@estudante.expedidor_rg %></td>
+							<td><strong>UF: </strong><%=@estudante.uf_expedidor_rg %> </td>
+						</tr>
+						<tr><td><strong>CPF: </strong><%=@estudante.cpf %></td>
+							<td><strong>Sexo: </strong><%= @estudante.sexo %></td> 
+						</tr>
+						<tr><td><strong>Telefone: </strong><%=@estudante.telefone %></td>
+							<td><strong>Celular: </strong><%=@estudante.celular %> </td> 
+						</tr>
+						<tr><td><strong>Foto: </strong><%= @estudante.foto_file_name.nil? ? '*' : @estudante.foto_file_name %> </td>
+							<td><strong>Xerox RG: </strong><%= @estudante.xerox_rg_file_name.nil? ? '*' : @estudante.xerox_rg_file_name %> </td> </tr>
+					</table>
+				</div>
+				<div class="panel-heading">
+					Dados Estudantis
+					<%= link_to '',:class=>'btn btn-link pull-right', :style=>'margin-top: -7px;', 'data-toggle'=>'modal', "data-target"=>"#edit-dados-estudantis-modal" do %>
+						<span class="glyphicon glyphicon-pencil"> </span>
+					<%end%>
+				</div>
+				<div class="panel-body" style="margin: 20px 0px 12px 20px;">
+					<table>
+						<tr><td colspan="2"><strong>Inst. Ensino: </strong><%=@estudante.instituicao_ensino %> </td></tr>
+						<tr><td colspan="2"><strong>Curso/Série </strong><%=@estudante.curso_serie %> </td></tr>
+						<tr><td colspan="2"><strong>Escolaridade: </strong><%=@estudante.escolaridade %> </td></tr>
+						<tr><td><strong>Matrícula: </strong><%=@estudante.matricula %> </td></tr>
+						<tr>
+							<td><strong>Mun. Inst. Ensino: </strong><%=@estudante.cidade_inst_ensino %> </td>
+							<td><strong>UF: </strong><%=@estudante.uf_inst_ensino %> </td>
+						</tr>
+						<tr>
+							<td colspan="2"><strong>Compr. Matrícula: </strong><%= @estudante.comprovante_matricula_file_name.nil? ? '*' : @estudante.comprovante_matricula_file_name %> 
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="panel-heading">
+					Endereço
+					<%= link_to '',:class=>'btn btn-link pull-right', :style=>'margin-top: -7px;', 'data-toggle'=>'modal', "data-target"=>"#edit-endereco-modal" do %>
+						<span class="glyphicon glyphicon-pencil"> </span>
+					<%end%>
+				</div>
+				<div class="panel-body" style="margin: 20px 0px 12px 20px;">
+					<table>
+						<tr><td><strong>CEP: </strong><%=@estudante.cep %> </td> </tr>
+						<tr>
+							<td> <strong>Logradouro: </strong><%=@estudante.logradouro %></td> 
+							<td><strong style="margin-left: 15px;">Nº: </strong><%=@estudante.numero %> </td>
+						</tr>
+						<tr><td><strong>Complemento: </strong><%=@estudante.complemento %> </td> </tr>
+						<tr><td><strong>Setor: </strong><%=@estudante.setor %> </td> </tr>
+						<tr>
+							<td><strong>Cidade: </strong><%=@estudante.cidade %> </td> 
+							<td><strong style="margin-left: 15px;">UF: </strong><%=@estudante.uf %> </td>
+						</tr>
+					</table>
+				</div>
+			</div>
