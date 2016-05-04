@@ -25,12 +25,16 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'bootstrap-sass', '~> 3.3.6'
 # Arquivos em anexo
 gem 'paperclip', '~> 4.3', '>= 4.3.6'
-# Login/Logoff
 
+# Login/Logoff
 gem 'devise', '~> 4.1'
 # Internacionaliza views pt-BR
 gem 'devise-i18n'
 
+# Oferece funcionalidades para serialização de modelos
+gem 'active_model_serializers', '~> 0.9.5'
+# Graph Facebook API rails
+gem 'koala', '~> 2.3'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

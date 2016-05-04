@@ -25,7 +25,7 @@ class LayoutCarteirinha < ActiveRecord::Base
 		 end
 	end
 
-	def self.last_layput_id
+	def self.last_layout_id
 		last = LayoutCarteirinha.last
 		last.nil? ? 0 : last.id
 	end

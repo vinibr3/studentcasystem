@@ -15,6 +15,16 @@ Rails.application.routes.draw do
     resources :carteirinhas, only: [:new, :show, :autenticacao, :create]
   end
 
+  namespace :api, defaults:{format: :json} do
+    resources :estudantes, only: [:create, :update], param: :oauth_token do
+      resources :carteirinhas, only: [:create]
+      get 'carteirinhas', to: 'carteirinhas#show' 
+    end
+    get 'estudantes/login', to: 'estudantes#login'   
+    get 'estudantes/login/facebook', to: 'estudantes#facebook'
+    resources :noticias, only:[:index]
+  end
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
