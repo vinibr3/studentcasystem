@@ -13,18 +13,26 @@
 						<tr><td colspan="3"><strong>Nome completo:</strong><%=@estudante.nome %></td></tr>
 						<tr><td colspan="3"><strong>E-mail: </strong><%=@estudante.email %> </td></tr>
 						<tr><td colspan="3"><strong>Data Nascimento:</strong><%=@estudante.data_nascimento %> </td></tr>
-						<tr><td><strong>RG: </strong><%=@estudante.rg %></td>
-							<td><strong>Expedidor: </strong><%=@estudante.expedidor_rg %></td>
-							<td><strong>UF: </strong><%=@estudante.uf_expedidor_rg %> </td>
-						</tr>
-						<tr><td><strong>CPF: </strong><%=@estudante.cpf %></td>
+						<tr>
+							<td><strong>RG: </strong><%=@estudante.rg %></td>
+								<td><strong>Expedidor: </strong><%=@estudante.expedidor_rg %></td>
+								<td><strong>UF: </strong><%=@estudante.uf_expedidor_rg %> </td>
+							</tr>
+						<tr>
+							<td><strong>CPF: </strong><%=@estudante.cpf %></td>
 							<td><strong>Sexo: </strong><%= @estudante.sexo %></td> 
 						</tr>
-						<tr><td><strong>Telefone: </strong><%=@estudante.telefone %></td>
+						<tr>
+							<td><strong>Telefone: </strong><%=@estudante.telefone %></td>
 							<td><strong>Celular: </strong><%=@estudante.celular %> </td> 
 						</tr>
-						<tr><td><strong>Foto: </strong><%= @estudante.foto_file_name.nil? ? '*' : @estudante.foto_file_name %> </td>
-							<td><strong>Xerox RG: </strong><%= @estudante.xerox_rg_file_name.nil? ? '*' : @estudante.xerox_rg_file_name %> </td> </tr>
+						<tr>
+							<td><strong>Foto: </strong><%= @estudante.foto_file_name.nil? ? '*' : @estudante.foto_file_name %> </td>
+							<td><strong>Xerox RG: </strong><%= @estudante.xerox_rg_file_name.nil? ? '*' : @estudante.xerox_rg_file_name %> </td> 
+						</tr>
+						<tr>
+							<td><strong>Xerox RG: </strong><%= @estudante.xerox_rg_file_name.nil? ? '*' : @estudante.xerox_rg_file_name %> </td> 
+						</tr>
 					</table>
 				</div>
 				<div class="panel-heading">

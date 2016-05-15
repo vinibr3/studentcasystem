@@ -48,9 +48,9 @@ class Estudante < ActiveRecord::Base
 							 format:{with:STRING_REGEX, message:"Somente letras é permitido"}, allow_blank: true
 	validates :chave_acesso, length:{is: 10, too_long: "Necessário 10 caracteres", too_short: "Necessário 10 caracteres"},
 							 format:{with:STRING_REGEX, message:"Somente letras é permitido"}, allow_blank: true
-	validates_attachment_size :foto, :less_than => 1.megabytes
-	validates_attachment_size :xerox_rg, :less_than => 1.megabytes
-	validates_attachment_size :comprovante_matricula, :less_than => 1.megabytes
+	validates_attachment_size :foto, :less_than => 2.megabytes
+	validates_attachment_size :xerox_rg, :less_than => 2.megabytes
+	validates_attachment_size :comprovante_matricula, :less_than => 2.megabytes
 	validates_attachment_file_name :foto, :matches => [/png\Z/, /jpe?g\Z/]
 	validates_attachment_file_name :comprovante_matricula, :matches=> FILES_NAME_PERMIT
 	validates_attachment_file_name :xerox_rg, :matches => FILES_NAME_PERMIT
@@ -190,7 +190,7 @@ class Estudante < ActiveRecord::Base
 
 		def create_oauth_token
 			begin
-				self.oauth_token = Devise.friendly_token(50)
+				self.oauth_token = Devise.friendly_token
 			end while self.class.exists?(oauth_token: oauth_token)
 		end
 end

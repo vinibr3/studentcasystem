@@ -1,13 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  foto: 
+  foto_file_name: 
   titulo: 
   autor: 
   body: MyText
 
 two:
-  foto: 
+  foto_file_name: 
   titulo: 
   autor: 
   body: MyText

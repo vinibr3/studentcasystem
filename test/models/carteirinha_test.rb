@@ -1,7 +1,8 @@
 require 'test_helper'
 
 class CarteirinhaTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test "ca info generation" do
+    Carteirinha.gera_certificado carteirinhas(:carteirinhatest)
+    assert true
+  end
 end

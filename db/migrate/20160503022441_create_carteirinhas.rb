@@ -14,11 +14,10 @@ class CreateCarteirinhas < ActiveRecord::Migration
     	t.string   :uf_inst_ensino
     	t.string   :curso_serie
     	t.string   :codigo_uso
-    	t.string   :numero_serie
+    	t.string   :numero_serie                      
     	t.date     :nao_antes
     	t.date     :nao_depois
-    	t.string   :qr_code  #
-    	t.string   :status_versao_digital,             null: false
+    	t.string   :qr_code  #         
     	t.string   :status_versao_impressa,            null: false
     	t.string   :foto_file_name
     	t.string   :foto_content_type
@@ -27,6 +26,7 @@ class CreateCarteirinhas < ActiveRecord::Migration
     	t.text     :certificado   #base64
     	t.references :estudante,            index: true, foreigh_key: true
     	t.references :layout_carteirinha,   index: true, foreigh_key: true
+        t.string     :alterado_por
       t.timestamps null: false
     end
   end

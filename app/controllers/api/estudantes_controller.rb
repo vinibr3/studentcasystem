@@ -73,10 +73,12 @@ class Api::EstudantesController < API::AuthenticateBase
 
 	private
 		def estudante_params
-			params.require(:estudante).permit(:nome, :cpf, :rg_certidao, :data_nascimento, :sexo, :telefone,
-											  :logradouro, :complemento, :setor, :cep, :cidade, :estado,
+			params.require(:estudante).permit(:nome, :cpf, :rg, :data_nascimento, :sexo, :telefone,
+											  :logradouro, :complemento, :setor, :cep, :cidade,
 											  :instituicao_ensino, :curso_serie, :matricula, :foto, 
 											  :comprovante_matricula, :xerox_rg, :email, :password, 
-											  :celular, :numero, :id, :provider, :oauth_token)
+											  :celular, :numero, :id, :provider, :oauth_token, :uf,
+											  :uf_inst_ensino, :expedidor_rg, :uf_expedidor_rg, 
+											  :escolaridade)
 		end
 end

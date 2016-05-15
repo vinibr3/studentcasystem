@@ -6,6 +6,10 @@ class ApplicationController < ActionController::Base
   
   respond_to :html
 
+  def access_denied(exception)
+    redirect_to  admin_carteirinhas_path, :alert => exception.message
+  end
+
    protected 
   	def json_request?
   		request.format.json?

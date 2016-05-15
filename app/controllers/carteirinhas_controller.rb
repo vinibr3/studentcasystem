@@ -28,6 +28,9 @@ class CarteirinhasController < ApplicationController
 			c.foto = current_estudante.foto
 			c.valor = Carteirinha.VALOR+Carteirinha.FRETE
 			c.layout_carteirinha_id = LayoutCarteirinha.last
+			status = Carteirinha.class_variable_get(:@@STATUS_VERSAO_IMPRESSA)
+			c.status_versao_impressa = status[0]
+			#c.status_versao_digital = Carteirinha.class_variable_get(:@@STATUS_VERSAO_DIGITAL[0])
 		end 
 
 		if @carteirinha.save!

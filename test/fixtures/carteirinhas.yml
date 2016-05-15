@@ -4,8 +4,22 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
-#
-two: {}
+carteirinhatest: 
+  nome: vinicius de oliveira santos
+  cpf:  "04118209152"
+  matricula: "092471"
+  rg: "5015160"
+  expedidor_rg: "SPTC"
+  uf_expedidor_rg: "GO"
+  cidade_inst_ensino: "Goiania"
+  curso_serie: "engenharia de computação"
+  escolaridade: "superior"
+  instituicao_ensino: Universidade Federal de Goiás
+  uf_inst_ensino: "GO"
+  #status_versao_digital: "Pagamento"
+  status_versao_impressa: "Pagamento"
+  data_nascimento: "1990-11-15"
+  nao_antes: "2016-01-12"
+
+#two: 
 #  column: value

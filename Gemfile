@@ -27,9 +27,11 @@ gem 'bootstrap-sass', '~> 3.3.6'
 gem 'paperclip', '~> 4.3', '>= 4.3.6'
 
 # Login/Logoff
-gem 'devise', '~> 4.1'
+gem 'devise', '~> 3.4.1'
 # Internacionaliza views pt-BR
 gem 'devise-i18n'
+# magnific-popup
+gem 'magnific-popup-rails', '~> 1.1'
 
 # Oferece funcionalidades para serialização de modelos
 gem 'active_model_serializers', '~> 0.9.5'
@@ -37,10 +39,13 @@ gem 'active_model_serializers', '~> 0.9.5'
 gem 'koala', '~> 2.3'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
-
+# Gemfile in Rails >= 3.1
+  gem 'activeadmin', '1.0.0.pre1'
+  #gem "meta_search", '>= 1.1.0.pre'
 # Use Unicorn as the app server
 # gem 'unicorn'
-
+# Provider for authorization
+gem 'cancan', '~> 1.6', '>= 1.6.10'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
