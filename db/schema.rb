@@ -11,7 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160516041316) do
+ActiveRecord::Schema.define(version: 20160518104932) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace"
@@ -199,8 +202,12 @@ ActiveRecord::Schema.define(version: 20160516041316) do
     t.datetime "last_sign_in_at"
     t.inet     "current_sign_in_ip"
     t.inet     "last_sign_in_ip"
+    t.string   "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
   end
 
+  add_index "estudantes", ["confirmation_token"], name: "index_estudantes_on_confirmation_token", unique: true, using: :btree
   add_index "estudantes", ["email"], name: "index_estudantes_on_email", unique: true, using: :btree
   add_index "estudantes", ["reset_password_token"], name: "index_estudantes_on_reset_password_token", unique: true, using: :btree
 

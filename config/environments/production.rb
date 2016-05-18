@@ -68,17 +68,17 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { :host => ENV["DOMAIN"] }   # Configura opções de rota padrao para action mailer
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
-  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = true
   config.action_mailer.default :charset => "utf-8"
 
   config.action_mailer.smtp_settings = {
-    address: ENV["EMAIL_SMTP"],
-    port: ENV["EMAIL_PORT"],
-    domain: ENV["EMAIL_DOMAIN"],
+   address: 'smtp.gmail.com',
+    port: 587,
+    domain: 'gmail.com',
     authentication: "plain",
     enable_starttls_auto: true,
-    user_name: ENV["EMAIL_USERNAME"],
-    password: ENV["EMAIL_PASSWORD"]
+    user_name: 'viniciusdeoliveirasantos@gmail.com',
+    password: '1820goiania'
   }
   # fim configurações E-mail
 

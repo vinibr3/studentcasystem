@@ -48,6 +48,8 @@ gem 'koala', '~> 2.3'
 gem 'cancan', '~> 1.6', '>= 1.6.10'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
-
+group :development, :test do
+	gem 'foreman'
+end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
