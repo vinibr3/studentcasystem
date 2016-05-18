@@ -12,7 +12,7 @@ class AdminUser < ActiveRecord::Base
   validates :nome, length: {maximum: 70, too_long: "Máximo de %{count} caracteres permitidos!"}, 
                          format:{with: STRING_REGEX, message:"Somente letras é permitido!"}, allow_blank: true
   validates :email, uniqueness: {message: "Email já utilizado!"}, format: {with: EMAIL_REGEX , on: :create}
-  validates :sexo, inclusion:{in: %w(masculino feminino), message: "%{value} não é um gênero válido."}, allow_blank: true
+  validates :sexo, inclusion:{in: %w(Masculino Feminino), message: "%{value} não é um gênero válido."}, allow_blank: true
   validates :usuario, presence: true, length:{in: 6..10, wrong_length: "Tamanho errado %{count}"}
   validates :expedidor_rg, length:{maximum: 10, too_long:"Máximo de 10 caracteres permitidos!"}, 
                format:{with:STRING_REGEX, message: "Somente letras é permitido!"}, allow_blank: true

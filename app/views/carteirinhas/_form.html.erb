@@ -1,12 +1,17 @@
 	<%= form_for ([@estudante, @estudante.carteirinhas.build]) do |f| %>
 	<div class="col-md-12">
 		<div class="col-md-7">
-			<%= image_tag(LayoutCarteirinha.anverso, :class=>'img img-responsive')%>
+			<%= image_tag(LayoutCarteirinha.anverso.url, :class=>'img img-responsive') if LayoutCarteirinha.anverso%>
 		</div>
 		<div class="col-md-5">
 			<div class="checkbox"><br>
-				<p><strong>Valor: R$</strong><%= f.label :frete, Carteirinha.VALOR %> </p>
-				<p><strong>Frete: R$</strong><%= f.label :frete, Carteirinha.FRETE %> </p>
+				<% entidade = Entidade.instance%>
+				<% valor = entidade.valor_carteirinha %>
+				<% frete = entidade.frete_carteirinha %>
+				<p><strong>Valor:</strong>&nbsp;R$<%= valor %> </p>
+				<% if !frete.blank? %>
+					<p><strong>Frete:</strong>&nbsp;R$<%= frete %> </p>
+				<%end%>
 				<label>
 					<%= f.check_box :termos %> 
 					<small style="font-size: 12px;"> Aceito os <a class="text-primary" href='#' >termos</a> </small>
@@ -14,8 +19,8 @@
 			</div>
 			<div class="input-group" role="group">
 				<span class="input-group-addon bg-success"><strong>Total R$</strong></span>
-				<%= f.label :valor, Carteirinha.VALOR+Carteirinha.FRETE, :id=> 'carteirinha_valor', :size=>'3', :class=>'form-control' %>
-				<span class="input-group-btn">
+				<%= f.label :valor, frete.to_i+valor.to_i, :id=> 'carteirinha_valor', :size=>'4', :class=>'form-control' %>
+				<span class="input-group-btn" id="pagar_agora">
 					<%= f.submit "Pagar Agora", :class=>'btn btn-success' %>
 				</span>
 			</div>

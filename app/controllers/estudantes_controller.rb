@@ -7,8 +7,9 @@ class EstudantesController < ApplicationController
 		@carteirinha = @estudante.carteirinhas.last
 	end	
 
-	def update
 
+
+	def update
 		if current_estudante.update(estudante_params)
 			flash[:notice] = "Dados salvos com sucesso!"
 			redirect_to current_estudante
@@ -16,6 +17,19 @@ class EstudantesController < ApplicationController
 			flash[:alert] = "Ocorreu um erro: ".concat(current_estudante.errors.full_messages.to_s)
 			redirect_to current_estudante
 		end
+	end
+
+	def update_password
+		@estudante = Estudante.find(current_estudante.id)
+    	if @estudante.update(estudante_params)
+	      # Sign in the user by passing validation in case their password changed
+	      sign_in @estudante, :bypass => true
+	      flash[:notice] = "Dados salvos com sucesso!"
+	      redirect_to current_estudante
+    	else
+     	  flash[:alert] = "Ocorreu um erro."
+		  redirect_to current_estudante
+    	end
 	end
 
 	private

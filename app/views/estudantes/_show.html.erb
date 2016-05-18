@@ -1,49 +1,48 @@
 <div class="panel panel-primary">
 	<div class="panel-heading">
-					Dados Cadastrais 
+					<span class="glyphicon glyphicon-user" style="color: #FFF"> </span>&nbsp;Dados Cadastrais 
 					<%= link_to '',:class=>'btn btn-link pull-right', :style=>'margin-top: -7px;', 'data-toggle'=>'modal', "data-target"=>"#edit-dados-cadastrais-modal" do %>
-						<span class="glyphicon glyphicon-pencil"> </span>
+						<span class="glyphicon glyphicon-pencil" style="color: #FFF"> </span>
 					<%end%>
-					<%= link_to '', :class=>'btn btn-link pull-right', :style=>'margin-top: -7px', 'data-toggle'=>'modal', "data-target"=>"#edit-modal-password" do %>
-						<span class="glyphicon glyphicon-star"> </span>
+					<%= link_to '', :class=>'btn btn-link pull-right', :style=>'margin-top: -7px', 'data-toggle'=>'modal', "data-target"=>"#edit-password-modal" do %>
+						<span class="glyphicon glyphicon-lock" style="color: #FFF"> </span>
 					<%end%>
 				</div>			
-				<div class="panel-body" style="margin: 20px 0px 12px 20px;">
+				<div class="panel-body" style="word-break: break-all;white-space: normal;">
 					<table>
-						<tr><td colspan="3"><strong>Nome completo:</strong><%=@estudante.nome %></td></tr>
+						<tr><td colspan="3"><strong>Nome completo:&nbsp;</strong><%= @estudante.nome %></td></tr>
 						<tr><td colspan="3"><strong>E-mail: </strong><%=@estudante.email %> </td></tr>
 						<tr><td colspan="3"><strong>Data Nascimento:</strong><%=@estudante.data_nascimento %> </td></tr>
 						<tr>
 							<td><strong>RG: </strong><%=@estudante.rg %></td>
-								<td><strong>Expedidor: </strong><%=@estudante.expedidor_rg %></td>
+								<td><strong>Expedidor: </strong><%=@estudante.expedidor_rg %>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 								<td><strong>UF: </strong><%=@estudante.uf_expedidor_rg %> </td>
 							</tr>
 						<tr>
 							<td><strong>CPF: </strong><%=@estudante.cpf %></td>
-							<td><strong>Sexo: </strong><%= @estudante.sexo %></td> 
+							<td colspan="2"><strong>Sexo: </strong><%= @estudante.sexo %></td> 
 						</tr>
 						<tr>
-							<td><strong>Telefone: </strong><%=@estudante.telefone %></td>
-							<td><strong>Celular: </strong><%=@estudante.celular %> </td> 
+							<td><strong>Telefone: </strong><%=@estudante.telefone %>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							<td colspan="2"><strong>Celular: </strong><%=@estudante.celular %> </td> 
 						</tr>
 						<tr>
-							<td><strong>Foto: </strong><%= @estudante.foto_file_name.nil? ? '*' : @estudante.foto_file_name %> </td>
-							<td><strong>Xerox RG: </strong><%= @estudante.xerox_rg_file_name.nil? ? '*' : @estudante.xerox_rg_file_name %> </td> 
+							<td colspan="3"><strong>Foto: </strong><%= @estudante.foto_file_name.nil? ? '*' : @estudante.foto_file_name %> </td>
 						</tr>
 						<tr>
-							<td><strong>Xerox RG: </strong><%= @estudante.xerox_rg_file_name.nil? ? '*' : @estudante.xerox_rg_file_name %> </td> 
+							<td colspan="3"><strong>Xerox RG: </strong><%= @estudante.xerox_rg_file_name.nil? ? '*' : @estudante.xerox_rg_file_name %> </td> 
 						</tr>
 					</table>
 				</div>
 				<div class="panel-heading">
-					Dados Estudantis
+					<span class="glyphicon glyphicon-education" style="color: #FFF"> </span>&nbsp;Dados Estudantis
 					<%= link_to '',:class=>'btn btn-link pull-right', :style=>'margin-top: -7px;', 'data-toggle'=>'modal', "data-target"=>"#edit-dados-estudantis-modal" do %>
-						<span class="glyphicon glyphicon-pencil"> </span>
+						<span class="glyphicon glyphicon-pencil" style="color: #FFF"> </span>
 					<%end%>
 				</div>
-				<div class="panel-body" style="margin: 20px 0px 12px 20px;">
+				<div class="panel-body" style="word-break: break-all;white-space: normal;">
 					<table>
-						<tr><td colspan="2"><strong>Inst. Ensino: </strong><%=@estudante.instituicao_ensino %> </td></tr>
+						<tr><td colspan="2"><strong>Instituição de Ensino: </strong><%=@estudante.instituicao_ensino %> </td></tr>
 						<tr><td colspan="2"><strong>Curso/Série </strong><%=@estudante.curso_serie %> </td></tr>
 						<tr><td colspan="2"><strong>Escolaridade: </strong><%=@estudante.escolaridade %> </td></tr>
 						<tr><td><strong>Matrícula: </strong><%=@estudante.matricula %> </td></tr>
@@ -58,12 +57,12 @@
 					</table>
 				</div>
 				<div class="panel-heading">
-					Endereço
+					<span class="glyphicon glyphicon-map-marker" style="color: #FFF"> </span>&nbsp;Endereço
 					<%= link_to '',:class=>'btn btn-link pull-right', :style=>'margin-top: -7px;', 'data-toggle'=>'modal', "data-target"=>"#edit-endereco-modal" do %>
-						<span class="glyphicon glyphicon-pencil"> </span>
+						<span class="glyphicon glyphicon-pencil" style="color: #FFF"> </span>
 					<%end%>
 				</div>
-				<div class="panel-body" style="margin: 20px 0px 12px 20px;">
+				<div class="panel-body" style="word-break: break-all;white-space: normal;">
 					<table>
 						<tr><td><strong>CEP: </strong><%=@estudante.cep %> </td> </tr>
 						<tr>

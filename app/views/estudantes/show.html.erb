@@ -5,10 +5,10 @@
 		<p class="lead text-center"> Preencha o formulário para solicitar seu Documento do Estudante </p>
 	</div>
 	<div class="row">
-		<div class="col-md-4">
+		<div class="col-md-5">
 			<%= render 'estudantes/show'%>
 		</div>
-		<div class="col-md-7 col-md-offset-1">
+		<div class="col-md-6 col-md-offset-1">
 			<h3 class="text-primary"> Carteira de Identifição Estudantil </h3>
 			<% if (@carteirinha && @carteirinha.dias_validade > 10.days) %>
 				<%= render template: 'carteirinhas/show', locals:{carteirinha: @carteirinha} %>
@@ -21,3 +21,4 @@
 <%= render 'edit_dados_cadastrais_modal' %>
 <%= render 'edit_dados_estudantis_modal' %>
 <%= render 'edit_endereco_modal'         %>
+<%= render 'edit_password_modal'         %>

@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   resources :estudantes, only: [:show, :update] do 
     resources :carteirinhas, only: [:new, :show, :autenticacao, :create]
   end
+  post 'estudantes/senha',   to:"estudantes#update_password", as: :alterar_password
 
   namespace :api, defaults:{format: :json} do
     resources :estudantes, only: [:create, :update], param: :oauth_token do

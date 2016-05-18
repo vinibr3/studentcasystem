@@ -1,0 +1,20 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# This model initially had no columns defined.  If you add columns to the
+# model remove the '{}' from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+# vinicius:
+#   nome: vinicius de oliveira
+#   email: vinicius.enc@outlook.com 
+#   cpf: 04118209152
+#   rg: '5015160'
+#   expedidor_rg: 'SPTC'
+#   uf_pedidor_rg: 'GO'
+#   data_nascimento: '1990-11-15'
+#   sexo: 'masculino'
+#   celular: '6293178387'
+# column: value
+#
+#two: {}
+#  column: value

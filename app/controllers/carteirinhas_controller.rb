@@ -11,8 +11,14 @@ class CarteirinhasController < ApplicationController
 	end
 
 	def create 
-		
-		@carteirinha = current_estudante.carteirinhas.new(carteirinha_params) do |c|
+		atributos = current_estudante.atributos_nao_preenchidos
+		if atributos.count > 0
+			campos = ""
+			atributos.collect{|f| campos.concat(f.to_s.humanize.concat(", "))}
+			flash[:alert] = "Campos #{campos} não preenchidos."
+			redirect_to estudante_path(current_estudante)
+		else
+			@carteirinha = current_estudante.carteirinhas.new(carteirinha_params) do |c|
 			c.nome = current_estudante.nome
 			c.rg = current_estudante.rg
 			c.cpf = current_estudante.cpf
@@ -31,15 +37,17 @@ class CarteirinhasController < ApplicationController
 			status = Carteirinha.class_variable_get(:@@STATUS_VERSAO_IMPRESSA)
 			c.status_versao_impressa = status[0]
 			#c.status_versao_digital = Carteirinha.class_variable_get(:@@STATUS_VERSAO_DIGITAL[0])
-		end 
+			end 
 
-		if @carteirinha.save!
-			flash[:notice] = "Solicitação enviada com sucesso!"
-			redirect_to estudante_path(current_estudante)
-		else
-			flash[:alert] = "Ocorreu um erro: ".concat(@carteirinha.errors.messages.to_s)
-			redirect_to estudante_path(current_estudante)
+			if @carteirinha.save!
+				flash[:notice] = "Solicitação enviada com sucesso!"
+				redirect_to estudante_path(current_estudante)
+			else
+				flash[:alert] = "Ocorreu um erro: ".concat(@carteirinha.errors.messages.to_s)
+				redirect_to estudante_path(current_estudante)
+			end
 		end
+		
 	end
 
 	def autenticacao

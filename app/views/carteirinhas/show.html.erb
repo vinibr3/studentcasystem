@@ -1,6 +1,6 @@
 	<div class="col-md-12">
 		<div class="col-md-12">
-			<%= image_tag(LayoutCarteirinha.anverso, :class=>'img img-responsive')%>
+			<%= image_tag(LayoutCarteirinha.anverso.url, :class=>'img img-responsive') if LayoutCarteirinha.anverso %>
 		</div>
 		<div class="col-md-12">
 			<p>Status da solicitação: <small style="float: right"> Código de Rastreio: </small></p>

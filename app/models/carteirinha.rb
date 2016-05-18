@@ -17,20 +17,17 @@ class Carteirinha < ActiveRecord::Base
 	@@STATUS_VERSAO_IMPRESSA = ["Pagamento", "Documentação", "Aprovada","Enviada", "Entregue"]
 	EMAIL_REGEX = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/
 	STRING_REGEX = /\A[a-z A-Z]+\z/
-	ALFANUMERICO = /\A[a-z A-Z]+\z/
-
-	@@VALOR = 20;
-	@@FRETE = 6.5;
+	LETRAS = /[A-Z a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+/
 
 	# validações
-	validates :nome, length: { maximum: 70, too_long: "Máximo de 70 caracteres permitidos"}, format:{with: STRING_REGEX, message:"Somente letras é permitido!"}
+	validates :nome, length: { maximum: 70, too_long: "Máximo de 70 caracteres permitidos"}, format:{with: LETRAS, message:"Somente letras é permitido!"}
 	validates :instituicao_ensino, length:{maximum: 50}
 	validates :curso_serie, length:{maximum: 30}
 	validates :matricula, numericality: true, length:{maximum: 30}, allow_blank: true
 	validates :rg, numericality: {only_integer: true}
-	validates :instituicao_ensino, length:{maximum: 50, too_long: "Máximo de 50 caracteres permitidos!."}, allow_blank: true
-	validates :cidade_inst_ensino, length:{maximum: 30, too_long:"Máximo de 70 carectetes é permitidos!"}, format:{with: STRING_REGEX}, allow_blank: true
-	validates :curso_serie, length:{maximum: 40, too_long: "Máximo de 40 caracteres permitidos!."}, allow_blank: true
+	validates :instituicao_ensino, length:{maximum: 50, too_long: "Máximo de 50 caracteres permitidos!."}, format: {with: LETRAS}, allow_blank: true
+	validates :cidade_inst_ensino, length:{maximum: 30, too_long:"Máximo de 70 carectetes é permitidos!"}, format:{with: LETRAS}, allow_blank: true
+	validates :curso_serie, length:{maximum: 40, too_long: "Máximo de 40 caracteres permitidos!."}, format:{with: LETRAS}, allow_blank: true
 	#validates :codigo_uso, allow_blank: true
 	validates :termos, acceptance: true
 	validates :status_versao_impressa, inclusion:{in: %w(Pagamento Documentação Aprovada Enviada Entregue)}
@@ -43,19 +40,10 @@ class Carteirinha < ActiveRecord::Base
 	validates :uf_expedidor_rg, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
 	validates :uf_inst_ensino, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
 	validates :escolaridade, length:{maximum: 30, too_long: "Máximo de 30 caracteres permitidos!"},
-							 format:{with:STRING_REGEX, message:"Somente letras é permitido"}, allow_blank: true
+							 format:{with:LETRAS, message:"Somente letras é permitido"}, allow_blank: true
 	validates_attachment_size :foto, :less_than => 1.megabytes
 	validates_attachment_file_name :foto, :matches => [/png\Z/, /jpe?g\Z/]
 	validates_attachment_content_type :foto, :content_type => ['image/jpeg', 'image/png', 'application/pdf']
-
-
-	def self.VALOR
-		@@VALOR
-	end
-
-	def self.FRETE
-		@@FRETE
-	end
 
 	def layout
 		if layout_carteirinha.nil? 
@@ -120,12 +108,33 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def self.gera_codigo_uso
-		"codigo de uso aqui"
+		
 	end 
 
 	def self.gera_certificado(carteirinha)
-		uri = "http://teste.com.br/validacao"
-		key = "chave vem aqui".bytes.to_a
+		entidade = Entidade.instance
+		authkey_identifier = entidade.authority_key_identifier
+		crl_dist_points = entidade.crl_dist_points
+		nome = entidade.nome
+		sigla = entidade.sigla
+		
+		if authkey_identifier.blank?
+			raise "Authority Key Identifier não definida para a entidade."
+		else
+			authkey_identifier = Digest::SHA1.hexdigest authkey_identifier
+		end
+		
+		if crl_dist_points.blank?
+			raise "CRL Distribution Points não definido para a Entidade"
+		end
+		
+		if sigla.blank?
+			raise "Sigla não definida para a entidade."
+		end
+
+		if nome.blank?
+			raise "Nome não definido para a entidade."
+		end
 
 		content1 = AttributeContentOID1.new
 		content1.setDataNascimento(carteirinha.data_nascimento.to_time.to_java)
@@ -142,11 +151,11 @@ class Carteirinha < ActiveRecord::Base
 		content2.setUfInstEnsino(carteirinha.uf_inst_ensino)
 
 		info = StudentACInfoGenerator.new
-		info.setHolderByParams("UEEGO", carteirinha.nome)
-		info.setIssuerByCN("Soluti", "UEEGO")
+		info.setHolderByParams(sigla, carteirinha.nome)
+		info.setIssuerByCN(sigla, nome)
 		info.setSerialNumber(carteirinha.numero_serie)
 		info.setNotBefore(carteirinha.nao_antes.to_time.to_java)
-		info.addMandatoryExtensions(key, uri, uri)
+		info.addMandatoryExtensions(hash_authkey_identifier, crl_dist_points, crl_dist_points)
 		info.addAttributes(content1, content2)
 
 		AttributeCertificate ca = info.generateAttributeCertificateInfo()
@@ -154,8 +163,14 @@ class Carteirinha < ActiveRecord::Base
 
 	end
 
-	def self.gera_qr_code
-		"qr code aqui"
+	def self.gera_qr_code chave_acesso
+		entidade = Entidade.instance
+		url_qr_code = entidade.url_qr_code
+		if url_qr_code.blank?
+			raise "url_qr_code não informada para a entidade."
+		else
+			return url_qr_code.concat(chave_acesso)
+		end
 	end
 
 	protected

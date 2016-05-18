@@ -1,5 +1,5 @@
 ActiveAdmin.register AdminUser do
-  menu if: proc{current_admin_user.super_admin?}
+  menu if: proc{current_admin_user.super_admin?}, priority: 7
 
   scope "Todos", :all, default: true
   scope("Ativos"){|scope| scope.where(status: "1")}
@@ -9,6 +9,10 @@ ActiveAdmin.register AdminUser do
                 :data_nascimento, :sexo, :celular, :telefone, :logradouro,
                 :numero, :complemento, :setor, :cep, :cidade, :uf, :usuario,
                 :super_admin, :status, :password, :password_confirmation
+
+  filter :nome
+  filter :usuario
+  filter :email
 
   index do
     selectable_column
@@ -75,10 +79,6 @@ ActiveAdmin.register AdminUser do
           end
         end
     end
-
-  filter :usuario
-  filter :nome
-  filter :email
 
   form do |f|
     f.inputs "Dados de Usuário" do 

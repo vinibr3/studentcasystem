@@ -1,6 +1,6 @@
 ActiveAdmin.register Carteirinha do
-    actions :all, except: [:new, :delete]
-
+   menu priority: 3
+   actions :all, except: [:new, :delete]
    
    scope "Todas", :all, default: true
    

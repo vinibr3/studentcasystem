@@ -16,24 +16,27 @@ class Estudante < ActiveRecord::Base
 	# expressões regulares
 	EMAIL_REGEX = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
 	STRING_REGEX = /\A[a-z A-Z]+\z/
+	LETRAS = /[A-Z a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+/
+
+	enum escolaridade: ["ENSINO FUNDAMENTAL", "ENSINO MÉDIO", "GRADUAÇÃO", "PÓS-GRADUAÇÃO"]
 
 	before_create :create_oauth_token
 
 	# validações
 	validates :nome, length: { maximum: 70, too_long: "Máximo de 70 caracteres permitidos!"}, 
-	                 		   format:{with: STRING_REGEX, message:"Somente letras é permitido!"},
+	                 		   format:{with: LETRAS, message:"Somente letras é permitido!"},
 	                 		   allow_blank: true
-	validates :email, uniqueness: {message: "Email já utilizado!"}, format: {with: EMAIL_REGEX , on: :create}
-	validates :sexo, inclusion: %w(masculino feminino), allow_blank: true
+	validates :email, uniqueness: true, format: {with: EMAIL_REGEX , on: :create}
+	validates :sexo, inclusion: %w(Masculino Feminino), allow_blank: true
 	validates :telefone, length:{in: 10..11}, numericality: true, allow_blank: true
 	validates :logradouro, length:{maximum: 50}, allow_blank: true
 	validates :complemento, length:{maximum: 50}, allow_blank: true
 	validates :setor, length:{maximum: 50}, allow_blank: true
 	validates :cep, length:{is: 8}, numericality: true, allow_blank: true
-	validates :cidade, length:{maximum: 30, too_long:"Máximo de 70 carectetes é permitidos!"}, format:{with: STRING_REGEX}, allow_blank: true
-	validates :cidade_inst_ensino, length:{maximum: 30, too_long:"Máximo de 70 carectetes é permitidos!"}, format:{with: STRING_REGEX}, allow_blank: true
-	validates :instituicao_ensino, length:{maximum: 50, too_long: "Máximo de 50 caracteres permitidos!."}, allow_blank: true
-	validates :curso_serie, length:{maximum: 40, too_long: "Máximo de 40 caracteres permitidos!."}, allow_blank: true
+	validates :cidade, length:{maximum: 30, too_long:"Máximo de 70 carectetes é permitidos!"}, format:{with: LETRAS}, allow_blank: true
+	validates :cidade_inst_ensino, length:{maximum: 30, too_long:"Máximo de 70 carectetes é permitidos!"}, format:{with: LETRAS}, allow_blank: true
+	validates :instituicao_ensino, length:{maximum: 50, too_long: "Máximo de 50 caracteres permitidos!."}, format:{with: LETRAS}, allow_blank: true
+	validates :curso_serie, length:{maximum: 40, too_long: "Máximo de 40 caracteres permitidos!."}, format:{with: LETRAS}, allow_blank: true
 	validates :matricula, numericality: true, length:{maximum: 30}, allow_blank: true
 	validates :celular, length:{in: 10..11}, numericality: true, allow_blank: true
 	validates :numero, length:{maximum: 5}, numericality: true, allow_blank: true
@@ -44,8 +47,7 @@ class Estudante < ActiveRecord::Base
 	validates :uf_expedidor_rg, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
 	validates :uf, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
 	validates :uf_inst_ensino, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
-	validates :escolaridade, length:{maximum: 30, too_long: "Máximo de 30 caracteres permitidos!"},
-							 format:{with:STRING_REGEX, message:"Somente letras é permitido"}, allow_blank: true
+	validates :escolaridade, length:{maximum: 30, too_long: "Máximo de 30 caracteres permitidos!"}
 	validates :chave_acesso, length:{is: 10, too_long: "Necessário 10 caracteres", too_short: "Necessário 10 caracteres"},
 							 format:{with:STRING_REGEX, message:"Somente letras é permitido"}, allow_blank: true
 	validates_attachment_size :foto, :less_than => 2.megabytes
@@ -57,6 +59,9 @@ class Estudante < ActiveRecord::Base
 	validates_attachment_content_type :foto, :content_type=> ['image/png', 'image/jpeg']
 	validates_attachment_content_type :comprovante_matricula, :content_type=> FILES_CONTENT_TYPE
 	validates_attachment_content_type :xerox_rg, :content_type=> FILES_CONTENT_TYPE
+    
+    validates_length_of :foto_file_name, :comprovante_matricula_file_name, :xerox_rg_file_name, 
+                        :maximum => 20, :message => "Menor que #{count} caracteres"
     # validates_associated :carteirinha, allow_blank: true
 
 	public
@@ -168,6 +173,19 @@ class Estudante < ActiveRecord::Base
 		array << self.cidade
 		array << self.uf
 		array
+	end
+
+	def atributos_nao_preenchidos
+		nao_preenchidos = Array.new
+		atributos = [:nome, :email, :cpf, :rg, :expedidor_rg, :uf_expedidor_rg, 
+			          :data_nascimento, :sexo, :celular, :logradouro, :numero, 
+			          :setor, :cep, :cidade, :uf, :instituicao_ensino, :curso_serie,
+			          :escolaridade, :matricula, :cidade_inst_ensino, :uf_inst_ensino,
+			      	  :foto_file_name, :comprovante_matricula_file_name, :xerox_rg_file_name]
+		atributos.each do |atr|
+			nao_preenchidos << atr if self[atr].blank?
+		end
+		nao_preenchidos
 	end
 
 	protected

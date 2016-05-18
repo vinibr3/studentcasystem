@@ -1,5 +1,5 @@
 ActiveAdmin.register LayoutCarteirinha do
-	menu if: proc{current_admin_user.super_admin?}
+	menu if: proc{current_admin_user.super_admin?}, priority: 5
 	permit_params :anverso, :verso
 
 	filter :anverso_file_name

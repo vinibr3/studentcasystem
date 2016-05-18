@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160504171120) do
+ActiveRecord::Schema.define(version: 20160516041316) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace"
@@ -101,6 +101,51 @@ ActiveRecord::Schema.define(version: 20160504171120) do
 
   add_index "carteirinhas", ["estudante_id"], name: "index_carteirinhas_on_estudante_id", using: :btree
   add_index "carteirinhas", ["layout_carteirinha_id"], name: "index_carteirinhas_on_layout_carteirinha_id", using: :btree
+
+  create_table "entidades", force: :cascade do |t|
+    t.string   "nome"
+    t.string   "sigla"
+    t.string   "email"
+    t.string   "cnpj"
+    t.string   "chave_privada_file_name"
+    t.string   "chave_privada_content_type"
+    t.integer  "chave_privada_file_size"
+    t.datetime "chave_privada_updated_at"
+    t.string   "password"
+    t.string   "common_name_certificado"
+    t.string   "organizational_unit"
+    t.string   "valor_carteirinha"
+    t.string   "frete_carteirinha"
+    t.string   "telefone"
+    t.string   "logradouro"
+    t.string   "numero"
+    t.string   "complemento"
+    t.string   "setor"
+    t.string   "cep"
+    t.string   "cidade"
+    t.string   "uf"
+    t.string   "nome_presidente"
+    t.string   "email_presidente"
+    t.string   "cpf_presidente"
+    t.string   "rg_presidente"
+    t.string   "expedidor_rg_presidente"
+    t.string   "uf_expedidor_rg_presidente"
+    t.date     "data_nascimento_presidente"
+    t.string   "sexo_presidente"
+    t.string   "celular_presidente"
+    t.string   "telefone_presidente"
+    t.string   "logradouro_presidente"
+    t.string   "numero_presidente"
+    t.string   "complemento_presidente"
+    t.string   "cep_presidente"
+    t.string   "cidade_presidente"
+    t.string   "uf_presidente"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.text     "authority_key_identifier"
+    t.string   "crl_dist_points"
+    t.string   "url_qr_code"
+  end
 
   create_table "estudantes", force: :cascade do |t|
     t.string   "nome"

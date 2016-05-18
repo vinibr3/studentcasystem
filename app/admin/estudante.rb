@@ -1,4 +1,5 @@
 ActiveAdmin.register Estudante do
+  menu priority: 2
   actions :all, except: [:new]
 
   permit_params :nome, :cpf, :rg, :data_nascimento, :sexo, :telefone,
