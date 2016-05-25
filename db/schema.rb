@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160518104932) do
+ActiveRecord::Schema.define(version: 20160522224141) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -148,6 +148,7 @@ ActiveRecord::Schema.define(version: 20160518104932) do
     t.text     "authority_key_identifier"
     t.string   "crl_dist_points"
     t.string   "url_qr_code"
+    t.string   "authority_info_access"
   end
 
   create_table "estudantes", force: :cascade do |t|

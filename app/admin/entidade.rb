@@ -10,7 +10,7 @@ ActiveAdmin.register Entidade do
 	              :sexo_presidente, :celular_presidente, :telefone_presidente,
 	              :logradouro_presidente, :numero_presidente, :complemento_presidente,
 	              :cep_presidente, :cidade_presidente, :uf_presidente, 
-	              :authority_key_identifier, :crl_dist_points, :url_qr_code
+	              :authority_key_identifier, :crl_dist_points, :url_qr_code, :authority_info_access
 
 	filter :nome
 	filter :sigla
@@ -24,6 +24,7 @@ ActiveAdmin.register Entidade do
 		column :frete_carteirinha
 		column :telefone
 		column :presidente
+		actions
 	end
 
 	show do
@@ -40,9 +41,10 @@ ActiveAdmin.register Entidade do
 				row :valor_carteirinha
 				row :frete_carteirinha
 				row :telefone
-				row :authority_key_identifier
-				row :crl_dist_points
-				row :url_qr_code
+				row :authority_key_identifier, "Chave Pública"
+				row :crl_dist_points, "URL CRL Dist. Points"
+				row :url_qr_code, "URl QR-Code"
+				row :authority_info_access, "URL Authority Info Access"
 			end
 		end
 		panel "Endereço da Entidade" do 
@@ -91,9 +93,10 @@ ActiveAdmin.register Entidade do
 			f.input :valor_carteirinha
 			f.input :frete_carteirinha
 			f.input :telefone
-			f.input :authority_key_identifier
-			f.input :crl_dist_points
-			f.input :url_qr_code
+			f.input :authority_key_identifier, label: "Chave Pública"
+			f.input :crl_dist_points, label: "URL CRL Dist. Points"
+			f.input :authority_info_access, "URL Authority Info Access"
+			f.input :url_qr_code, label: "URL Qr-Code"
 		end
 		f.inputs "Endereço da Entidade" do 
 			f.input :logradouro

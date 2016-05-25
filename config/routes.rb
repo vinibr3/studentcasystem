@@ -2,9 +2,7 @@ Rails.application.routes.draw do
   
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
-  devise_for :estudantes, path: "auth", path_names: { sign_in: 'login', sign_out: 'logout', password: 'secret', 
-                                                                confirmation: 'verification', unlock: 'unblock', 
-                                                                registration: 'register', sign_up: 'cmon_let_me_in' }
+ 
   get 'pages/index',          to:"pages#index",          as: :home
   get 'pages/mei_entrada',    to:"pages#meia_entrada",   as: :meia_entrada
   get 'pages/noticias',       to:"pages#noticias",       as: :noticias
@@ -19,6 +17,15 @@ Rails.application.routes.draw do
   post 'estudantes/senha',   to:"estudantes#update_password", as: :alterar_password
 
   resources :contatos, only:[:create]
+
+   devise_for :estudantes, path: "auth", controllers: {:omniauth_callbacks=>"estudantes/omniauth_callbacks"},
+                          path_names: { sign_in: 'login', sign_out: 'logout', password: 'secret', 
+                                                                confirmation: 'verification', unlock: 'unblock', 
+                                                                registration: 'register', sign_up: 'cmon_let_me_in' }
+
+  # devise_scope :estudante do
+  #   delete 'sign_out', :to => 'devise/sessions#destroy', :as => :destroy_user_session
+  # end
 
   namespace :api, defaults:{format: :json} do
     resources :estudantes, only: [:create, :update], param: :oauth_token do

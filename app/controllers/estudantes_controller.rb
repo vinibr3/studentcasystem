@@ -39,7 +39,7 @@ class EstudantesController < ApplicationController
 											  :instituicao_ensino, :curso_serie, :matricula, :foto, 
 											  :comprovante_matricula, :xerox_rg, :email, :password, 
 											  :celular, :numero, :expedidor_rg, :uf_expedidor_rg,
-											  :cidade_inst_ensino, :uf_inst_ensino)
+											  :cidade_inst_ensino, :uf_inst_ensino, :escolaridade)
 		end
 
 end

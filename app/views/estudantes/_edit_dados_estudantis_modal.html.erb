@@ -19,11 +19,11 @@
 					</div>
 					<div class="form-group">
 						<%= f.label :uf_inst_ensino, "UF Inst. de Ensino", :class=>'control-label col-sm-4 col-sm-offset-1' %>
-						<div class="col-sm-6"><%= f.text_field :cidade_inst_ensino, :class=>'form-control'%></div>
+						<div class="col-sm-6"><%= f.text_field :uf_inst_ensino, :class=>'form-control'%></div>
 					</div>
 					<div class="form-group">
 						<%= f.label :escolaridade, :class=>'control-label col-sm-4 col-sm-offset-1' %>
-						<div class="col-sm-6"><%= f.select :escolaridade, options_for_select(Estudante.escolaridades.keys)%></div>
+						<div class="col-sm-6"><%= f.select :escolaridade, options_for_select(Estudante.escolaridades)%></div>
 					</div>
 					<div class="form-group">
 						<%= f.label :curso_serie, "Curso/Série", :class=>'control-label col-sm-4 col-sm-offset-1' %>

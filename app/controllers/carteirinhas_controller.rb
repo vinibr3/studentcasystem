@@ -32,7 +32,6 @@ class CarteirinhasController < ApplicationController
 			c.uf_inst_ensino = current_estudante.uf_inst_ensino
 			c.curso_serie = current_estudante.curso_serie
 			c.foto = current_estudante.foto
-			c.valor = Carteirinha.VALOR+Carteirinha.FRETE
 			c.layout_carteirinha_id = LayoutCarteirinha.last
 			status = Carteirinha.class_variable_get(:@@STATUS_VERSAO_IMPRESSA)
 			c.status_versao_impressa = status[0]

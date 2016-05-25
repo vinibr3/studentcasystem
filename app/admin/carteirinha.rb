@@ -157,17 +157,6 @@ ActiveAdmin.register Carteirinha do
     end
 
     before_update do |carteirinha| 
-        aprovada = Carteirinha.class_variable_get(:@@STATUS_VERSAO_IMPRESSA)
-        aprovada = aprovada[2]
-        if carteirinha.status_versao_impressa == aprovada 
-            carteirinha.layout_carteirinha_id = LayoutCarteirinha.last_layout_id        if carteirinha.layout_carteirinha_id.blank?
-            carteirinha.nao_antes = Time.new                                            if carteirinha.nao_antes.blank?
-            carteirinha.nao_depois = Time.new(Time.new.year+1, 3, 31).to_date           if carteirinha.nao_depois.blank? 
-            carteirinha.numero_serie = Carteirinha.gera_numero_serie(carteirinha.id)    if carteirinha.numero_serie.blank?
-            carteirinha.codigo_uso = Carteirinha.gera_codigo_uso                        if carteirinha.codigo_uso.blank?
-            carteirinha.qr_code = Carteirinha.gera_qr_code                              if carteirinha.qr_code.blank?
-            carteirinha.certificado = Carteirinha.gera_certificado(carteirinha)         if carteirinha.certificado.blank?
-        end
         carteirinha.alterado_por = current_admin_user.usuario
     end
 end

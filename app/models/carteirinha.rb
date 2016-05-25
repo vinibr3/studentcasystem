@@ -32,7 +32,7 @@ class Carteirinha < ActiveRecord::Base
 	validates :termos, acceptance: true
 	validates :status_versao_impressa, inclusion:{in: %w(Pagamento Documentação Aprovada Enviada Entregue)}
 	#validates :status_versao_digital, inclusion:{in: %w(Pagamento Documentação Download Baixada)}
-	validates :valor, length:{maximum: 4}, numericality: {only_float: true}
+	validates :valor, length:{maximum: 4}
 	validates :numero_serie, numericality: true, uniqueness: true, allow_blank: true
 	validates :cpf, numericality: true, length:{is: 11, too_long: "Necessário 11 caracteres.",  too_short: "Necessário 11 caracteres."}, allow_blank: true
 	validates :expedidor_rg, length:{maximum: 10, too_long:"Máximo de 10 caracteres permitidos!"}, 
@@ -44,6 +44,8 @@ class Carteirinha < ActiveRecord::Base
 	validates_attachment_size :foto, :less_than => 1.megabytes
 	validates_attachment_file_name :foto, :matches => [/png\Z/, /jpe?g\Z/]
 	validates_attachment_content_type :foto, :content_type => ['image/jpeg', 'image/png', 'application/pdf']
+
+	before_update :check_update_status
 
 	def layout
 		if layout_carteirinha.nil? 
@@ -90,13 +92,17 @@ class Carteirinha < ActiveRecord::Base
 		end
 	end
 
-	# def status_versao_digital_to_i
-	# 	@@STATUS_VERSAO_DIGITAL.length.times do |i|
-	# 		if @@STATUS_VERSAO_DIGITAL[i] == self[:status_versao_digital]
-	# 			return i
-	# 		end
-	# 	end
-	# end
+	def check_update_status
+		if self.status_versao_impressa == "Aprovada" 
+            self.layout_carteirinha_id = LayoutCarteirinha.last_layout_id                 if self.layout_carteirinha_id.blank?
+            self.nao_antes = Time.new                                                     if self.nao_antes.blank?
+            self.nao_depois = Time.new(Time.new.year+1, 3, 31).to_date                    if self.nao_depois.blank? 
+            self.numero_serie = Carteirinha.gera_numero_serie(self.id)                    if self.numero_serie.blank?
+            self.codigo_uso = Carteirinha.gera_codigo_uso                                             if self.codigo_uso.blank?
+            self.qr_code = Carteirinha.gera_qr_code(Estudante.find(self.estudante_id).chave_acesso)   if self.qr_code.blank?
+            self.certificado = Carteirinha.gera_certificado(self)                                     if self.certificado.blank?
+        end
+	end
 
 	def self.gera_numero_serie(id)
 		if last
@@ -108,20 +114,19 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def self.gera_codigo_uso
-		
+		SecureRandom.random_number(10)
 	end 
 
 	def self.gera_certificado(carteirinha)
 		entidade = Entidade.instance
-		authkey_identifier = entidade.authority_key_identifier
+		pub_key = entidade.authority_key_identifier
 		crl_dist_points = entidade.crl_dist_points
+		auth_info_access = entidade.authority_info_access
 		nome = entidade.nome
 		sigla = entidade.sigla
 		
-		if authkey_identifier.blank?
-			raise "Authority Key Identifier não definida para a entidade."
-		else
-			authkey_identifier = Digest::SHA1.hexdigest authkey_identifier
+		if pub_key.blank?
+			raise "Chave pública não definida para a entidade."	
 		end
 		
 		if crl_dist_points.blank?
@@ -134,6 +139,10 @@ class Carteirinha < ActiveRecord::Base
 
 		if nome.blank?
 			raise "Nome não definido para a entidade."
+		end
+
+		if authority_info_access.blank?
+			raise "Authority Info Access não definido para a entidade."
 		end
 
 		content1 = AttributeContentOID1.new
@@ -152,14 +161,14 @@ class Carteirinha < ActiveRecord::Base
 
 		info = StudentACInfoGenerator.new
 		info.setHolderByParams(sigla, carteirinha.nome)
-		info.setIssuerByCN(sigla, nome)
+		info.setIssuerByParams(sigla, nome)
 		info.setSerialNumber(carteirinha.numero_serie)
 		info.setNotBefore(carteirinha.nao_antes.to_time.to_java)
-		info.addMandatoryExtensions(hash_authkey_identifier, crl_dist_points, crl_dist_points)
+		#info.addMandatoryExtensions(, auth_info_access, crl_dist_points)
 		info.addAttributes(content1, content2)
 
-		AttributeCertificate ca = info.generateAttributeCertificateInfo()
-		#ca.getEncoded()
+		AttributeCertificate ca = info.generateAttributeCertificateInfo
+		ca.getEncoded()
 
 	end
 

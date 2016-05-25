@@ -2,7 +2,9 @@ class Estudante < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable, :confirmable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :rememberable, :trackable, :validatable,
+         :omniauthable, :omniauth_providers => [:facebook]
+	
 	has_many :carteirinhas
 
 	has_attached_file :foto
@@ -17,9 +19,7 @@ class Estudante < ActiveRecord::Base
 	STRING_REGEX = /\A[a-z A-Z]+\z/
 	LETRAS = /[A-Z a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+/
 
-	enum escolaridade: ["ENSINO FUNDAMENTAL", "ENSINO MÉDIO", "GRADUAÇÃO", "PÓS-GRADUAÇÃO"]
-
-	before_create :create_oauth_token
+	before_create :create_oauth_token, :create_chave_acesso 
 
 	# validações
 	validates :nome, length: { maximum: 70, too_long: "Máximo de 70 caracteres permitidos!"}, 
@@ -46,9 +46,8 @@ class Estudante < ActiveRecord::Base
 	validates :uf_expedidor_rg, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
 	validates :uf, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
 	validates :uf_inst_ensino, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
-	validates :escolaridade, length:{maximum: 30, too_long: "Máximo de 30 caracteres permitidos!"}
-	validates :chave_acesso, length:{is: 10, too_long: "Necessário 10 caracteres", too_short: "Necessário 10 caracteres"},
-							 format:{with:STRING_REGEX, message:"Somente letras é permitido"}, allow_blank: true
+	#validates :escolaridade, length:{maximum: 30, too_long: "Máximo de 30 caracteres permitidos!"}
+	validates :chave_acesso, length:{is: 10, too_long: "Necessário 10 caracteres", too_short: "Necessário 10 caracteres"}, allow_blank: true
 	validates_attachment_size :foto, :less_than => 2.megabytes
 	validates_attachment_size :xerox_rg, :less_than => 2.megabytes
 	validates_attachment_size :comprovante_matricula, :less_than => 2.megabytes
@@ -97,8 +96,8 @@ class Estudante < ActiveRecord::Base
 			estudante.uid = auth.uid
 			estudante.nome = auth.info.name
 			estudante.email = auth.info.email
-			estudante.sexo = auth.extra.gender.slice(0).upcase unless auth.extra.gender != ('male'||'female')
-			estudante.password = Devise.friendly_token[0,20]
+			#estudante.sexo = auth.extra.gender.slice(0).captalize unless auth.extra.gender != ('male'||'female')
+			estudante.password = Devise.friendly_token
 		end
 	end
 
@@ -111,6 +110,10 @@ class Estudante < ActiveRecord::Base
 		else
 			super
 		end	
+	end
+
+	def self.escolaridades
+		@@ESCOLARIDADES = ["", "ENSINO FUNDAMENTAL", "ENSINO MÉDIO", "GRADUAÇÃO", "PÓS-GRADUAÇÃO"]
 	end
 
 	def last_valid_carteirinha
@@ -187,6 +190,10 @@ class Estudante < ActiveRecord::Base
 		nao_preenchidos
 	end
 
+	def confirmation_required?
+		self.provider.blank?
+	end
+
 	protected
 		def endereco
 	 		endereco = Hash.new
@@ -209,5 +216,9 @@ class Estudante < ActiveRecord::Base
 			begin
 				self.oauth_token = Devise.friendly_token
 			end while self.class.exists?(oauth_token: oauth_token)
+		end
+
+		def create_chave_acesso
+			self[:chave_acesso] = SecureRandom.hex(5).upcase
 		end
 end

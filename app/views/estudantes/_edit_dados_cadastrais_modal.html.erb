@@ -34,14 +34,14 @@
 							<div class="col-sm-7"><%= f.text_field :uf_expedidor_rg, :class=>'form-control'%></div>
 						</div>
 						<div class="form-group">
-							<%= f.label :cpf, :class=>'control-label col-sm-3 col-sm-offset-1'%>
+							<%= f.label :cpf, "CPF", :class=>'control-label col-sm-3 col-sm-offset-1'%>
 							<div class="col-sm-7"><%= f.text_field :cpf, :class=>'form-control'%></div>
 						</div>
 						<div class="field form-group">
 							<%= f.label :sexo, :class=>'control-label col-sm-3 col-sm-offset-1'%>
 							<div class="col-sm-7">
-								<%= f.radio_button :sexo, 'masculino' %>Masculino </span>&nbsp;
-								<%= f.radio_button :sexo, 'feminino' %>Feminino </span>
+								<%= f.radio_button :sexo, 'Masculino' %>Masculino </span>&nbsp;
+								<%= f.radio_button :sexo, 'Feminino' %>Feminino </span>
 							</div>
 						</div>
 						<div class="field form-group">
