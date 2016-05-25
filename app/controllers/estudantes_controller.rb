@@ -7,14 +7,12 @@ class EstudantesController < ApplicationController
 		@carteirinha = @estudante.carteirinhas.last
 	end	
 
-
-
 	def update
 		if current_estudante.update(estudante_params)
 			flash[:notice] = "Dados salvos com sucesso!"
 			redirect_to current_estudante
 		else
-			flash[:alert] = "Ocorreu um erro: ".concat(current_estudante.errors.full_messages.to_s)
+			flash[:alert] = current_estudante.errors.full_messages.to_s
 			redirect_to current_estudante
 		end
 	end

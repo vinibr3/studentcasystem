@@ -42,7 +42,7 @@ class CarteirinhasController < ApplicationController
 				flash[:notice] = "Solicitação enviada com sucesso!"
 				redirect_to estudante_path(current_estudante)
 			else
-				flash[:alert] = "Ocorreu um erro: ".concat(@carteirinha.errors.messages.to_s)
+				flash[:alert] = @carteirinha.errors.messages.to_s
 				redirect_to estudante_path(current_estudante)
 			end
 		end
