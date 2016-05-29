@@ -1,11 +1,3 @@
-require "java"
-require "././vendor/java/bcprov-jdk15on-154.jar"
-require "././vendor/java/student-ca-1.0.jar"
-
-java_import Java::BrComDoti::AttributeContentOID1
-java_import Java::BrComDoti::AttributeContentOID2
-java_import Java::BrComDoti::StudentACInfoGenerator
-
 class Carteirinha < ActiveRecord::Base
 
 	belongs_to :estudante
@@ -118,57 +110,57 @@ class Carteirinha < ActiveRecord::Base
 	end 
 
 	def self.gera_certificado(carteirinha)
-		entidade = Entidade.instance
-		pub_key = entidade.authority_key_identifier
-		crl_dist_points = entidade.crl_dist_points
-		auth_info_access = entidade.authority_info_access
-		nome = entidade.nome
-		sigla = entidade.sigla
+		# entidade = Entidade.instance
+		# pub_key = entidade.authority_key_identifier
+		# crl_dist_points = entidade.crl_dist_points
+		# auth_info_access = entidade.authority_info_access
+		# nome = entidade.nome
+		# sigla = entidade.sigla
 		
-		if pub_key.blank?
-			raise "Chave pública não definida para a entidade."	
-		end
+		# if pub_key.blank?
+		# 	raise "Chave pública não definida para a entidade."	
+		# end
 		
-		if crl_dist_points.blank?
-			raise "CRL Distribution Points não definido para a Entidade"
-		end
+		# if crl_dist_points.blank?
+		# 	raise "CRL Distribution Points não definido para a Entidade"
+		# end
 		
-		if sigla.blank?
-			raise "Sigla não definida para a entidade."
-		end
+		# if sigla.blank?
+		# 	raise "Sigla não definida para a entidade."
+		# end
 
-		if nome.blank?
-			raise "Nome não definido para a entidade."
-		end
+		# if nome.blank?
+		# 	raise "Nome não definido para a entidade."
+		# end
 
-		if authority_info_access.blank?
-			raise "Authority Info Access não definido para a entidade."
-		end
+		# if authority_info_access.blank?
+		# 	raise "Authority Info Access não definido para a entidade."
+		# end
 
-		content1 = AttributeContentOID1.new
-		content1.setDataNascimento(carteirinha.data_nascimento.to_time.to_java)
-		content1.setCpf(carteirinha.cpf)
-		content1.setMatricula(carteirinha.matricula)
-		content1.setRg(carteirinha.rg)
-		content1.setExpeditorRG(carteirinha.expedidor_rg)
+		# content1 = AttributeContentOID1.new
+		# content1.setDataNascimento(carteirinha.data_nascimento.to_time.to_java)
+		# content1.setCpf(carteirinha.cpf)
+		# content1.setMatricula(carteirinha.matricula)
+		# content1.setRg(carteirinha.rg)
+		# content1.setExpeditorRG(carteirinha.expedidor_rg)
 
-		content2 = AttributeContentOID2.new
-		content2.setCityInstEnsino(carteirinha.cidade_inst_ensino)
-		content2.setCourseName(carteirinha.curso_serie)
-		content2.setEscolarity(carteirinha.escolaridade)
-		content2.setInstEnsino(carteirinha.instituicao_ensino)
-		content2.setUfInstEnsino(carteirinha.uf_inst_ensino)
+		# content2 = AttributeContentOID2.new
+		# content2.setCityInstEnsino(carteirinha.cidade_inst_ensino)
+		# content2.setCourseName(carteirinha.curso_serie)
+		# content2.setEscolarity(carteirinha.escolaridade)
+		# content2.setInstEnsino(carteirinha.instituicao_ensino)
+		# content2.setUfInstEnsino(carteirinha.uf_inst_ensino)
 
-		info = StudentACInfoGenerator.new
-		info.setHolderByParams(sigla, carteirinha.nome)
-		info.setIssuerByParams(sigla, nome)
-		info.setSerialNumber(carteirinha.numero_serie)
-		info.setNotBefore(carteirinha.nao_antes.to_time.to_java)
-		#info.addMandatoryExtensions(, auth_info_access, crl_dist_points)
-		info.addAttributes(content1, content2)
+		# info = StudentACInfoGenerator.new
+		# info.setHolderByParams(sigla, carteirinha.nome)
+		# info.setIssuerByParams(sigla, nome)
+		# info.setSerialNumber(carteirinha.numero_serie)
+		# info.setNotBefore(carteirinha.nao_antes.to_time.to_java)
+		# #info.addMandatoryExtensions(, auth_info_access, crl_dist_points)
+		# info.addAttributes(content1, content2)
 
-		AttributeCertificate ca = info.generateAttributeCertificateInfo
-		ca.getEncoded()
+		# AttributeCertificate ca = info.generateAttributeCertificateInfo
+		# ca.getEncoded()
 
 	end
 
