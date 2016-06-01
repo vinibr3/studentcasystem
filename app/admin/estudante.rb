@@ -113,6 +113,7 @@ ActiveAdmin.register Estudante do
   end
 
   form do |f|
+    f.semantic_errors *f.object.errors.keys
     f.inputs "Dados Pessoais" do
       f.input :email
       f.input :nome
@@ -122,15 +123,15 @@ ActiveAdmin.register Estudante do
       f.input :sexo
       f.input :telefone
       f.input :celular
-      f.input :foto
-      f.input :xerox_rg
+      f.input :foto, :hint => "Imagem Atual: #{f.object.foto_file_name}"
+      f.input :xerox_rg, :hint => "Imagem Atual: #{f.object.xerox_rg_file_name}"
     end
     f.inputs "Dados Estudantis" do
       f.input :instituicao_ensino
       f.input :escolaridade
       f.input :curso_serie
       f.input :matricula
-      f.input :comprovante_matricula
+      f.input :comprovante_matricula, :hint => "Imagem Atual: #{f.object.comprovante_matricula_file_name}"
       f.input :instituicao_ensino
       f.input :cidade_inst_ensino
       f.input :uf_inst_ensino

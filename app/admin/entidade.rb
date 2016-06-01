@@ -77,10 +77,12 @@ ActiveAdmin.register Entidade do
 				row :cidade_presidente, "Cidade"
 				row :uf_presidente, "UF"
 			end
-		end 
+		end
+		render inline: "<script type='text/javascript'>$('.show-popup-link').magnificPopup({type: 'image'});</script>" 
 	end
 
 	form do |f|
+		f.semantic_errors *f.object.errors.keys
 		f.inputs "Dados da Entidade" do 
 			f.input :nome
 			f.input :sigla

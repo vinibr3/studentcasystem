@@ -67,6 +67,7 @@ GEM
       thor (~> 0.19)
     builder (3.2.2)
     cancan (1.6.10)
+    certified (1.0.0)
     climate_control (0.0.3)
       activesupport (>= 3.0)
     cocaine (0.5.8)
@@ -208,6 +209,7 @@ GEM
       json (~> 1.4)
     responders (2.2.0)
       railties (>= 4.2.0, < 5.1)
+    rmagick (2.15.4)
     sass (3.4.22)
     sass-rails (5.0.4)
       railties (>= 4.0.0, < 5.0)
@@ -252,6 +254,7 @@ DEPENDENCIES
   activeadmin (= 1.0.0.pre1)
   bootstrap-sass (~> 3.3.6)
   cancan (~> 1.6, >= 1.6.10)
+  certified (~> 1.0)
   coffee-rails (~> 4.1.0)
   devise (~> 3.4.1)
   devise-i18n
@@ -264,6 +267,7 @@ DEPENDENCIES
   paperclip (~> 4.3, >= 4.3.6)
   pg
   rails (= 4.2.6)
+  rmagick (~> 2.15, >= 2.15.4)
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   therubyrhino

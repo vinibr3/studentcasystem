@@ -25,12 +25,6 @@ $(document).ready(function() {
                     //Valida o formato do CEP.
                     if(validacep.test(cep)) {
 
-                        //Preenche os campos com "..." enquanto consulta webservice.
-                        $("#estudante_rua").val("...")
-                        $("#estudante_setor").val("...")
-                        $("#estudante_cidade").val("...")
-                        $("#estudante_uf").val("...")
-                 
                         //Consulta o webservice viacep.com.br/
                         $.getJSON("//viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) {
 

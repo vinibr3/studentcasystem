@@ -1,6 +1,11 @@
 ActiveAdmin.register LayoutCarteirinha do
 	menu if: proc{current_admin_user.super_admin?}, priority: 5
-	permit_params :anverso, :verso
+	
+	permit_params :anverso, :verso, :nome_posx, :nome_posy, :instituicao_ensino_posx, :instituicao_ensino_posy,
+	              :escolaridade_posx, :escolaridade_posy, :curso_posx, :curso_posy,
+	              :data_nascimento_posx, :data_nascimento_posy, :rg_posx, :rg_posy,
+	              :cpf_posx, :cpf_posy, :codigo_uso_posx, :codigo_uso_posy, 
+	              :nao_depois_posx, :nao_depois_posy, :qr_code_posx, :qr_code_posy
 
 	filter :anverso_file_name
 	filter :verso_file_name
@@ -14,22 +19,104 @@ ActiveAdmin.register LayoutCarteirinha do
 	end
 
 	show do
-		panel "Anverso" do
+		panel "Verso" do 
 			attributes_table_for layout_carteirinha do
-				row :anverso
+				row :anverso do 
+					a layout_carteirinha.anverso_file_name, class: "show-popup-link", href: layout_carteirinha.anverso.url
+				end
+			end
+		end
+		panel "Posições de Informações" do
+			columns do
+				column do
+					attributes_table_for layout_carteirinha do
+						row :nome_posx
+						row :instituicao_ensino_posx
+						row :escolaridade_posx
+						row :curso_posx
+						row :data_nascimento_posx
+						row :rg_posx
+						row :cpf_posx
+						row :codigo_uso_posx
+						row :nao_depois_posx
+						row :qr_code_posx
+					end
+				end
+				column do
+					attributes_table_for layout_carteirinha do
+						row :nome_posy
+						row :instituicao_ensino_posy
+						row :escolaridade_posy
+						row :curso_posy
+						row :data_nascimento_posy
+						row :rg_posy
+						row :cpf_posy
+						row :codigo_uso_posy
+						row :nao_depois_posy
+						row :qr_code_posy
+					end
+				end
 			end
 		end
 		panel "Verso" do 
 			attributes_table_for layout_carteirinha do
-				row :verso
+				row :verso do 
+					a layout_carteirinha.verso_file_name, class: "show-popup-link", href: layout_carteirinha.verso.url
+				end
 			end
 		end
+		render inline: "<script type='text/javascript'>$('.show-popup-link').magnificPopup({type: 'image'});</script>"
 	end
 
-	form do |f| 
-		f.inputs "Layouts" do
-			f.input :anverso
-			f.input :verso
+	form :html => { :enctype => "multipart/form-data"}  do |f| 
+		f.semantic_errors *f.object.errors.keys
+		f.inputs "Layout", multipart: true do 
+			f.input :anverso, label: "Frente", :hint => "Imagem Atual: #{f.object.anverso_file_name}"
+			f.input :verso, label: "Verso", :hint => "Imagem Atual: #{f.object.verso_file_name}"
+		end
+		panel "Informações" do
+			attributes_table_for layout_carteirinha do
+				row "Nome" do 
+					td f.input :nome_posx, label:"Posição X  "
+					td f.input :nome_posy, label:"Posição X  "
+				end
+				row "Instituição de Ensino" do 
+					td f.input :instituicao_ensino_posx, label:"Posição X  "
+					td f.input :instituicao_ensino_posy, label:"Posição X  "
+				end
+				row "Nome" do 
+					td f.input :escolaridade_posx, label:"Posição X  "
+					td f.input :escolaridade_posy, label:"Posição X  "
+				end
+				row "Instituição de Ensino" do 
+					td f.input :curso_posx, label:"Posição X  "
+					td f.input :curso_posy, label:"Posição X  "
+				end
+				row "Nome" do 
+					td f.input :data_nascimento_posx, label:"Posição X  "
+					td f.input :data_nascimento_posy, label:"Posição X  "
+				end
+				row "Instituição de Ensino" do 
+					td f.input :rg_posx, label:"Posição X  "
+					td f.input :rg_posy, label:"Posição X  "
+				end
+				row "Nome" do 
+					td f.input :cpf_posx, label:"Posição X  "
+					td f.input :cpf_posy, label:"Posição X  "
+				end
+				row "Instituição de Ensino" do 
+					td f.input :codigo_uso_posx, label:"Posição X  "
+					td f.input :codigo_uso_posy, label:"Posição X  "
+				end
+				row "Nome" do 
+					td f.input :nao_depois_posx, label:"Posição X  "
+					td f.input :nao_depois_posy, label:"Posição X  "
+				end
+				row "Instituição de Ensino" do 
+					td f.input :qr_code_posx, label:"Posição X  "
+					td f.input :qr_code_posy, label:"Posição X  "
+				end
+			end
 		end
 		f.actions
 	end

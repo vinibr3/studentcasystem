@@ -53,9 +53,10 @@ gem 'cancan', '~> 1.6', '>= 1.6.10'
 gem 'omniauth-facebook'
 # Gerencia variaveis de ambiente
 gem 'figaro', '~> 1.1', '>= 1.1.1'
-
 # Edita imagens
-gem 'magickwand', '~> 0.2.0'
+gem 'rmagick', '~> 2.15', '>= 2.15.4'
+# Verifica certificados ou fornece um quando não há
+gem 'certified', '~> 1.0'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

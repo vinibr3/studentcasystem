@@ -81,6 +81,7 @@ ActiveAdmin.register AdminUser do
     end
 
   form do |f|
+    f.semantic_errors *f.object.errors.keys
     f.inputs "Dados de Usuário" do 
       f.input :nome
       f.input :usuario

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160522224141) do
+ActiveRecord::Schema.define(version: 20160531181522) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -221,8 +221,28 @@ ActiveRecord::Schema.define(version: 20160522224141) do
     t.string   "verso_content_type"
     t.integer  "verso_file_size"
     t.datetime "verso_updated_at"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "nome_posx"
+    t.integer  "nome_posy"
+    t.integer  "instituicao_ensino_posx"
+    t.integer  "instituicao_ensino_posy"
+    t.integer  "escolaridade_posx"
+    t.integer  "escolaridade_posy"
+    t.integer  "curso_posx"
+    t.integer  "curso_posy"
+    t.integer  "data_nascimento_posx"
+    t.integer  "data_nascimento_posy"
+    t.integer  "rg_posx"
+    t.integer  "rg_posy"
+    t.integer  "cpf_posx"
+    t.integer  "cpf_posy"
+    t.integer  "codigo_uso_posx"
+    t.integer  "codigo_uso_posy"
+    t.integer  "nao_depois_posx"
+    t.integer  "nao_depois_posy"
+    t.integer  "qr_code_posx"
+    t.integer  "qr_code_posy"
   end
 
   create_table "noticias", force: :cascade do |t|

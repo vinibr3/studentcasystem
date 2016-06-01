@@ -77,7 +77,9 @@ ActiveAdmin.register Carteirinha do
                 row :rg
                 row :cpf
                 row :data_nascimento
-                row :foto_file_name
+                row :foto do 
+                    a carteirinha.foto_file_name, class: "show-popup-link", href: foto.foto.url
+                end
             end
         end
         panel "Dados Escolares" do 
@@ -112,15 +114,17 @@ ActiveAdmin.register Carteirinha do
                 row :numero_boleto
             end
         end
+        render inline: "<script type='text/javascript'>$('.show-popup-link').magnificPopup({type: 'image'});</script>"
     end
 
     form do |f|
+        f.semantic_errors *f.object.errors.keys
         if current_admin_user.super_admin?
             f.inputs "Dados do Estudante" do
                 f.input :nome 
                 f.input :rg
                 f.input :cpf
-                f.input :data_nascimento
+                f.input :data_nascimento, as: :datepicker
                 #f.input :foto_file_name
             end
             f.inputs "Dados Escolares" do
@@ -139,7 +143,7 @@ ActiveAdmin.register Carteirinha do
                 f.input :certificado
                 f.input :numero_serie
                 f.input :layout_carteirinha_id
-                f.input :estudante_id
+                f.input :estudante_id, label: "Estudante ID"
             end 
         end
             f.inputs "Dados da Solicitação" do

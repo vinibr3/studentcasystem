@@ -19,7 +19,7 @@
 			</div>
 			<div class="input-group" role="group">
 				<span class="input-group-addon bg-success"><strong>Total R$</strong></span>
-				<%= f.hidden :valor,frete.to_i+valor.to_i %>
+				<%= f.hidden_field :valor, :value=>frete.to_i+valor.to_i %>
 				<%= f.label :valor, frete.to_i+valor.to_i, :id=> 'carteirinha_valor', :size=>'4', :class=>'form-control' %>
 				<span class="input-group-btn" id="pagar_agora">
 					<%= f.submit "Pagar Agora", :class=>'btn btn-success' %>
