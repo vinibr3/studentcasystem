@@ -15,4 +15,6 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym 'RESTful'
   inflect.plural('noticia','noticias')
   inflect.singular('noticias','noticia')
+  inflect.plural('configuracao','configuracoes')
+  inflect.singular('configuracoes','configuracao')
 end

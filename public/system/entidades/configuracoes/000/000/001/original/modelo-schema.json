@@ -1,0 +1,14 @@
+{
+	"entidade":{
+		"sigla":"DCE",
+		"instituicoes_ensino":[{
+			"nome":"UESPI",
+			"cursos":{
+				"fundamental":["Curso1"],
+				"medio":["Curso2"],
+				"superior":["Curso3"],
+				"pos_graduacao":["Curso4"]
+			}
+		}]
+	}
+}

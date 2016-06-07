@@ -18,8 +18,8 @@ class CreateEstudantes < ActiveRecord::Migration
     	t.string :cep
     	t.string :cidade
     	t.string :uf
-    	t.string :instituicao_ensino
-    	t.string :curso_serie
+    	t.integer :instituicao_ensino_id
+    	t.integer :curso_id
     	t.string :escolaridade
     	t.string :matricula
     	t.string :cidade_inst_ensino

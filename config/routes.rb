@@ -14,11 +14,15 @@ Rails.application.routes.draw do
   resources :estudantes, only: [:show, :update] do 
     resources :carteirinhas, only: [:new, :show, :autenticacao, :create]
   end
+  
   post 'estudantes/senha',   to:"estudantes#update_password", as: :alterar_password
+
+  get 'entidades/escolaridades', to:"entidades#escolaridades"
+  get 'entidades/cursos', to:"entidades#cursos"
 
   resources :contatos, only:[:create]
 
-   devise_for :estudantes, path: "auth", controllers: {:omniauth_callbacks=>"estudantes/omniauth_callbacks"},
+  devise_for :estudantes, path: "auth", controllers: {:omniauth_callbacks=>"estudantes/omniauth_callbacks"},
                           path_names: { sign_in: 'login', sign_out: 'logout', password: 'secret', 
                                                                 confirmation: 'verification', unlock: 'unblock', 
                                                                 registration: 'register', sign_up: 'cmon_let_me_in' }

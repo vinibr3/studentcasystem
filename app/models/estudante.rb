@@ -6,6 +6,9 @@ class Estudante < ActiveRecord::Base
          :omniauthable, :omniauth_providers => [:facebook]
 	
 	has_many :carteirinhas
+	belongs_to :instituicao_ensino
+	belongs_to :curso
+	has_one :escolaridade, through: :curso
 
 	has_attached_file :foto
 	has_attached_file :comprovante_matricula
@@ -19,7 +22,8 @@ class Estudante < ActiveRecord::Base
 	STRING_REGEX = /\A[a-z A-Z]+\z/
 	LETRAS = /[A-Z a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+/
 
-	before_create :create_oauth_token, :create_chave_acesso 
+	before_create :create_oauth_token, :create_chave_acesso
+	before_update :set_instituicao_id
 
 	# validações
 	validates :nome, length: { maximum: 70, too_long: "Máximo de 70 caracteres permitidos!"}, 
@@ -33,9 +37,6 @@ class Estudante < ActiveRecord::Base
 	validates :setor, length:{maximum: 50}, allow_blank: true
 	validates :cep, length:{is: 8}, numericality: true, allow_blank: true
 	validates :cidade, length:{maximum: 30, too_long:"Máximo de 70 carectetes é permitidos!"}, format:{with: LETRAS}, allow_blank: true
-	validates :cidade_inst_ensino, length:{maximum: 30, too_long:"Máximo de 70 carectetes é permitidos!"}, format:{with: LETRAS}, allow_blank: true
-	validates :instituicao_ensino, length:{maximum: 50, too_long: "Máximo de 50 caracteres permitidos!."}, format:{with: LETRAS}, allow_blank: true
-	validates :curso_serie, length:{maximum: 40, too_long: "Máximo de 40 caracteres permitidos!."}, format:{with: LETRAS}, allow_blank: true
 	validates :matricula, numericality: true, length:{maximum: 30}, allow_blank: true
 	validates :celular, length:{in: 10..11}, numericality: true, allow_blank: true
 	validates :numero, length:{maximum: 5}, numericality: true, allow_blank: true
@@ -45,8 +46,6 @@ class Estudante < ActiveRecord::Base
 							 format:{with:STRING_REGEX, message: "Somente letras é permitido!"}, allow_blank: true
 	validates :uf_expedidor_rg, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
 	validates :uf, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
-	validates :uf_inst_ensino, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
-	#validates :escolaridade, length:{maximum: 30, too_long: "Máximo de 30 caracteres permitidos!"}
 	validates :chave_acesso, length:{is: 10, too_long: "Necessário 10 caracteres", too_short: "Necessário 10 caracteres"}, allow_blank: true
 	validates_attachment_size :foto, :less_than => 2.megabytes
 	validates_attachment_size :xerox_rg, :less_than => 2.megabytes
@@ -57,13 +56,15 @@ class Estudante < ActiveRecord::Base
 	validates_attachment_content_type :foto, :content_type=> ['image/png', 'image/jpeg']
 	validates_attachment_content_type :comprovante_matricula, :content_type=> FILES_CONTENT_TYPE
 	validates_attachment_content_type :xerox_rg, :content_type=> FILES_CONTENT_TYPE
+	validates_acceptance_of :termos
     
     validates_length_of :foto_file_name, :comprovante_matricula_file_name, :xerox_rg_file_name, 
                         :maximum => 20, :message => "Menor que #{count} caracteres"
     # validates_associated :carteirinha, allow_blank: true
+    #validates_associated :instituicao_ensino unless self[:instituicao_ensino_id].blank?
+    #validates_associated :curso unless self.curso_id.blank?
 
 	public
-
 		def tem_carteirinha
 			!self.carteirinha.last.nil?
 		end
@@ -76,19 +77,20 @@ class Estudante < ActiveRecord::Base
 			string_to_substring(self.nome, " ")
 		end
 
-		def atributos_em_branco
-			atributos = [:nome, :email, :cpf, :rg_certidao, :data_nascimento, :sexo, :telefone, 
-									 :logradouro, :complemento, :setor, :cep, :cidade, :estado, :instituicao_ensino, 
-									 :curso_serie, :matricula, :foto_file_name, :comprovante_matricula_file_name, 
-									 :xerox_rg_file_name, :celular, :numero, :oauth_token]
-			atributos_em_branco = Array.new
-			atributos.each do |atributo|
-				if self[atributo].nil?
-					atributos_em_branco.push(atributo)
-				end 
-			end
-			atributos_em_branco
-		end
+		# def atributos_em_branco
+		# 	atributos = [:nome, :email, :cpf, :rg, :data_nascimento, :sexo,  
+		# 				:logradouro, :complemento, :cep, :cidade, :estado, :instituicao_ensino_id, 
+		# 				:curso_serie, :matricula, :foto_file_name, :comprovante_matricula_file_name, 
+		# 				:xerox_rg_file_name, :celular, :numero]
+
+		# 	atributos_em_branco = Array.new
+		# 	atributos.each do |atributo|
+		# 		if self[atributo].nil?
+		# 			atributos_em_branco.push(atributo)
+		# 		end 
+		# 	end
+		# 	atributos_em_branco
+		# end
 		
 	def self.from_omniauth(auth)
 		where(provider: auth.provider, uid: auth.uid).first_or_create do |estudante|
@@ -181,9 +183,9 @@ class Estudante < ActiveRecord::Base
 		nao_preenchidos = Array.new
 		atributos = [:nome, :email, :cpf, :rg, :expedidor_rg, :uf_expedidor_rg, 
 			          :data_nascimento, :sexo, :celular, :logradouro, :numero, 
-			          :setor, :cep, :cidade, :uf, :instituicao_ensino, :curso_serie,
-			          :escolaridade, :matricula, :cidade_inst_ensino, :uf_inst_ensino,
-			      	  :foto_file_name, :comprovante_matricula_file_name, :xerox_rg_file_name]
+			          :cep, :cidade, :uf, :instituicao_ensino_id, :curso_id,
+			          :matricula, :foto_file_name, :comprovante_matricula_file_name, 
+			          :xerox_rg_file_name]
 		atributos.each do |atr|
 			nao_preenchidos << atr if self[atr].blank?
 		end
@@ -220,5 +222,9 @@ class Estudante < ActiveRecord::Base
 
 		def create_chave_acesso
 			self[:chave_acesso] = SecureRandom.hex(5).upcase
+		end
+
+		def set_instituicao_id
+			self[:instituicao_ensino_id] = InstituicaoEnsino.last.id
 		end
 end

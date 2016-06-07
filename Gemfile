@@ -57,6 +57,8 @@ gem 'figaro', '~> 1.1', '>= 1.1.1'
 gem 'rmagick', '~> 2.15', '>= 2.15.4'
 # Verifica certificados ou fornece um quando não há
 gem 'certified', '~> 1.0'
+# Verifica um dado json objeto com um json schema
+gem 'json-schema', '~> 2.6', '>= 2.6.2'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

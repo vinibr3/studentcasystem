@@ -20,7 +20,7 @@
 							</tr>
 						<tr>
 							<td><strong>CPF: </strong><%=@estudante.cpf %></td>
-							<td colspan="2"><strong>Sexo: </strong><%= @estudante.sexo %></td> 
+							<td colspan="2"><strong>Gênero: </strong><%= @estudante.sexo %></td> 
 						</tr>
 						<tr>
 							<td><strong>Telefone: </strong><%=@estudante.telefone %>&nbsp;&nbsp;&nbsp;&nbsp;</td>
@@ -42,14 +42,9 @@
 				</div>
 				<div class="panel-body" style="word-break: break-all;white-space: normal;">
 					<table>
-						<tr><td colspan="2"><strong>Instituição de Ensino: </strong><%=@estudante.instituicao_ensino %> </td></tr>
-						<tr><td colspan="2"><strong>Curso/Série </strong><%=@estudante.curso_serie %> </td></tr>
-						<tr><td colspan="2"><strong>Escolaridade: </strong><%=@estudante.escolaridade %> </td></tr>
+						<tr><td colspan="2"><strong>Curso/Série </strong><%=@estudante.curso.nome if @estudante.curso %> </td></tr>
+						<tr><td><strong>Escolaridade: </strong><%=@estudante.escolaridade.nome if @estudante.escolaridade %> </td></tr>
 						<tr><td><strong>Matrícula: </strong><%=@estudante.matricula %> </td></tr>
-						<tr>
-							<td><strong>Mun. Inst. Ensino: </strong><%=@estudante.cidade_inst_ensino %> </td>
-							<td><strong>UF: </strong><%=@estudante.uf_inst_ensino %> </td>
-						</tr>
 						<tr>
 							<td colspan="2"><strong>Compr. Matrícula: </strong><%= @estudante.comprovante_matricula_file_name.nil? ? '*' : @estudante.comprovante_matricula_file_name %> 
 							</td>

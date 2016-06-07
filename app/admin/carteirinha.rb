@@ -78,7 +78,7 @@ ActiveAdmin.register Carteirinha do
                 row :cpf
                 row :data_nascimento
                 row :foto do 
-                    a carteirinha.foto_file_name, class: "show-popup-link", href: foto.foto.url
+                    a carteirinha.foto_file_name, class: "show-popup-link", href: foto.url
                 end
             end
         end

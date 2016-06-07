@@ -34,10 +34,8 @@ class EstudantesController < ApplicationController
 		def estudante_params
 			params.require(:estudante).permit(:nome, :cpf, :rg, :data_nascimento, :sexo, :telefone,
 											  :logradouro, :complemento, :setor, :cep, :cidade, :uf,
-											  :instituicao_ensino, :curso_serie, :matricula, :foto, 
+											  :instituicao_ensino_id, :curso_id, :matricula, :foto, 
 											  :comprovante_matricula, :xerox_rg, :email, :password, 
-											  :celular, :numero, :expedidor_rg, :uf_expedidor_rg,
-											  :cidade_inst_ensino, :uf_inst_ensino, :escolaridade)
+											  :celular, :numero, :expedidor_rg, :uf_expedidor_rg)
 		end
-
 end

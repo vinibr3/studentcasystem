@@ -91,12 +91,13 @@ class Carteirinha < ActiveRecord::Base
             self.nao_depois = Time.new(Time.new.year+1, 3, 31).to_date                    if self.nao_depois.blank? 
             self.numero_serie = Carteirinha.gera_numero_serie(self.id)                    if self.numero_serie.blank?
             self.codigo_uso = Carteirinha.gera_codigo_uso                                             if self.codigo_uso.blank?
-            self.qr_code = Carteirinha.gera_qr_code(Estudante.find(self.estudante_id).chave_acesso)   if self.qr_code.blank?
+            self.qr_code = Carteirinha.gera_qr_code(Estudante.find(self.codigo_uso))                  if self.qr_code.blank?
             self.certificado = Carteirinha.gera_certificado(self)                                     if self.certificado.blank?
         end
 	end
 
 	def self.gera_numero_serie(id)
+		last = where(status_versao_impressa: "Aprovada").last
 		if last
 			return last.numero_serie if last.id == id
 			return last.id.to_i+1
@@ -106,71 +107,18 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def self.gera_codigo_uso
-		SecureRandom.random_number(10)
+		SecureRandom.hex(4).upcase
 	end 
 
-	def self.gera_certificado(carteirinha)
-		# entidade = Entidade.instance
-		# pub_key = entidade.authority_key_identifier
-		# crl_dist_points = entidade.crl_dist_points
-		# auth_info_access = entidade.authority_info_access
-		# nome = entidade.nome
-		# sigla = entidade.sigla
-		
-		# if pub_key.blank?
-		# 	raise "Chave pública não definida para a entidade."	
-		# end
-		
-		# if crl_dist_points.blank?
-		# 	raise "CRL Distribution Points não definido para a Entidade"
-		# end
-		
-		# if sigla.blank?
-		# 	raise "Sigla não definida para a entidade."
-		# end
-
-		# if nome.blank?
-		# 	raise "Nome não definido para a entidade."
-		# end
-
-		# if authority_info_access.blank?
-		# 	raise "Authority Info Access não definido para a entidade."
-		# end
-
-		# content1 = AttributeContentOID1.new
-		# content1.setDataNascimento(carteirinha.data_nascimento.to_time.to_java)
-		# content1.setCpf(carteirinha.cpf)
-		# content1.setMatricula(carteirinha.matricula)
-		# content1.setRg(carteirinha.rg)
-		# content1.setExpeditorRG(carteirinha.expedidor_rg)
-
-		# content2 = AttributeContentOID2.new
-		# content2.setCityInstEnsino(carteirinha.cidade_inst_ensino)
-		# content2.setCourseName(carteirinha.curso_serie)
-		# content2.setEscolarity(carteirinha.escolaridade)
-		# content2.setInstEnsino(carteirinha.instituicao_ensino)
-		# content2.setUfInstEnsino(carteirinha.uf_inst_ensino)
-
-		# info = StudentACInfoGenerator.new
-		# info.setHolderByParams(sigla, carteirinha.nome)
-		# info.setIssuerByParams(sigla, nome)
-		# info.setSerialNumber(carteirinha.numero_serie)
-		# info.setNotBefore(carteirinha.nao_antes.to_time.to_java)
-		# #info.addMandatoryExtensions(, auth_info_access, crl_dist_points)
-		# info.addAttributes(content1, content2)
-
-		# AttributeCertificate ca = info.generateAttributeCertificateInfo
-		# ca.getEncoded()
-
-	end
-
-	def self.gera_qr_code chave_acesso
+	def self.gera_qr_code codigo_uso
 		entidade = Entidade.instance
 		url_qr_code = entidade.url_qr_code
 		if url_qr_code.blank?
 			raise "url_qr_code não informada para a entidade."
 		else
-			return url_qr_code.concat(chave_acesso)
+			index = url_qr_code.rindex("/")+1
+			index == url_qr_code.size ? url_qr_code.concat(codigo_uso) : url_qr_code.concat("/".concat(codigo_uso))
+			return url_qr_code
 		end
 	end
 

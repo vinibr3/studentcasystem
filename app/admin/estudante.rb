@@ -43,8 +43,6 @@ ActiveAdmin.register Estudante do
     panel "Dados Escolares" do
       attributes_table_for estudante do
         row :instituicao_ensino
-        row :cidade_inst_ensino
-        row :uf_inst_ensino
         row :escolaridade
         row :curso_serie
         row :matricula

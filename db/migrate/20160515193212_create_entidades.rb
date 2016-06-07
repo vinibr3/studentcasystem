@@ -5,10 +5,6 @@ class CreateEntidades < ActiveRecord::Migration
       t.string :sigla
       t.string :email
       t.string :cnpj
-      t.attachment :chave_privada
-      t.string :password
-      t.string :common_name_certificado
-      t.string :organizational_unit
       t.string :valor_carteirinha
       t.string :frete_carteirinha
       t.string :telefone

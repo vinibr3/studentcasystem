@@ -2,7 +2,7 @@ ActiveAdmin.register Entidade do
 	menu if: proc{current_admin_user.super_admin?}, label: "Entidade", priority: 6
 
 	permit_params :nome, :sigla, :email, :cnpj, :chave_privada, :password,
-	              :common_name_certificado, :organizational_unit, :valor_carteirinha,
+	              :instituicao_ensino, :organizational_unit, :valor_carteirinha,
 	              :frete_carteirinha, :telefone, :logradouro, :numero, :complemento,
 	              :setor, :cep, :cidade, :uf, :nome_presidente, :email_presidente,
 	              :cpf_presidente, :rg_presidente, :expedidor_rg_presidente,
@@ -10,7 +10,8 @@ ActiveAdmin.register Entidade do
 	              :sexo_presidente, :celular_presidente, :telefone_presidente,
 	              :logradouro_presidente, :numero_presidente, :complemento_presidente,
 	              :cep_presidente, :cidade_presidente, :uf_presidente, 
-	              :authority_key_identifier, :crl_dist_points, :url_qr_code, :authority_info_access
+	              :authority_key_identifier, :crl_dist_points, :url_qr_code, 
+	              :authority_info_access, :representatividade, :configuracao
 
 	filter :nome
 	filter :sigla
@@ -34,10 +35,7 @@ ActiveAdmin.register Entidade do
 				row :sigla
 				row :email
 				row :cnpj
-				row :chave_privada_file_name
-				row :password
-				row :common_name_certificado
-				row :organizational_unit
+				row :logo_file_name
 				row :valor_carteirinha
 				row :frete_carteirinha
 				row :telefone
@@ -88,16 +86,13 @@ ActiveAdmin.register Entidade do
 			f.input :sigla
 			f.input :email
 			f.input :cnpj
-			f.input :chave_privada
-			f.input :password
-			f.input :common_name_certificado
-			f.input :organizational_unit
+			f.input :logo
 			f.input :valor_carteirinha
 			f.input :frete_carteirinha
 			f.input :telefone
 			f.input :authority_key_identifier, label: "Chave Pública"
 			f.input :crl_dist_points, label: "URL CRL Dist. Points"
-			f.input :authority_info_access, "URL Authority Info Access"
+			f.input :authority_info_access, label: "URL Authority Info Access"
 			f.input :url_qr_code, label: "URL Qr-Code"
 		end
 		f.inputs "Endereço da Entidade" do 
@@ -106,8 +101,8 @@ ActiveAdmin.register Entidade do
 			f.input :complemento
 			f.input :setor
 			f.input :cep
+			f.input :uf, as: :select, collection: Estado.siglas
 			f.input :cidade
-			f.input :uf
 		end
 		f.inputs "Dados do Presidente" do 
 			f.input :nome_presidente, label: "Presidente"

@@ -15,7 +15,7 @@ class CarteirinhasController < ApplicationController
 		if atributos.count > 0
 			campos = ""
 			atributos.collect{|f| campos.concat(f.to_s.humanize.concat(", "))}
-			flash[:alert] = "Campos #{campos} não preenchidos."
+			flash[:alert] = "Campo(s) #{campos} não preenchido(s)."
 			redirect_to estudante_path(current_estudante)
 		else
 			@carteirinha = current_estudante.carteirinhas.new(carteirinha_params) do |c|
@@ -26,13 +26,14 @@ class CarteirinhasController < ApplicationController
 			c.matricula = current_estudante.matricula
 			c.expedidor_rg = current_estudante.expedidor_rg
 			c.uf_expedidor_rg = current_estudante.uf_expedidor_rg
-			c.instituicao_ensino = current_estudante.instituicao_ensino
-			c.cidade_inst_ensino = current_estudante.cidade_inst_ensino
-			c.escolaridade = current_estudante.escolaridade
-			c.uf_inst_ensino = current_estudante.uf_inst_ensino
-			c.curso_serie = current_estudante.curso_serie
+			@instituicao = InstituicaoEnsino.find(current_estudante.instituicao_ensino_id)
+			c.instituicao_ensino = @instituicao.nome
+			c.cidade_inst_ensino = @instituicao.cidade.nome
+			c.escolaridade = current_estudante.escolaridade.nome
+			c.uf_inst_ensino = @instituicao.estado.sigla
+			c.curso_serie = current_estudante.curso.nome
 			c.foto = current_estudante.foto
-			c.layout_carteirinha_id = LayoutCarteirinha.last
+			c.layout_carteirinha = LayoutCarteirinha.last
 			status = Carteirinha.class_variable_get(:@@STATUS_VERSAO_IMPRESSA)
 			c.status_versao_impressa = status[0]
 			#c.status_versao_digital = Carteirinha.class_variable_get(:@@STATUS_VERSAO_DIGITAL[0])

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160531181522) do
+ActiveRecord::Schema.define(version: 201606060397040) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -105,18 +105,37 @@ ActiveRecord::Schema.define(version: 20160531181522) do
   add_index "carteirinhas", ["estudante_id"], name: "index_carteirinhas_on_estudante_id", using: :btree
   add_index "carteirinhas", ["layout_carteirinha_id"], name: "index_carteirinhas_on_layout_carteirinha_id", using: :btree
 
+  create_table "cidades", force: :cascade do |t|
+    t.string   "nome"
+    t.boolean  "capital"
+    t.integer  "estado_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "cidades", ["estado_id"], name: "index_cidades_on_estado_id", using: :btree
+
+  create_table "cursos", force: :cascade do |t|
+    t.string   "nome"
+    t.integer  "escolaridade_id"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+    t.integer  "curso_id"
+    t.integer  "instituicao_ensino_id"
+  end
+
+  add_index "cursos", ["curso_id"], name: "index_cursos_on_curso_id", using: :btree
+  add_index "cursos", ["instituicao_ensino_id"], name: "index_cursos_on_instituicao_ensino_id", using: :btree
+
   create_table "entidades", force: :cascade do |t|
     t.string   "nome"
     t.string   "sigla"
     t.string   "email"
     t.string   "cnpj"
-    t.string   "chave_privada_file_name"
-    t.string   "chave_privada_content_type"
-    t.integer  "chave_privada_file_size"
-    t.datetime "chave_privada_updated_at"
-    t.string   "password"
-    t.string   "common_name_certificado"
-    t.string   "organizational_unit"
+    t.string   "logo_file_name"
+    t.string   "logo_content_type"
+    t.integer  "logo_file_size"
+    t.datetime "logo_updated_at"
     t.string   "valor_carteirinha"
     t.string   "frete_carteirinha"
     t.string   "telefone"
@@ -149,6 +168,24 @@ ActiveRecord::Schema.define(version: 20160531181522) do
     t.string   "crl_dist_points"
     t.string   "url_qr_code"
     t.string   "authority_info_access"
+    t.string   "representatividade"
+    t.string   "configuracao_file_name"
+    t.string   "configuracao_content_type"
+    t.integer  "configuracao_file_size"
+    t.datetime "configuracao_updated_at"
+  end
+
+  create_table "escolaridades", force: :cascade do |t|
+    t.string   "nome"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "estados", force: :cascade do |t|
+    t.string   "nome"
+    t.string   "sigla"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "estudantes", force: :cascade do |t|
@@ -169,12 +206,9 @@ ActiveRecord::Schema.define(version: 20160531181522) do
     t.string   "cep"
     t.string   "cidade"
     t.string   "uf"
-    t.string   "instituicao_ensino"
-    t.string   "curso_serie"
-    t.string   "escolaridade"
+    t.integer   "instituicao_ensino_id"
+    t.string   "curso_id"
     t.string   "matricula"
-    t.string   "cidade_inst_ensino"
-    t.string   "uf_inst_ensino"
     t.string   "foto_file_name"
     t.string   "foto_content_type"
     t.integer  "foto_file_size"
@@ -211,6 +245,35 @@ ActiveRecord::Schema.define(version: 20160531181522) do
   add_index "estudantes", ["confirmation_token"], name: "index_estudantes_on_confirmation_token", unique: true, using: :btree
   add_index "estudantes", ["email"], name: "index_estudantes_on_email", unique: true, using: :btree
   add_index "estudantes", ["reset_password_token"], name: "index_estudantes_on_reset_password_token", unique: true, using: :btree
+
+  create_table "instituicao_ensino_cursos", force: :cascade do |t|
+    t.integer  "instituicao_ensino_id"
+    t.integer  "curso_id"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+  end
+
+  add_index "instituicao_ensino_cursos", ["curso_id"], name: "index_instituicao_ensino_cursos_on_curso_id", using: :btree
+  add_index "instituicao_ensino_cursos", ["instituicao_ensino_id"], name: "index_instituicao_ensino_cursos_on_instituicao_ensino_id", using: :btree
+
+  create_table "instituicao_ensinos", force: :cascade do |t|
+    t.string   "nome"
+    t.string   "sigla"
+    t.string   "cnpj"
+    t.string   "logradouro"
+    t.string   "numero"
+    t.string   "cep"
+    t.string   "complemento"
+    t.integer  "cidade_id"
+    t.integer  "estado_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "entidade_id"
+  end
+
+  add_index "instituicao_ensinos", ["cidade_id"], name: "index_instituicao_ensinos_on_cidade_id", using: :btree
+  add_index "instituicao_ensinos", ["entidade_id"], name: "index_instituicao_ensinos_on_entidade_id", using: :btree
+  add_index "instituicao_ensinos", ["estado_id"], name: "index_instituicao_ensinos_on_estado_id", using: :btree
 
   create_table "layout_carteirinhas", force: :cascade do |t|
     t.string   "anverso_file_name"
@@ -257,4 +320,12 @@ ActiveRecord::Schema.define(version: 20160531181522) do
     t.datetime "updated_at",        null: false
   end
 
+  add_foreign_key "cidades", "estados"
+  add_foreign_key "cursos", "cursos"
+  add_foreign_key "cursos", "instituicao_ensinos"
+  add_foreign_key "instituicao_ensino_cursos", "cursos"
+  add_foreign_key "instituicao_ensino_cursos", "instituicao_ensinos"
+  add_foreign_key "instituicao_ensinos", "cidades"
+  add_foreign_key "instituicao_ensinos", "entidades"
+  add_foreign_key "instituicao_ensinos", "estados"
 end
