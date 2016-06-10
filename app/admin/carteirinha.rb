@@ -1,3 +1,4 @@
+require 'zip'
 ActiveAdmin.register Carteirinha do
    menu priority: 3
    actions :all, except: [:new, :delete]
@@ -51,12 +52,10 @@ ActiveAdmin.register Carteirinha do
 
 	filter :nome
     filter :status_versao_impressa, as: :select, collection: proc {Carteirinha.class_variable_get(:@@STATUS_VERSAO_IMPRESSA)}
-	filter :matricula
-	filter :rg
-	filter :cpf
 	filter :numero_serie
-	filter :qr_code
 	
+
+
 	index do
 		selectable_column
     	column :nome 
@@ -78,7 +77,7 @@ ActiveAdmin.register Carteirinha do
                 row :cpf
                 row :data_nascimento
                 row :foto do 
-                    a carteirinha.foto_file_name, class: "show-popup-link", href: foto.url
+                    a carteirinha.foto_file_name, class: "show-popup-link", href: carteirinha.foto.url
                 end
             end
         end
@@ -162,5 +161,24 @@ ActiveAdmin.register Carteirinha do
 
     before_update do |carteirinha| 
         carteirinha.alterado_por = current_admin_user.usuario
+    end
+
+    #Actions
+    member_action :download, method: :get do
+       carteirinha = Carteirinha.find(params[:id])
+       send_data carteirinha.to_blob, type: 'image/jpg', filename: "#{carteirinha.numero_serie}.jpg"
+    end
+
+    collection_action :download_all, method: :get do
+       data = Carteirinha.zipfile_by_scope params[:scope] 
+       send_data  data[:stream], type:'application/zip', filename: data[:filename]
+    end
+    #Action items 
+    action_item :download, only: :show do
+        link_to 'Download ', download_admin_carteirinha_path(carteirinha)
+    end
+
+    action_item :download_all, only: :index do
+        link_to 'Download', download_all_admin_carteirinhas_path
     end
 end

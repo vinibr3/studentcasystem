@@ -24,21 +24,18 @@ class LayoutCarteirinha < ActiveRecord::Base
 	                          :nao_depois_posx, :nao_depois_posy, :qr_code_posx, :qr_code_posy, allow_blank: true
 
 
-	# def self.instance
-	# 	 if @@last_layout.nil? 
-	# 	 	return 0	
-	# 	 else
-	# 	 	return @@last_layout
-	# 	 end
-	# end
+	def self.instance
+		 last_layout = LayoutCarteirinha.last
+	end
 
 	def self.last_layout_id
-		last = LayoutCarteirinha.last
+		last = self.instance
 		last.nil? ? 0 : last.id
 	end
 
 	def self.anverso
-		LayoutCarteirinha.last ? LayoutCarteirinha.last.anverso : nil
+		last = self.instance
+		last ? last.anverso : nil
 	end
 
 end

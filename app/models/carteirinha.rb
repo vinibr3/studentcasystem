@@ -1,5 +1,4 @@
 class Carteirinha < ActiveRecord::Base
-
 	belongs_to :estudante
 	belongs_to :layout_carteirinha
 
@@ -38,14 +37,6 @@ class Carteirinha < ActiveRecord::Base
 	validates_attachment_content_type :foto, :content_type => ['image/jpeg', 'image/png', 'application/pdf']
 
 	before_update :check_update_status
-
-	def layout
-		if layout_carteirinha.nil? 
-			LayoutCarteirinha::instance.layout 
-		else
-			layout_carteirinha.layout_front
-		end
-	end
 
 	def dias_validade 
 		nao_depois  = self.nao_depois
@@ -90,10 +81,81 @@ class Carteirinha < ActiveRecord::Base
             self.nao_antes = Time.new                                                     if self.nao_antes.blank?
             self.nao_depois = Time.new(Time.new.year+1, 3, 31).to_date                    if self.nao_depois.blank? 
             self.numero_serie = Carteirinha.gera_numero_serie(self.id)                    if self.numero_serie.blank?
-            self.codigo_uso = Carteirinha.gera_codigo_uso                                             if self.codigo_uso.blank?
-            self.qr_code = Carteirinha.gera_qr_code(Estudante.find(self.codigo_uso))                  if self.qr_code.blank?
-            self.certificado = Carteirinha.gera_certificado(self)                                     if self.certificado.blank?
+            self.codigo_uso = Carteirinha.gera_codigo_uso                                 if self.codigo_uso.blank?
+            self.qr_code = Carteirinha.gera_qr_code(Estudante.find(self.codigo_uso))      if self.qr_code.blank?
+            #self.certificado = Carteirinha.gera_certificado(self)                         if self.certificado.blank?
         end
+	end
+
+	def to_blob
+		lyt = self.layout_carteirinha
+		img = Magick::Image.read(lyt.anverso.path)
+		img = img.first
+
+		# Desenha os dados (texto) no layout
+		draw = Magick::Draw.new
+		draw.annotate(img, 0, 0, lyt.nome_posx, lyt.nome_posy, self.nome.upcase)                                            	 unless lyt.nome_posx.blank? && lyt.nome_posy.blank? 
+		draw.annotate(img, 0, 0, lyt.instituicao_ensino_posx, lyt.instituicao_ensino_posy, self.instituicao_ensino.upcase)       unless lyt.instituicao_ensino_posx.blank? && lyt.instituicao_ensino_posy.blank? 
+		draw.annotate(img, 0, 0, lyt.escolaridade_posx, lyt.escolaridade_posy, self.escolaridade.nome.upcase)               	 unless lyt.escolaridade_posx.blank? && lyt.escolaridade_posy.blank? 
+		draw.annotate(img, 0, 0, lyt.curso_posx, lyt.curso_posy, self.curso_serie.upcase)                                        unless lyt.curso_posx.blank? && lyt.curso_posy.blank? 
+		draw.annotate(img, 0, 0, lyt.data_nascimento_posx, lyt.data_nascimento_posy, self.data_nascimento.strftime("%d/%m/%Y"))  unless lyt.data_nascimento_posx.blank? && lyt.data_nascimento_posy.blank? 
+		draw.annotate(img, 0, 0, lyt.rg_posx, lyt.rg_posy, self.rg)                                                  		 	 unless lyt.rg_posx.blank? && lyt.rg_posy.blank? 
+		draw.annotate(img, 0, 0, lyt.cpf_posx, lyt.cpf_posy, self.cpf)                                                           unless lyt.cpf_posx.blank? && lyt.cpf_posy.blank? 
+		draw.annotate(img, 0, 0, lyt.nao_depois_posx, lyt.nao_depois_posy, self.nao_depois)                          			 unless lyt.nao_depois_posx.blank? && lyt.nao_depois_posy.blank?
+		draw.font_weight(700)  # bold                                             			                                             
+		draw.annotate(img, 0, 0, lyt.codigo_uso_posx, lyt.codigo_uso_posy, self.codigo_uso.upcase)                         		 unless lyt.codigo_uso_posx.blank? && lyt.codigo_uso_posy.blank? 
+		 
+		# Desenha foto 
+		foto = Magick::Image.read(self.foto.path)
+		draw.composite(lyt.foto_posx, lyt.foto_posy, lyt.foto_width, lyt.foto_height, foto[0])    unless data_foto_blank(lyt)
+		
+		# Cria e Desenha Qr Code
+		dir_qr_code = "tmp/#{self.numero_serie}.png"
+		qr = RQRCode::QRCode.new( self.qr_code, :size => 4, :level => :h ).to_img 
+		qr.resize(lyt.qr_code_width, lyt.qr_code_height).save(dir_qr_code)
+		
+		qr_code = Magick::Image.read(dir_qr_code)
+		draw.composite(lyt.qr_code_posx, lyt.qr_code_posy, lyt.qr_code_width, lyt.qr_code_height, qr_code[0])    unless data_qr_code_blank(lyt)
+		draw.draw(img)
+		File.delete(dir_qr_code)
+
+		img.to_blob
+	end
+
+	def self.zipfile_by_scope scope
+		begin
+			carteirinhas = where(scope)
+
+			# Cria nome do arquivo zip
+	        first_numero_serie = carteirinhas.first.numero_serie
+	        last_numero_serie = carteirinhas.last.numero_serie
+	        zipfile_name = first_numero_serie
+	        zipfile_name = zipfile_name.concat("-#{last_numero_serie}") unless carteirinhas.count <= 1
+	        zipfile_name = zipfile_name.concat(".zip")
+	        path_zip = "tmp/#{zipfile_name}"
+
+	        # Inicia o arquivo temporario como zip
+	       data = Zip::OutputStream.write_buffer do |stream| 
+	        	carteirinhas.each do |carteirinha|
+		         	begin
+		         	file_name = "#{carteirinha.numero_serie}.jpg"
+		         	temp = Tempfile.new file_name
+		         	img = Magick::Image.from_blob carteirinha.to_blob
+		         	img.first.write temp.path #converte para jpg
+		         	img = Magick::Image.read temp.path
+		         	stream.put_next_entry file_name
+		         	stream.write img.first.to_blob
+		         	ensure
+		         		temp.close
+		         		temp.unlink
+		         	end
+		        end
+	        end	 
+	       {:stream=>data.string, :filename => zipfile_name}
+		ensure
+			#File.delete zip
+			#File.delete "tmp/arquivo.zip"
+		end
 	end
 
 	def self.gera_numero_serie(id)
@@ -125,5 +187,13 @@ class Carteirinha < ActiveRecord::Base
 	protected
 		def vencida
 			self.vencimento == "1"	
+		end
+
+		def data_foto_blank layout
+			layout.foto_posx.blank? && layout.foto_posy.blank? && layout.foto_width.blank? && layout.foto_height.blank?
+		end
+
+		def data_qr_code_blank layout
+			layout.qr_code_posx.blank? && layout.qr_code_posy.blank? && layout.qr_code_width.blank? && layout.qr_code_height.blank?
 		end
 end

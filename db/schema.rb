@@ -206,7 +206,7 @@ ActiveRecord::Schema.define(version: 201606060397040) do
     t.string   "cep"
     t.string   "cidade"
     t.string   "uf"
-    t.integer   "instituicao_ensino_id"
+    t.integer  "instituicao_ensino_id"
     t.string   "curso_id"
     t.string   "matricula"
     t.string   "foto_file_name"
@@ -306,6 +306,12 @@ ActiveRecord::Schema.define(version: 201606060397040) do
     t.integer  "nao_depois_posy"
     t.integer  "qr_code_posx"
     t.integer  "qr_code_posy"
+    t.integer  "qr_code_width"
+    t.integer  "qr_code_height"
+    t.integer  "foto_posx"
+    t.integer  "foto_posy"
+    t.integer  "foto_width"
+    t.integer  "foto_height"
   end
 
   create_table "noticias", force: :cascade do |t|
