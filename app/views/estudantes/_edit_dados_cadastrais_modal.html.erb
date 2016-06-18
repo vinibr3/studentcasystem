@@ -31,7 +31,7 @@
 						</div>
 						<div class="form-group">
 							<%= f.label :uf_expedidor_rg, "UF Expedidor RG", :class=>'control-label col-sm-3 col-sm-offset-1'%>
-							<div class="col-sm-7"><%= f.text_field :uf_expedidor_rg, :class=>'form-control'%></div>
+							<div class="col-sm-7"><%= f.collection_select :uf_expedidor_rg, Estado.all, :sigla, :sigla, prompt: "Selecione UF", :class=>'form-control'%></div>
 						</div>
 						<div class="form-group">
 							<%= f.label :cpf, "CPF", :class=>'control-label col-sm-3 col-sm-offset-1'%>

@@ -70,3 +70,4 @@ production:
   database: studentcasystem_production
   username: studentcasystem
   password: <%= ENV['STUDENTCASYSTEM_DATABASE_PASSWORD'] %>
+  pool: 25

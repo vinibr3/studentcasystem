@@ -27,9 +27,9 @@ Rails.application.routes.draw do
                                                                 confirmation: 'verification', unlock: 'unblock', 
                                                                 registration: 'register', sign_up: 'cmon_let_me_in' }
 
-  # devise_scope :estudante do
-  #   delete 'sign_out', :to => 'devise/sessions#destroy', :as => :destroy_user_session
-  # end
+  # Rotas Pagseguro Payment
+  get 'payment/checkout', to:'checkout#create', as: :checkout
+  post 'payment/notifications', to:'notifications#create'
 
   namespace :api, defaults:{format: :json} do
     resources :estudantes, only: [:create, :update], param: :oauth_token do

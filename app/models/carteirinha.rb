@@ -4,11 +4,13 @@ class Carteirinha < ActiveRecord::Base
 
 	has_attached_file :foto
 	
-	@@STATUS_VERSAO_DIGITAL = ["Pagamento", "Documentação", "Download", "Baixada"]
+	#@@STATUS_VERSAO_DIGITAL = ["Pagamento", "Documentação", "Download", "Baixada"]
 	@@STATUS_VERSAO_IMPRESSA = ["Pagamento", "Documentação", "Aprovada","Enviada", "Entregue"]
 	EMAIL_REGEX = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/
 	STRING_REGEX = /\A[a-z A-Z]+\z/
 	LETRAS = /[A-Z a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+/
+
+	@@status_pagamento = ["Iniciada","Aguardando Pagamento","Em Análise","Pago","Disponível","Em disputa","Estornado","Cancelado","Devolvido","Contestado"]
 
 	# validações
 	validates :nome, length: { maximum: 70, too_long: "Máximo de 70 caracteres permitidos"}, format:{with: LETRAS, message:"Somente letras é permitido!"}
@@ -36,7 +38,7 @@ class Carteirinha < ActiveRecord::Base
 	validates_attachment_file_name :foto, :matches => [/png\Z/, /jpe?g\Z/]
 	validates_attachment_content_type :foto, :content_type => ['image/jpeg', 'image/png', 'application/pdf']
 
-	before_update :check_update_status
+	before_update :check_update_status, :check_pagamento
 
 	def dias_validade 
 		nao_depois  = self.nao_depois
@@ -67,6 +69,23 @@ class Carteirinha < ActiveRecord::Base
 		end
 	end
 
+	def status_pagamento
+		status = self[:status_pagamento]
+		case status
+			when "0" then self[:status_pagamento] = @@status_pagamento[0]
+			when "1" then self[:status_pagamento] = @@status_pagamento[1]
+			when "2" then self[:status_pagamento] = @@status_pagamento[2]
+			when "3" then self[:status_pagamento] = @@status_pagamento[3]
+			when "4" then self[:status_pagamento] = @@status_pagamento[4]
+			when "5" then self[:status_pagamento] = @@status_pagamento[5]
+			when "6" then self[:status_pagamento] = @@status_pagamento[6]
+			when "7" then self[:status_pagamento] = @@status_pagamento[7]
+			when "8" then self[:status_pagamento] = @@status_pagamento[8]	
+			when "9" then self[:status_pagamento] = @@status_pagamento[9]		
+		end
+		self[:status_pagamento]
+	end
+
 	def status_versao_impressa_to_i
 		@@STATUS_VERSAO_IMPRESSA.length.times do |i|
 			if @@STATUS_VERSAO_IMPRESSA[i] == self[:status_versao_impressa]
@@ -76,7 +95,7 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def check_update_status
-		if self.status_versao_impressa == "Aprovada" 
+		if self.status_versao_impressa == @@STATUS_VERSAO_IMPRESSA[2]
             self.layout_carteirinha_id = LayoutCarteirinha.last_layout_id                 if self.layout_carteirinha_id.blank?
             self.nao_antes = Time.new                                                     if self.nao_antes.blank?
             self.nao_depois = Time.new(Time.new.year+1, 3, 31).to_date                    if self.nao_depois.blank? 
@@ -85,6 +104,12 @@ class Carteirinha < ActiveRecord::Base
             self.qr_code = Carteirinha.gera_qr_code(Estudante.find(self.codigo_uso))      if self.qr_code.blank?
             #self.certificado = Carteirinha.gera_certificado(self)                         if self.certificado.blank?
         end
+	end
+
+	def check_pagamento
+		if self.status_pagamento == @@status_pagamento[3] && self.status_versao_impressa == @@STATUS_VERSAO_IMPRESSA[0]
+			self.status_versao_impressa = @@STATUS_VERSAO_IMPRESSA[1]
+		end
 	end
 
 	def to_blob
@@ -159,7 +184,7 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def self.gera_numero_serie(id)
-		last = where(status_versao_impressa: "Aprovada").last
+		last = where(status_versao_impressa: @@STATUS_VERSAO_IMPRESSA[2]).last
 		if last
 			return last.numero_serie if last.id == id
 			return last.id.to_i+1
@@ -182,6 +207,10 @@ class Carteirinha < ActiveRecord::Base
 			index == url_qr_code.size ? url_qr_code.concat(codigo_uso) : url_qr_code.concat("/".concat(codigo_uso))
 			return url_qr_code
 		end
+	end
+
+	def self.status_versao_impressa
+		@@STATUS_VERSAO_IMPRESSA
 	end
 
 	protected

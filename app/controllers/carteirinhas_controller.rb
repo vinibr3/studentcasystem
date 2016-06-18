@@ -36,12 +36,13 @@ class CarteirinhasController < ApplicationController
 			c.layout_carteirinha = LayoutCarteirinha.last
 			status = Carteirinha.class_variable_get(:@@STATUS_VERSAO_IMPRESSA)
 			c.status_versao_impressa = status[0]
-			#c.status_versao_digital = Carteirinha.class_variable_get(:@@STATUS_VERSAO_DIGITAL[0])
+			
+			entidade = Entidade.instance
+			c.valor = entidade.valor_carteirinha.to_f+entidade.frete_carteirinha.to_f
 			end 
 
 			if @carteirinha.save!
-				flash[:notice] = "Solicitação enviada com sucesso!"
-				redirect_to estudante_path(current_estudante)
+				redirect_to checkout_path(id: @carteirinha.id)
 			else
 				flash[:alert] = @carteirinha.errors.messages.to_s
 				redirect_to estudante_path(current_estudante)

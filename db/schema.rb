@@ -97,9 +97,10 @@ ActiveRecord::Schema.define(version: 201606060397040) do
     t.string   "alterado_por"
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
-    t.integer  "valor"
+    t.string   "valor"
     t.string   "forma_pagamento"
-    t.string   "numero_boleto"
+    t.string   "status_pagamento"
+    t.string   "transaction_id"
   end
 
   add_index "carteirinhas", ["estudante_id"], name: "index_carteirinhas_on_estudante_id", using: :btree

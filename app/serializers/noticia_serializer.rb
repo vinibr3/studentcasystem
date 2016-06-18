@@ -1,7 +1,7 @@
-class NoticiaSerializer < ActiveModel::NoticiaSerializer
+class NoticiaSerializer < ActiveModel::Serializer
 	ActiveModel::Serializer.root = false
 
-	attributes type:, :id, :title, :author, :photo, :body
+	attributes :type, :id, :title, :author, :photo, :body
 
 	def type
 		'noticia'

@@ -5,39 +5,41 @@ ActiveAdmin.register Carteirinha do
    
    scope "Todas", :all, default: true
    
+   status = Carteirinha.status_versao_impressa
+
    scope :pagamento do |carteirinha|
         if current_admin_user.super_admin?
-            carteirinha.where(status_versao_impressa: "Pagamento")
+            carteirinha.where(status_versao_impressa: status[0])
         else
-            carteirinha.where(status_versao_impressa: "Pagamento", alterado_por: current_admin_user.usuario)
+            carteirinha.where(status_versao_impressa: status[0], alterado_por: current_admin_user.usuario)
         end
    end
    scope "Documentação" do |carteirinha|
         if current_admin_user.super_admin?
-            carteirinha.where(status_versao_impressa: "Documentação")
+            carteirinha.where(status_versao_impressa:  status[1])
         else
-            carteirinha.where(status_versao_impressa: "Documentação", alterado_por: current_admin_user.usuario)
+            carteirinha.where(status_versao_impressa:  status[1], alterado_por: current_admin_user.usuario)
         end
    end
    scope :aprovada do |carteirinha|
         if current_admin_user.super_admin?
-            carteirinha.where(status_versao_impressa: "Aprovada")
+            carteirinha.where(status_versao_impressa: status[2])
         else
-            carteirinha.where(status_versao_impressa: "Aprovada", alterado_por: current_admin_user.usuario)
+            carteirinha.where(status_versao_impressa: status[2], alterado_por: current_admin_user.usuario)
         end
    end
    scope :entregue do |carteirinha|
         if current_admin_user.super_admin?
-            carteirinha.where(status_versao_impressa: "Enviada")
+            carteirinha.where(status_versao_impressa: status[3])
         else
-            carteirinha.where(status_versao_impressa: "Enviada", alterado_por: current_admin_user.usuario)
+            carteirinha.where(status_versao_impressa: status[3], alterado_por: current_admin_user.usuario)
         end
    end
    scope :enviada do |carteirinha|
         if current_admin_user.super_admin?
-            carteirinha.where(status_versao_impressa: "Entregue")
+            carteirinha.where(status_versao_impressa: status[4])
         else
-            carteirinha.where(status_versao_impressa: "Entregue", alterado_por: current_admin_user.usuario)
+            carteirinha.where(status_versao_impressa: status[4], alterado_por: current_admin_user.usuario)
         end
    end
 
@@ -48,23 +50,22 @@ ActiveAdmin.register Carteirinha do
                   :status_versao_impressa, :expedidor_rg, :uf_expedidor_rg,
                   :cidade_inst_ensino,:escolaridade, :uf_inst_ensino, 
                   :foto_file_name, :nao_antes, :nao_depois, :codigo_uso,
-                  :alterado_por, :valor, :forma_pagamento, :numero_boleto
+                  :alterado_por, :valor, :forma_pagamento, :status_pagamento, 
+                  :transaction_id
 
 	filter :nome
     filter :status_versao_impressa, as: :select, collection: proc {Carteirinha.class_variable_get(:@@STATUS_VERSAO_IMPRESSA)}
 	filter :numero_serie
+    filter :transaction_id
 	
-
-
 	index do
 		selectable_column
     	column :nome 
     	column :curso_serie
         column :instituicao_ensino
         column :valor 
-        column :forma_pagamento
-        column :numero_boleto
-        column "Status", :status_versao_impressa
+        column :status_pagamento
+        column "Status Pedido", :status_versao_impressa
         column :alterado_por
         actions
 	end
@@ -106,11 +107,11 @@ ActiveAdmin.register Carteirinha do
         panel "Dados da Solicitaçao" do 
             attributes_table_for carteirinha do
                 row :status_versao_impressa
-                row :status_versao_digital
-                row :alterado_por
                 row :valor
                 row :forma_pagamento
-                row :numero_boleto
+                row :status_pagamento
+                row :transaction_id
+                row :alterado_por
             end
         end
         render inline: "<script type='text/javascript'>$('.show-popup-link').magnificPopup({type: 'image'});</script>"
@@ -152,7 +153,8 @@ ActiveAdmin.register Carteirinha do
                     f.input :alterado_por
                     f.input :valor
                     f.input :forma_pagamento
-                    f.input :numero_boleto
+                    f.input :status_pagamento
+                    f.input :transaction_id
                 end
             end
             f.actions

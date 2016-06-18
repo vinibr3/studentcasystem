@@ -52,6 +52,8 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.4.0)
+    aitch (0.5.0)
+      nokogiri (>= 1.6.0)
     arbre (1.0.3)
       activesupport (>= 3.0.0)
     arel (6.0.3)
@@ -163,6 +165,11 @@ GEM
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
     orm_adapter (0.5.0)
+    pagseguro-oficial (2.6.0)
+      aitch (~> 0.2)
+      i18n (~> 0.7)
+      json (~> 1.8)
+      nokogiri (~> 1.6)
     paperclip (4.3.6)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
@@ -273,6 +280,7 @@ DEPENDENCIES
   koala (~> 2.3)
   magnific-popup-rails (~> 1.1)
   omniauth-facebook
+  pagseguro-oficial (~> 2.6)
   paperclip (~> 4.3, >= 4.3.6)
   pg
   rails (= 4.2.6)

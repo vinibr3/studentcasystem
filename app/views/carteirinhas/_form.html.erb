@@ -6,10 +6,10 @@
 		<div class="col-md-5">
 			<div class="checkbox"><br>
 				<% entidade = Entidade.instance%>
-				<% valor = entidade.valor_carteirinha %>
-				<% frete = entidade.frete_carteirinha %>
+				<% valor = entidade.valor_carteirinha.to_f %>
+				<% frete = entidade.frete_carteirinha.to_f %>
 				<p><strong>Valor:</strong>&nbsp;R$<%= valor %> </p>
-				<% if !frete.blank? %>
+				<% if !entidade.frete_carteirinha.blank? %>
 					<p><strong>Frete:</strong>&nbsp;R$<%= frete %> </p>
 				<%end%>
 				<label>
@@ -19,8 +19,7 @@
 			</div>
 			<div class="input-group" role="group">
 				<span class="input-group-addon bg-success"><strong>Total R$</strong></span>
-				<%= f.hidden_field :valor, :value=>frete.to_i+valor.to_i %>
-				<%= f.label :valor, frete.to_i+valor.to_i, :id=> 'carteirinha_valor', :size=>'4', :class=>'form-control' %>
+				<%= f.label :valor, frete+valor, :id=> 'carteirinha_valor', :size=>'4', :class=>'form-control' %>
 				<span class="input-group-btn" id="pagar_agora">
 					<%= f.submit "Pagar Agora", :class=>'btn btn-success' %>
 				</span>

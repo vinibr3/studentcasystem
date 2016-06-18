@@ -36,6 +36,6 @@ class EstudantesController < ApplicationController
 											  :logradouro, :complemento, :setor, :cep, :cidade, :uf,
 											  :instituicao_ensino_id, :curso_id, :matricula, :foto, 
 											  :comprovante_matricula, :xerox_rg, :email, :password, 
-											  :celular, :numero, :expedidor_rg, :uf_expedidor_rg)
+											  :celular, :numero, :expedidor_rg, :uf_expedidor_rg, :callback)
 		end
 end

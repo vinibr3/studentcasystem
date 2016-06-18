@@ -61,6 +61,9 @@ gem 'certified', '~> 1.0'
 gem 'rubyzip', '~> 1.0'
 # Cria e salva QR-Code
 gem 'rqrcode_png', '~> 0.1.5'
+# Possibilita pagamentos via cartao ou boleto 
+gem 'pagseguro-oficial', '~> 2.6'
+
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
