@@ -10,9 +10,9 @@ class Estudante < ActiveRecord::Base
 	belongs_to :curso
 	has_one :escolaridade, through: :curso
 
-	has_attached_file :foto
-	has_attached_file :comprovante_matricula
-	has_attached_file :xerox_rg     
+	has_attached_file :foto, :styles => {:original => {}}
+	has_attached_file :comprovante_matricula, :styles => {:original => {}}
+	has_attached_file :xerox_rg, :styles => {:original => {}}     
 
 	FILES_NAME_PERMIT = [/png\Z/, /jpe?g\Z/, /pdf\Z/]
 	FILES_CONTENT_TYPE = ['image/jpeg', 'image/png', 'application/pdf']
@@ -59,7 +59,7 @@ class Estudante < ActiveRecord::Base
 	validates_acceptance_of :termos
     
     validates_length_of :foto_file_name, :comprovante_matricula_file_name, :xerox_rg_file_name, 
-                        :maximum => 20, :message => "Menor que #{count} caracteres"
+                        :maximum => 20, :message => "Nome do arquivo deve ser menor que 20 caracteres"
     # validates_associated :carteirinha, allow_blank: true
     #validates_associated :instituicao_ensino unless self[:instituicao_ensino_id].blank?
     #validates_associated :curso unless self.curso_id.blank?

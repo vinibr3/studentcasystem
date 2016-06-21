@@ -346,3 +346,7 @@ pt-BR:
       block: "Lista"
       grid: "Grid"
       blog: "Blog"
+    crop:
+      open_crop_modal: Recortar Imagem
+      save_cropped_image: Salvar Imagem Recortada
+      cancel: Cancelar

@@ -2,6 +2,8 @@ ActiveAdmin.register Estudante do
   menu priority: 2
   actions :all, except: [:new]
 
+  jcropable
+
   permit_params :nome, :cpf, :rg, :data_nascimento, :sexo, :telefone,
                 :logradouro, :complemento, :setor, :cep, :cidade, :uf,
                 :instituicao_ensino, :curso_serie, :matricula, :foto, 
@@ -36,7 +38,7 @@ ActiveAdmin.register Estudante do
         row :celular
         row :chave_acesso
         row :foto do
-          a estudante.foto_file_name, class: "show-popup-link", href: estudante.foto.url, target: "_blank"
+          a estudante.foto_file_name, class: "show-popup-link", href: estudante.foto.url
         end
       end 
     end 
@@ -94,7 +96,7 @@ ActiveAdmin.register Estudante do
         end
       end
     end
-   render inline: "<script type='text/javascript'>$('.show-popup-link').magnificPopup({type: 'image'});</script>"
+  render inline: "<script type='text/javascript'>$('.show-popup-link').magnificPopup({type: 'image'});</script>"
   end
 
   index do
@@ -121,18 +123,18 @@ ActiveAdmin.register Estudante do
       f.input :sexo
       f.input :telefone
       f.input :celular
-      f.input :foto, :hint => "Imagem Atual: #{f.object.foto_file_name}"
+      f.input :foto, :hint => "Imagem Atual: #{f.object.foto_file_name}", as: :jcropable, jcrop_options: {aspectRatio: 0.75, showDimensions: false, maxSize: [400,500]}
       f.input :xerox_rg, :hint => "Imagem Atual: #{f.object.xerox_rg_file_name}"
     end
     f.inputs "Dados Estudantis" do
       f.input :instituicao_ensino
-      f.input :escolaridade
-      f.input :curso_serie
+      #f.input :escolaridade, as: :select, collection: Escolaridades.all
+      f.input :curso
       f.input :matricula
       f.input :comprovante_matricula, :hint => "Imagem Atual: #{f.object.comprovante_matricula_file_name}"
       f.input :instituicao_ensino
-      f.input :cidade_inst_ensino
-      f.input :uf_inst_ensino
+      #f.input :cidade_inst_ensino
+      #f.input :uf_inst_ensino
     end
     f.inputs "Endereço" do
       f.input :logradouro

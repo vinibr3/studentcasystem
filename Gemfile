@@ -24,8 +24,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Bootstrap gem
 gem 'bootstrap-sass', '~> 3.3.6'
 # Arquivos em anexo
-gem 'paperclip', '~> 4.3', '>= 4.3.6'
-
+gem 'paperclip', '4.3'
+# Recorta a imagens
+gem 'active_admin_jcrop', '~> 0.0.10'
 # Login/Logoff
 gem 'devise', '~> 3.4.1'
 # Internacionaliza views pt-BR
@@ -64,6 +65,7 @@ gem 'rqrcode_png', '~> 0.1.5'
 # Possibilita pagamentos via cartao ou boleto 
 gem 'pagseguro-oficial', '~> 2.6'
 
+gem 'mini_magick', '~> 4.5', '>= 4.5.1'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
