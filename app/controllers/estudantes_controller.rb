@@ -4,7 +4,7 @@ class EstudantesController < ApplicationController
 
 	def show
 		@estudante = current_estudante
-		@carteirinha = @estudante.carteirinhas.last
+		@carteirinhas = current_estudante.carteirinhas.each{|carteirinha| carteirinha if carteirinha}
 	end	
 
 	def update

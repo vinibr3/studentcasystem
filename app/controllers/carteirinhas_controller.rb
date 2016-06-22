@@ -36,9 +36,6 @@ class CarteirinhasController < ApplicationController
 			c.layout_carteirinha = LayoutCarteirinha.last
 			status = Carteirinha.class_variable_get(:@@STATUS_VERSAO_IMPRESSA)
 			c.status_versao_impressa = status[0]
-			
-			entidade = Entidade.instance
-			c.valor = entidade.valor_carteirinha.to_f+entidade.frete_carteirinha.to_f
 			end 
 
 			if @carteirinha.save!

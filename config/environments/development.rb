@@ -50,7 +50,7 @@ Rails.application.configure do
 
   # Paperclip configuration
   Paperclip.options[:command_path] = 'C:\Program Files\GnuWin32\bin'
-  Paperclip.options[:command_path] = 'C:\ImageMagick'
+  #Paperclip.options[:command_path] = 'C:\ImageMagick'
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 end

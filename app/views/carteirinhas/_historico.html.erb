@@ -1,0 +1,31 @@
+<h4 class="text-primary"> Histórico de Solicitações </h4>
+	<% @carteirinhas.each do |carteirinha| %>
+		<div class="col-md-12">
+			<div style="text-align:center">
+				<strong> <%= carteirinha.created_at.strftime("%d/%m/%Y") %></strong>
+			</div>
+			<div>
+			    <div>
+					 <span><strong>Valor Pago:&nbsp;</strong>R$<%=  carteirinha.valor %></span><br>
+					 <span><strong>Forma de Pagamento:&nbsp;</strong><%=  carteirinha.forma_pagamento %></span><br> 
+					 <span><strong>Transação:&nbsp;</strong><%=  carteirinha.transaction_id %> </span><br>
+			    </div>
+			    <div class="progress">
+			    	<% if carteirinha.solicitacao_cancelada? %>
+			    		<div class="progress-bar progress-bar-danger" role="progress-bar" style="width:100%;"> Cancelada </div>
+			    	<% else %>
+			    		<% carteirinha.status_take_while.each do |status| %>
+				    		<div class="progress-bar progress-bar-success" role="progress-bar" style="width: 20%">
+				    			<%= status %>
+			    			</div>
+			    		<% end %>
+			    	<% end %> 
+
+			    	
+			    </div>
+			</div>
+	</div>
+	<% end %>
+<% if @carteirinhas.empty? %>
+	<%= render inline: "<div style='text-align:center'><p> Não há dados a serem mostrados </p></div>" %>
+<%end%>

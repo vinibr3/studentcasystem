@@ -25,7 +25,7 @@ class Carteirinha < ActiveRecord::Base
 	validates :termos, acceptance: true
 	validates :status_versao_impressa, inclusion:{in: %w(Pagamento Documentação Aprovada Enviada Entregue)}
 	#validates :status_versao_digital, inclusion:{in: %w(Pagamento Documentação Download Baixada)}
-	validates :valor, length:{maximum: 4}
+	#validates :valor, length:{maximum: 4}
 	validates :numero_serie, numericality: true, uniqueness: true, allow_blank: true
 	validates :cpf, numericality: true, length:{is: 11, too_long: "Necessário 11 caracteres.",  too_short: "Necessário 11 caracteres."}, allow_blank: true
 	validates :expedidor_rg, length:{maximum: 10, too_long:"Máximo de 10 caracteres permitidos!"}, 
@@ -69,6 +69,16 @@ class Carteirinha < ActiveRecord::Base
 		end
 	end
 
+	def status_take_while
+		index = self.status_versao_impressa_to_i+1
+		@@STATUS_VERSAO_IMPRESSA.take index
+	end
+
+	def solicitacao_cancelada?
+		comparable = @@status_pagamento.last(4)
+		!comparable.select{|x| x==self.status_pagamento}.empty?
+	end
+
 	def status_pagamento
 		status = self[:status_pagamento]
 		case status
@@ -101,7 +111,7 @@ class Carteirinha < ActiveRecord::Base
             self.nao_depois = Time.new(Time.new.year+1, 3, 31).to_date                    if self.nao_depois.blank? 
             self.numero_serie = Carteirinha.gera_numero_serie(self.id)                    if self.numero_serie.blank?
             self.codigo_uso = Carteirinha.gera_codigo_uso                                 if self.codigo_uso.blank?
-            self.qr_code = Carteirinha.gera_qr_code(Estudante.find(self.codigo_uso))      if self.qr_code.blank?
+            self.qr_code = Carteirinha.gera_qr_code(self.codigo_uso)                      if self.qr_code.blank?
             #self.certificado = Carteirinha.gera_certificado(self)                         if self.certificado.blank?
         end
 	end
@@ -200,11 +210,10 @@ class Carteirinha < ActiveRecord::Base
 	def self.gera_qr_code codigo_uso
 		entidade = Entidade.instance
 		url_qr_code = entidade.url_qr_code
-		if url_qr_code.blank?
+		if url_qr_code.blank? || url_qr_code.nil?
 			raise "url_qr_code não informada para a entidade."
 		else
-			index = url_qr_code.rindex("/")+1
-			index == url_qr_code.size ? url_qr_code.concat(codigo_uso) : url_qr_code.concat("/".concat(codigo_uso))
+			url_qr_code.end_with?("/") ? url_qr_code.concat(codigo_uso) : url_qr_code.concat("/#{codigo_uso}")
 			return url_qr_code
 		end
 	end
@@ -224,5 +233,9 @@ class Carteirinha < ActiveRecord::Base
 
 		def data_qr_code_blank layout
 			layout.qr_code_posx.blank? && layout.qr_code_posy.blank? && layout.qr_code_width.blank? && layout.qr_code_height.blank?
+		end
+
+		def transacao_cancelada
+			@@status_pagamento
 		end
 end

@@ -9,6 +9,7 @@ class NotificationsController < ApplicationController
       carteirinha.forma_pagamento = transaction.payment_method.description
       carteirinha.status_pagamento = transaction.status.id
       carteirinha.transaction_id = transaction.code
+      carteirinha.valor = transaction.gross_amount.to_f
       carteirinha.save!
     end
 
