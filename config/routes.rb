@@ -31,14 +31,18 @@ Rails.application.routes.draw do
   get 'payment/checkout', to:'checkout#create', as: :checkout
   post 'payment/notifications', to:'notifications#create'
 
+  # Rotas da API 
   namespace :api, defaults:{format: :json} do
     resources :estudantes, only: [:create, :update], param: :oauth_token do
-      resources :carteirinhas, only: [:create]
-      get 'carteirinhas', to: 'carteirinhas#show' 
+      resources :carteirinhas, only: [:create, :show]
     end
+    get 'carteirinhas', to: 'carteirinhas#index'
     get 'estudantes/login', to: 'estudantes#login'   
     get 'estudantes/login/facebook', to: 'estudantes#facebook'
     resources :noticias, only:[:index]
+
+    # Certificado de atributo
+    post 'certificados/create', to:'certificados#create'  # cria certificados
   end
 
   # The priority is based upon order of creation: first created -> highest priority.

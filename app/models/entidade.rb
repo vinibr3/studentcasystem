@@ -53,41 +53,7 @@ class Entidade < ActiveRecord::Base
 	validates :cep_presidente, length:{is: 8, wrong_length: "8 caracteres."}, numericality: true, allow_blank: true
 	validates :cidade_presidente, length: {maximum: 50, too_long: "Máximo de #{count} caracteres permitidos."}, allow_blank: true
 	validates :uf_presidente, length: {is: 2, wrong_length: "Máximo de 2 caracteres permitidos."}, format: {with: STRING_REGEX}, allow_blank: true
-
-	# def configuracao_file_match_json_schema
-	# 	msg = "json fora do padrão"
-	# 	begin
-	# 	schema = {"type"=>"object","properties"=>{"entidade"=>{"type"=>"object","properties"=>{"sigla"=>{"type"=>"string"},"instituicoes_ensino"=>{"type"=>"array","properties"=>{"nome"=>{"type"=>"string"},"cursos"=>{"type"=>"object","properties"=>{"fundamental"=>{"type"=>"array"},"medio"=>{"type"=>"array"},"superior"=>{"type"=>"array"},"pos_graduacao"=>{"type"=>"array"}}}}}}}}}
-	# 	json = JSON.parse Paperclip.io_adapters.for(self.configuracao).read
-	# 	errors.add(:configuracao, msg) unless JSON::Validator.validate(schema, json)
-	# 	rescue JSON::ParserError
-	# 		errors.add(:configuracao, msg)
-	# 	end
-	# end
-
-	# def instituicoes_ensino_from_json_file
-	# 	json = JSON.parse Paperclip.io_adapters.for(self.configuracao).read
-	# 	instituicoes_ensino = json["entidade"]["instituicoes_ensino"].map{|instituicao| instituicao["nome"]}
-	# end
-
-	# def escolaridades_from_json_file instituicao
-	# 	json = JSON.parse Paperclip.io_adapters.for(self.configuracao).read
-	# 	instituicoes = json["entidade"]["instituicoes_ensino"].each{|inst| instituicao = inst if inst["nome"] == instituicao}
-	# 	instituicao["cursos"].map{|k,v| k unless v.count == 0}
-	# end 
-
-	# def escolaridades_from_first_instituicao
-	# 	json = JSON.parse Paperclip.io_adapters.for(self.configuracao).read
-	# 	instituicao = json["entidade"]["instituicoes_ensino"][0]["nome"]
-	# 	escolaridades_from_json_file instituicao
-	# end
-
-	# def cursos_from_json_file instituicao, escolaridade
-	# 	json = JSON.parse Paperclip.io_adapters.for(self.configuracao).read
-	# 	instituicoes = json["entidade"]["instituicoes_ensino"].each{|inst| instituicao = inst if inst["nome"] == instituicao}
-	# 	instituicao["cursos"][escolaridade.to_s]
-	# end
-
+	
 	def self.instance
 		entidade = Entidade.last
 		if entidade 

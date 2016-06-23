@@ -1,7 +1,7 @@
 class API::AuthenticateBase < ApplicationController
 			
 	respond_to :json
-	before_action :http_token_authentication
+	#before_action :http_token_authentication
 
 	protected 
 		def http_base_authentication
@@ -20,4 +20,12 @@ class API::AuthenticateBase < ApplicationController
 				Estudante.exists?(oauth_token: token)
 			end
 		end
+
+		def http_base_authentication_with_entidade_data
+			entidade = Entidade.instance
+			authenticate_or_request_with_http_basic do |username, password|
+				username == entidade.usuario && password == entidade.token_certificado
+			end
+		end
+
 end

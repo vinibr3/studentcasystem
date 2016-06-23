@@ -1,7 +1,4 @@
 class Api::NoticiasController < API::AuthenticateBase
-
-	skip_before_action :http_token_authentication
-
 	def index
 		begin
 			@noticias = Noticia.all.where("id > #{params[:id]}")

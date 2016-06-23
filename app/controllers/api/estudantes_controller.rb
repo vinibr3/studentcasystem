@@ -1,7 +1,7 @@
 class Api::EstudantesController < API::AuthenticateBase
 
-	skip_before_action :http_token_authentication, only: [:login, :facebook, :create]
 	before_action :http_base_authentication, only: [:create]
+	before_action :http_token_authentication
 
 	def login
 		begin 

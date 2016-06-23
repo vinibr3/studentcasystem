@@ -165,11 +165,10 @@ ActiveRecord::Schema.define(version: 201606060397040) do
     t.string   "uf_presidente"
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
-    t.text     "authority_key_identifier"
-    t.string   "crl_dist_points"
+    t.string   "usuario"
     t.string   "url_qr_code"
-    t.string   "authority_info_access"
-    t.string   "representatividade"
+    t.string   "token_certificado"
+    t.string   "url_certificado"
     t.string   "configuracao_file_name"
     t.string   "configuracao_content_type"
     t.integer  "configuracao_file_size"

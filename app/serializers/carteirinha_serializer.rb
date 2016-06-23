@@ -2,25 +2,20 @@ class CarteirinhaSerializer < ActiveModel::Serializer
 	ActiveModel::Serializer.root = false
 
 	attributes :type, :id, :nome, :instituicao_ensino, :curso_serie, 
-						 :matricula, :rg_certidao, :data_nascimento, :cpf, 
-						 :validade, :foto, :numero_serie, :qr_code, 
-						 :status_versao_digital, :status_versao_impressa,
-						 :layout_front, :layout_back
-						 
-	def layout_back
-		object.layout_carteirinha.layout_back
-	end
-
-	def layout_front
-		object.layout_carteirinha.layout_front
-	end		   
-
-	def cpf
-		object.cpf.numero
-	end
-
+			   :matricula, :rg, :data_nascimento, :cpf, :expedidor_rg,
+			   :numero_serie, :qr_code, :status_versao_impressa,
+			   :escolaridade, :cidade_inst_ensino, :uf_inst_ensino
+						 	
 	def type
 		'carteirinha'
+	end
+
+	def data_nascimento
+		self.object.data_nascimento.strftime("%d%m%Y")
+	end
+
+	def expedidor_rg
+		self.object.expedidor_rg.concat(self.object.uf_expedidor_rg)
 	end
 
 end

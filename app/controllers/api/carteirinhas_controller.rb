@@ -1,5 +1,24 @@
 class Api::CarteirinhasController < API::AuthenticateBase
 
+	before_action :http_base_authentication_with_entidade_data, only: [:index]
+	before_action :http_token_authentication, only: [:show, :create]
+
+	def index
+		begin 
+		@carteirinhas = Carteirinha.where(params[:status_versao_impressa])
+		if @carteirinhas
+			if @carteirinhas.empty?
+				message = "Nenhuma Carteira de Identificação Estudantil encontrada."
+				render json: {errors: messsage, type: 'erro'}, :status => 200
+			else
+				respond_with @carteirinhas
+			end
+		end 
+		rescue Exception => ex
+			render json: {errors: ex.message, type: 'erro'}, :status => 404
+		end
+	end
+
 	def show
 		begin
 			@estudante = Estudante.find_by_oauth_token(params[:estudante_oauth_token])
@@ -65,6 +84,6 @@ class Api::CarteirinhasController < API::AuthenticateBase
 
 	private 
 		def carteirinha_params
-			params.require(:carteirinha).permit(:versao_digital, :versao_impressa, :valor)
+			params.require(:carteirinha).permit(:valor, :status_versao_impressa)
 		end
 end
