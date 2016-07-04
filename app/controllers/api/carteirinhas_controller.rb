@@ -4,18 +4,13 @@ class Api::CarteirinhasController < API::AuthenticateBase
 	before_action :http_token_authentication, only: [:show, :create]
 
 	def index
-		begin 
-		@carteirinhas = Carteirinha.where(params[:status_versao_impressa])
-		if @carteirinhas
-			if @carteirinhas.empty?
-				message = "Nenhuma Carteira de Identificação Estudantil encontrada."
-				render json: {errors: messsage, type: 'erro'}, :status => 200
-			else
-				respond_with @carteirinhas
-			end
-		end 
-		rescue Exception => ex
-			render json: {errors: ex.message, type: 'erro'}, :status => 404
+		@carteirinhas = Carteirinha.where(status_versao_impressa: params[:status_versao_impressa])
+		status = Carteirinha.status_versao_impressa[2]
+		if @carteirinhas.empty?
+			message = "Nenhuma Carteira de Identificação Estudantil com status #{status} encontrada."
+			render json: {errors: message, type: 'erro'}, :status => 200
+		else
+			respond_with @carteirinhas
 		end
 	end
 

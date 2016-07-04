@@ -67,7 +67,7 @@ test:
 #
 production:
   <<: *default
-  database: studentcasystem_production
-  username: studentcasystem
+  database: studentcasystem
+  username: <%= ENV['STUDENTCASYSTEM_DATABASE_PASSWORD'] %>
   password: <%= ENV['STUDENTCASYSTEM_DATABASE_PASSWORD'] %>
   pool: 25
