@@ -65,20 +65,20 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Configurações de E-mail
-  config.action_mailer.default_url_options = { :host => ENV["DOMAIN"] }   # Configura opções de rota padrao para action mailer
+  config.action_mailer.default_url_options = { :host => ENV["STUDENTCASYSTEM_EMAIL_SITE_DOMAIN"] }   # Configura opções de rota padrao para action mailer
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.default :charset => "utf-8"
 
   config.action_mailer.smtp_settings = {
-   address: 'smtp.gmail.com',
-    port: 587,
-    domain: 'gmail.com',
+    address: ENV['STUDENTCASYSTEM_EMAIL_SMTP'],
+    port: ENV['STUDENTCASYSTEM_EMAIL_PORT'],
+    domain: ENV['STUDENTCASYSTEM_EMAIL_DOMAIN'],
     authentication: "plain",
     enable_starttls_auto: true,
-    user_name: 'viniciusdeoliveirasantos@gmail.com',
-    password: '1820goiania'
+    user_name: ENV['STUDENTCASYSTEM_EMAIL_USER'],
+    password: ENV['STUDENTCASYSTEM_EMAIL_PASSWORD']
   }
   # fim configurações E-mail
 
@@ -94,4 +94,10 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # Paperclip configuration
+  #Paperclip.options[:command_path] = 'C:\Program Files\GnuWin32\bin'
+  #Paperclip.options[:command_path] = 'C:\ImageMagick'
+  # Raises error for missing translations
+  # config.action_view.raise_on_missing_translations = true
 end

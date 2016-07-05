@@ -18,13 +18,13 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }  # Configura opções de rota padrao para action mailer  
   config.action_mailer.delivery_method = :smtp   #configura tipo de envio de e-mail 
   config.action_mailer.smtp_settings = { #configurações para envio de e-mails
-    address: 'smtp.gmail.com',
-    port: 587,
-    domain: 'gmail.com',
+    address: ENV['STUDENTCASYSTEM_EMAIL_SMTP'],
+    port: ENV['STUDENTCASYSTEM_EMAIL_PORT'],
+    domain: ENV['STUDENTCASYSTEM_EMAIL_DOMAIN'],
     authentication: "plain",
     enable_starttls_auto: true,
-    user_name: 'viniciusdeoliveirasantos@gmail.com',
-    password: '1820goiania'
+    user_name: ENV['STUDENTCASYSTEM_EMAIL_USER'],
+    password: ENV['STUDENTCASYSTEM_EMAIL_PASSWORD']
   }
   # Fim configurações de E-mail
 
