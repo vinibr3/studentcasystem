@@ -1,7 +1,12 @@
 Rails.application.routes.draw do
   
   devise_for :admin_users, ActiveAdmin::Devise.config
-  ActiveAdmin.routes(self)
+  begin
+    ActiveAdmin.routes(self)
+  rescue Exception => e
+    puts "ActiveAdmin: #{e.class}: #{e}"
+  end
+
  
   get 'pages/index',          to:"pages#index",          as: :home
   get 'pages/mei_entrada',    to:"pages#meia_entrada",   as: :meia_entrada
