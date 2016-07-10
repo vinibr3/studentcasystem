@@ -30,10 +30,6 @@ class Entidade < ActiveRecord::Base
 	validates_attachment_size :logo, :less_than => 1.megabytes
 	validates_attachment_file_name :logo, :matches => FILES_NAME_PERMIT
 	validates_attachment_content_type :logo, :content_type => FILES_CONTENT_TYPE
-
-	validates_attachment_size :configuracao, :less_than => 5.megabytes
-	validates_attachment_file_name :configuracao, :matches => [/json\Z/]
-	validates_attachment_content_type :configuracao, :content_type => ["application/octet-stream", "text/plain"]
 	
 	#dados presidente da entidade
 	validates :nome_presidente, length: { maximum: 70, too_long: "Máximo de #{count} caracteres permitidos!"}, 
