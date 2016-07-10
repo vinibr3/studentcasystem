@@ -1,4 +1,4 @@
-class AddAttachmentConfiguracaoToEntidades < ActiveRecord::Migration
+class AddAttachmentLogoToEntidades < ActiveRecord::Migration
   def self.up
     change_table :entidades do |t|
       t.attachment :logo
