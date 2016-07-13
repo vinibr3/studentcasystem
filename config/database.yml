@@ -71,4 +71,4 @@ production:
   username: <%= ENV['STUDENTCASYSTEM_DATABASE_USER'] %>
   password: <%= ENV['STUDENTCASYSTEM_DATABASE_PASSWORD'] %>
   host:     localhost
-  pool: 25
+  pool: 5
