@@ -1,10 +1,9 @@
 module ApplicationHelper
 	def presentation_name nome
-		name=nil
-		if nome.blank?
-			name = current_estudante.email_less_domain
+		if nome
+			nome = current_estudante.first_name
 		else
-			name = current_estudante.first_name
+			nome = current_estudante.email_less_domain
 		end
 		cumprimento = "Olá, #{name}"
 		content_tag :li  do
