@@ -211,7 +211,7 @@ class Estudante < ActiveRecord::Base
 
 	private
 		def string_to_substring(string , char)
-			string.from(0).to(string.index(char).to_i - 1)
+			string.split(char).first
 		end
 
 		def create_oauth_token
