@@ -1,12 +1,12 @@
 module ApplicationHelper
 	def presentation_name nome
-		nome=nil
-		if nome
-			nome = current_estudante.email_less_domain
+		name=nil
+		if nome.blank?
+			name = current_estudante.email_less_domain
 		else
-			nome = current_estudante.first_name
+			name = current_estudante.first_name
 		end
-		cumprimento = "Olá, #{nome}"
+		cumprimento = "Olá, #{name}"
 		content_tag :li  do
 			link_to cumprimento, estudante_path(current_estudante)
 		end
