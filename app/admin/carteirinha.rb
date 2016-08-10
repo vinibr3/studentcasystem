@@ -51,7 +51,7 @@ ActiveAdmin.register Carteirinha do
                   :cidade_inst_ensino,:escolaridade, :uf_inst_ensino, 
                   :foto_file_name, :nao_antes, :nao_depois, :codigo_uso,
                   :alterado_por, :valor, :forma_pagamento, :status_pagamento, 
-                  :transaction_id
+                  :transaction_id, :certificado
 
 	filter :nome
     filter :status_versao_impressa, as: :select, collection: proc {Carteirinha.class_variable_get(:@@STATUS_VERSAO_IMPRESSA)}
@@ -163,6 +163,20 @@ ActiveAdmin.register Carteirinha do
 
     before_update do |carteirinha| 
         carteirinha.alterado_por = current_admin_user.usuario
+    end
+
+    controller do 
+        def update(options={}, &block)
+            @carteirinha = Carteirinha.find(params[:id])
+            @status_atual = params[:carteirinha][:status_versao_impressa]
+            if @status_atual != @carteirinha.status_versao_impressa
+               EstudanteNotificacoes.status_notificacoes(@carteirinha).deliver
+            end
+          super do |success, failure| 
+            block.call(success, failure) if block
+            failure.html { render :edit }
+          end
+        end
     end
 
     #Actions

@@ -5,7 +5,7 @@ module ApplicationHelper
 		else
 			nome = current_estudante.email_less_domain
 		end
-		cumprimento = "Olá, #{name}"
+		cumprimento = "Olá, #{nome}"
 		content_tag :li  do
 			link_to cumprimento, estudante_path(current_estudante)
 		end

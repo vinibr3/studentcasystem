@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'viniciusdeoliveirasantos@gmail.com'
+  default from: ENV["STUDENTCASYSTEM_EMAIL_USER"]
   layout 'mailer'
 end
