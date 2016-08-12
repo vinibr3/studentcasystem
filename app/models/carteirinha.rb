@@ -111,7 +111,7 @@ class Carteirinha < ActiveRecord::Base
             self.nao_depois = Time.new(Time.new.year+1, 3, 31).to_date                    if self.nao_depois.blank? 
             self.numero_serie = Carteirinha.gera_numero_serie(self.id)                    if self.numero_serie.blank?
             self.codigo_uso = Carteirinha.gera_codigo_uso                                 if self.codigo_uso.blank?
-            self.qr_code = Carteirinha.gera_qr_code(self.codigo_uso)                      if self.qr_code.blank?
+            self.qr_code = Carteirinha.gera_qr_code(self.estudante.chave_acesso)          if self.qr_code.blank?
             #self.certificado = Carteirinha.gera_certificado(self)                         if self.certificado.blank?
         end
 	end
@@ -207,14 +207,14 @@ class Carteirinha < ActiveRecord::Base
 		SecureRandom.hex(4).upcase
 	end 
 
-	def self.gera_qr_code codigo_uso
+	def self.gera_qr_code chave_acesso
 		entidade = Entidade.instance
 		url_qr_code = entidade.url_qr_code
 		if url_qr_code.blank? || url_qr_code.nil?
 			raise "url_qr_code não informada para a entidade."
 		else
-			url_qr_code.end_with?("/") ? url_qr_code.concat(codigo_uso) : url_qr_code.concat("/#{codigo_uso}")
-			return url_qr_code
+			url_qr_code.end_with?("/") ? url_qr_code.concat(chave_acesso) : url_qr_code.concat("/#{chave_acesso}")
+			url_qr_code
 		end
 	end
 

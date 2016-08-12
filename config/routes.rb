@@ -39,6 +39,8 @@ Rails.application.routes.draw do
   get '', to:'carteirinhas#carteirinha_image'
   post 'carteirinhas/consulta',   to:"carteirinhas#consulta", as: :consulta_carteirinha
 
+  get 'certificados/:chave_acesso', to:"certificados#show"
+
   # Rotas da API 
   namespace :api, defaults:{format: :json} do
     resources :estudantes, only: [:create, :update], param: :oauth_token do
