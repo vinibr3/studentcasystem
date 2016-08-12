@@ -1,0 +1,7 @@
+<% if @carteirinha && @carteirinha.valid? %>
+	$('#carteirinha').html("<%= escape_javascript(render @carteirinha) %>");
+<% else %>
+	<% flash[:alert] = "Código de Uso inválido ou Documento vencido." %>
+	$('#carteirinha').html(null).html("");
+	$('#flash_message').html("<%= j(render 'layouts/messages') %>");
+<% end %>

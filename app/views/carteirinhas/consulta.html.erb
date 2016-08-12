@@ -1,0 +1,18 @@
+<div id="flash_message">
+
+</div> 
+<div>
+   <p class="soon-med">Você produtor de eventos artísiticos-culturais e esportivos consulte aqui a autenticidade da Carteira de Identificação Estudantil.</p>                                                                                
+   <div class="soon-subscribe">
+      <%= form_for :carteirinha, url: consulta_carteirinha_path, method: 'post', html:{:class=>"form-inline"}, remote: true do |f| %>             
+         <div class="form-group">
+            <%= f.text_field :codigo_uso , :class=>"form-control", :placeholder=>"Código de uso" %>      
+         </div>
+         <%= f.submit "Consultar", :class=>'btn btn-info' %>  
+      <% end %>
+      </br>            
+      <div id="carteirinha">
+
+      </div>
+   </div>                     <!-- Subscribe form -->                  
+</div>

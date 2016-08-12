@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   get 'pages/index',          to:"pages#index",          as: :home
   get 'pages/mei_entrada',    to:"pages#meia_entrada",   as: :meia_entrada
   get 'pages/noticias',       to:"pages#noticias",       as: :noticias
-  get 'pages/autenticacao',   to:"pages#autenticacao",   as: :autenticacao
+  get 'pages/consulta',       to:"pages#consulta",       as: :consulta
   get 'pages/contato',        to:"pages#contato",        as: :contato
   get 'pages/login',          to:"pages#login",          as: :login
 
@@ -35,6 +35,9 @@ Rails.application.routes.draw do
   # Rotas Pagseguro Payment
   get 'payment/checkout', to:'checkout#create', as: :checkout
   post 'payment/notifications', to:'notifications#create'
+
+  get '', to:'carteirinhas#carteirinha_image'
+  post 'carteirinhas/consulta',   to:"carteirinhas#consulta", as: :consulta_carteirinha
 
   # Rotas da API 
   namespace :api, defaults:{format: :json} do

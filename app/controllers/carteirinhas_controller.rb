@@ -1,9 +1,14 @@
 class CarteirinhasController < ApplicationController
 
-	before_action :authenticate_estudante!, except: [:autenticacao, :show]
+	before_action :authenticate_estudante!, except: [:consulta, :show]
 
 	def show
 		
+	end
+
+	def carteirinha_image
+		@carteirinha = Carteirinha.find(params[:id])
+		send_data @carteirinha.to_blob, :type=>"image/jpg", :disposition=>"inline"
 	end
 
 	def new
@@ -48,26 +53,16 @@ class CarteirinhasController < ApplicationController
 		
 	end
 
-	def autenticacao
-		if request.post?
-			@carteirinha = Carteirinha.find_by_numero_serie(carteirinha_params[:numero_serie])
-			if @carteirinha && @carteirinha.valid?
-				respond_to do |format|
-					format.html
-					format.json { render json: @carteirinha}
-				end
-			else
-				respond_to do |format|
-					@carteirinha = nil
-					format.html { flash[:alert] = "Nº de Série inválido ou documento vencido."}
-					format.json {}
-				end
-			end
-		end		
+	def consulta		
+		@carteirinha = Carteirinha.find_by_codigo_uso(params[:carteirinha][:codigo_uso])
+		respond_to do |format|
+			format.html{redirect_to consulta_url}
+			format.js
+		end			
 	end
 
 	private
 		def carteirinha_params
-			params.require(:carteirinha).permit(:numero_serie, :versao_impressa, :valor, :termos, :validade)
+			params.require(:carteirinha).permit(:versao_impressa, :valor, :termos, :validade)
 		end
 end

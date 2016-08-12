@@ -131,12 +131,12 @@ class Carteirinha < ActiveRecord::Base
 		draw = Magick::Draw.new
 		draw.annotate(img, 0, 0, lyt.nome_posx, lyt.nome_posy, self.nome.upcase)                                            	 unless lyt.nome_posx.blank? && lyt.nome_posy.blank? 
 		draw.annotate(img, 0, 0, lyt.instituicao_ensino_posx, lyt.instituicao_ensino_posy, self.instituicao_ensino.upcase)       unless lyt.instituicao_ensino_posx.blank? && lyt.instituicao_ensino_posy.blank? 
-		draw.annotate(img, 0, 0, lyt.escolaridade_posx, lyt.escolaridade_posy, self.escolaridade.nome.upcase)               	 unless lyt.escolaridade_posx.blank? && lyt.escolaridade_posy.blank? 
+		draw.annotate(img, 0, 0, lyt.escolaridade_posx, lyt.escolaridade_posy, self.escolaridade.upcase)               	         unless lyt.escolaridade_posx.blank? && lyt.escolaridade_posy.blank? 
 		draw.annotate(img, 0, 0, lyt.curso_posx, lyt.curso_posy, self.curso_serie.upcase)                                        unless lyt.curso_posx.blank? && lyt.curso_posy.blank? 
 		draw.annotate(img, 0, 0, lyt.data_nascimento_posx, lyt.data_nascimento_posy, self.data_nascimento.strftime("%d/%m/%Y"))  unless lyt.data_nascimento_posx.blank? && lyt.data_nascimento_posy.blank? 
 		draw.annotate(img, 0, 0, lyt.rg_posx, lyt.rg_posy, self.rg)                                                  		 	 unless lyt.rg_posx.blank? && lyt.rg_posy.blank? 
 		draw.annotate(img, 0, 0, lyt.cpf_posx, lyt.cpf_posy, self.cpf)                                                           unless lyt.cpf_posx.blank? && lyt.cpf_posy.blank? 
-		draw.annotate(img, 0, 0, lyt.nao_depois_posx, lyt.nao_depois_posy, self.nao_depois)                          			 unless lyt.nao_depois_posx.blank? && lyt.nao_depois_posy.blank?
+		draw.annotate(img, 0, 0, lyt.nao_depois_posx, lyt.nao_depois_posy, self.nao_depois.strftime("%d/%m/%Y"))                 unless lyt.nao_depois_posx.blank? && lyt.nao_depois_posy.blank?
 		draw.font_weight(700)  # bold                                             			                                             
 		draw.annotate(img, 0, 0, lyt.codigo_uso_posx, lyt.codigo_uso_posy, self.codigo_uso.upcase)                         		 unless lyt.codigo_uso_posx.blank? && lyt.codigo_uso_posy.blank? 
 		 
@@ -146,7 +146,7 @@ class Carteirinha < ActiveRecord::Base
 		
 		# Cria e Desenha Qr Code
 		dir_qr_code = "tmp/#{self.numero_serie}.png"
-		qr = RQRCode::QRCode.new( self.qr_code, :size => 4, :level => :h ).to_img 
+		qr = RQRCode::QRCode.new( self.qr_code, :size => 6, :level => :h ).to_img 
 		qr.resize(lyt.qr_code_width, lyt.qr_code_height).save(dir_qr_code)
 		
 		qr_code = Magick::Image.read(dir_qr_code)
