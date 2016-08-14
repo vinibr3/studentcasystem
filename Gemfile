@@ -67,8 +67,10 @@ gem 'pagseguro-oficial', '~> 2.6'
 
 gem 'mini_magick', '~> 4.5', '>= 4.5.1'
 
+gem "recaptcha", require: "recaptcha/rails"
+
 group :production do
-  gem 'unicorn'
+  #gem 'unicorn'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

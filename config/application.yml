@@ -10,6 +10,9 @@
 #   stripe_api_key: sk_live_EeHnL644i6zo4Iyq4v1KdV9H
 #   stripe_publishable_key: pk_live_9lcthxpSIHbGwmdO941O1XVU
 
+RECAPTCHA_PUBLIC_KEY:  '6LcajicTAAAAAP23pEpr8R7kxVnxIFMiSFrP7vxK'
+RECAPTCHA_PRIVATE_KEY: '6LcajicTAAAAALK8MsZ8z0XYSXxAuTFNb6c719o9'
+
 production:
  PAGSEGURO_URL_NOTIFICATION: 'http://46.101.84.54/payment/notifications'
  PAGSEGURO_URL_CALLBACK: 'http://46.101.84.54'
@@ -26,6 +29,8 @@ production:
  STUDENTCASYSTEM_EMAIL_USER: 'viniciusdeoliveirasantos@gmail.com'
  STUDENTCASYSTEM_EMAIL_PASSWORD: '1820goiania'
  STUDENTCASYSTEM_EMAIL_SITE_DOMAIN: 'http://46.101.84.54'
+ RECAPTCHA_PUBLIC_KEY:  ''
+ RECAPTCHA_PRIVATE_KEY: ''
 
 development:
  PAGSEGURO_URL_NOTIFICATION: 'http://localhost:3000/payment/notifications'
@@ -43,6 +48,8 @@ development:
  STUDENTCASYSTEM_EMAIL_SITE_DOMAIN: 'localhost'
  STUDENTCASYSTEM_EMAIL_USER: 'viniciusdeoliveirasantos@gmail.com'
  STUDENTCASYSTEM_EMAIL_PASSWORD: '1820goiania'
+ RECAPTCHA_PUBLIC_KEY:  '6LcajicTAAAAAP23pEpr8R7kxVnxIFMiSFrP7vxK'
+ RECAPTCHA_PRIVATE_KEY: '6LcajicTAAAAALK8MsZ8z0XYSXxAuTFNb6c719o9'
 
 test:
  PAGSEGURO_URL_NOTIFICATION: 'http://localhost:3000/payment/notifications'
@@ -60,3 +67,5 @@ test:
  STUDENTCASYSTEM_EMAIL_SITE_DOMAIN: 'localhost'
  STUDENTCASYSTEM_EMAIL_USER: 'viniciusdeoliveirasantos@gmail.com'
  STUDENTCASYSTEM_EMAIL_PASSWORD: '1820goiania'
+ RECAPTCHA_PUBLIC_KEY:  '6LcajicTAAAAAP23pEpr8R7kxVnxIFMiSFrP7vxK'
+ RECAPTCHA_PRIVATE_KEY: '6LcajicTAAAAALK8MsZ8z0XYSXxAuTFNb6c719o9'

@@ -1,6 +1,6 @@
 class CarteirinhasController < ApplicationController
 
-	before_action :authenticate_estudante!, except: [:consulta, :show]
+	before_action :authenticate_estudante!, except: [:consulta, :show, :carteirinha_image]
 
 	def show
 		
@@ -55,9 +55,13 @@ class CarteirinhasController < ApplicationController
 
 	def consulta		
 		@carteirinha = Carteirinha.find_by_codigo_uso(params[:carteirinha][:codigo_uso])
-		respond_to do |format|
-			format.html{redirect_to consulta_url}
-			format.js
+		if verify_recaptcha(model: @carteirinha)
+			 respond_to do |format|
+				format.html{redirect_to consulta_url}
+				format.js
+			end
+		else
+		  redirect_to consulta_url
 		end			
 	end
 
