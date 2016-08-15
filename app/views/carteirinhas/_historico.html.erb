@@ -11,8 +11,8 @@
 					 <span><strong>Transação:&nbsp;</strong><%=  carteirinha.transaction_id %> </span><br>
 			    </div>
 			    <div class="progress">
-			    	<% if carteirinha.solicitacao_cancelada? %>
-			    		<div class="progress-bar progress-bar-danger" role="progress-bar" style="width:100%;"> Cancelada </div>
+			    	<% if carteirinha.solicitacao_cancelada_ou_revogada? %>
+			    		<div class="progress-bar progress-bar-danger" role="progress-bar" style="width:100%;"> carteirinha.status_versao_impressa </div>
 			    	<% else %>
 			    		<% carteirinha.status_take_while.each do |status| %>
 				    		<div class="progress-bar progress-bar-success" role="progress-bar" style="width: 20%">

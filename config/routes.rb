@@ -8,8 +8,8 @@ Rails.application.routes.draw do
   end
 
  
-  get 'pages/index',          to:"pages#index",          as: :home
-  get 'pages/mei_entrada',    to:"pages#meia_entrada",   as: :meia_entrada
+  get 'pages/home',           to:"pages#index",          as: :home
+  get 'pages/meia_entrada',   to:"pages#meia_entrada",   as: :meia_entrada
   get 'pages/noticias',       to:"pages#noticias",       as: :noticias
   get 'pages/consulta',       to:"pages#consulta",       as: :consulta
   get 'pages/contato',        to:"pages#contato",        as: :contato
@@ -36,7 +36,7 @@ Rails.application.routes.draw do
   get 'payment/checkout', to:'checkout#create', as: :checkout
   post 'payment/notifications', to:'notifications#create'
 
-  get '', to:'carteirinhas#carteirinha_image'
+  get 'carteirinhas/image', to:'carteirinhas#carteirinha_image'
   post 'carteirinhas/consulta',   to:"carteirinhas#consulta", as: :consulta_carteirinha
 
   get 'certificados/:chave_acesso', to:"certificados#show"

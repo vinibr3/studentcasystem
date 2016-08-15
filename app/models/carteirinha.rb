@@ -5,7 +5,7 @@ class Carteirinha < ActiveRecord::Base
 	has_attached_file :foto
 	
 	#@@STATUS_VERSAO_DIGITAL = ["Pagamento", "Documentação", "Download", "Baixada"]
-	@@STATUS_VERSAO_IMPRESSA = ["Pagamento", "Documentação", "Aprovada","Enviada", "Entregue"]
+	@@STATUS_VERSAO_IMPRESSA = ["Pagamento", "Documentação", "Aprovada","Enviada", "Entregue", "Cancelada", "Revogada"]
 	EMAIL_REGEX = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/
 	STRING_REGEX = /\A[a-z A-Z]+\z/
 	LETRAS = /[A-Z a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+/
@@ -38,7 +38,10 @@ class Carteirinha < ActiveRecord::Base
 	validates_attachment_file_name :foto, :matches => [/png\Z/, /jpe?g\Z/]
 	validates_attachment_content_type :foto, :content_type => ['image/jpeg', 'image/png', 'application/pdf']
 
-	before_update :check_update_status, :check_pagamento
+	validate :nao_mudar_status_se_nao_pago
+
+	before_update :gera_dados_se_carteirinha_aprovada, :muda_status_carteirinha_para_documentacao_se_pago, 
+	              :muda_status_carteirinha_from_status_pagamento
 
 	def dias_validade 
 		nao_depois  = self.nao_depois
@@ -74,9 +77,14 @@ class Carteirinha < ActiveRecord::Base
 		@@STATUS_VERSAO_IMPRESSA.take index
 	end
 
-	def solicitacao_cancelada?
-		comparable = @@status_pagamento.last(4)
-		!comparable.select{|x| x==self.status_pagamento}.empty?
+	def solicitacao_cancelada_ou_revogada?
+		if self.status_versao_impressa == @@STATUS_VERSAO_IMPRESSA[5] || self.status_versao_impressa == @@STATUS_VERSAO_IMPRESSA[6]
+	end
+
+	def nao_mudar_status_se_nao_pago
+		if self.status_pagamento != @@status_pagamento[3] # não pago
+			errors.add(:status_versao_impressa, "pagamento da CIE não foi realizado") if status_versao_impressa_to_i >= 1
+		end
 	end
 
 	def status_pagamento
@@ -104,8 +112,26 @@ class Carteirinha < ActiveRecord::Base
 		end
 	end
 
-	def check_update_status
-		if self.status_versao_impressa == @@STATUS_VERSAO_IMPRESSA[2]
+	def status_pagamento_to_i
+		@@status_pagamento.length.times do |i|
+			if @@status_pagamento[i] == self[:status_pagamento]
+				return i
+			end
+		end
+	end
+
+	def muda_status_carteirinha_from_status_pagamento
+		if status_pagamento_to_i <= 2 #em processamento
+			self.status_versao_impressa = @@STATUS_VERSAO_IMPRESSA[0]
+		elsif status_pagamento_to_i == 3 || 4 # paga ou disponível
+			
+		elsif status_pagamento >= 5 #cancelada
+			self.status_versao_impressa == @@STATUS_VERSAO_IMPRESSA[5]
+		end
+	end
+
+	def gera_dados_se_carteirinha_aprovada
+		if self.status_versao_impressa == @@STATUS_VERSAO_IMPRESSA[2] # Status é 'Aprovada'
             self.layout_carteirinha_id = LayoutCarteirinha.last_layout_id                 if self.layout_carteirinha_id.blank?
             self.nao_antes = Time.new                                                     if self.nao_antes.blank?
             self.nao_depois = Time.new(Time.new.year+1, 3, 31).to_date                    if self.nao_depois.blank? 
@@ -113,12 +139,12 @@ class Carteirinha < ActiveRecord::Base
             self.codigo_uso = Carteirinha.gera_codigo_uso                                 if self.codigo_uso.blank?
             self.qr_code = Carteirinha.gera_qr_code(self.estudante.chave_acesso)          if self.qr_code.blank?
             #self.certificado = Carteirinha.gera_certificado(self)                         if self.certificado.blank?
-        end
+       end
 	end
 
-	def check_pagamento
+	def muda_status_carteirinha_para_documentacao_se_pago
 		if self.status_pagamento == @@status_pagamento[3] && self.status_versao_impressa == @@STATUS_VERSAO_IMPRESSA[0]
-			self.status_versao_impressa = @@STATUS_VERSAO_IMPRESSA[1]
+			self.status_versao_impressa = @@STATUS_VERSAO_IMPRESSA[1] # status muda de pagamento para documentaçao
 		end
 	end
 
@@ -157,16 +183,10 @@ class Carteirinha < ActiveRecord::Base
 		img.to_blob
 	end
 
-	def self.zipfile_by_scope scope
+	def self.zipfile_by_scope carteirinhas
 		begin
-			carteirinhas = where(scope)
-
 			# Cria nome do arquivo zip
-	        first_numero_serie = carteirinhas.first.numero_serie
-	        last_numero_serie = carteirinhas.last.numero_serie
-	        zipfile_name = first_numero_serie
-	        zipfile_name = zipfile_name.concat("-#{last_numero_serie}") unless carteirinhas.count <= 1
-	        zipfile_name = zipfile_name.concat(".zip")
+	        zipfile_name = "carteirinhas.zip"
 	        path_zip = "tmp/#{zipfile_name}"
 
 	        # Inicia o arquivo temporario como zip

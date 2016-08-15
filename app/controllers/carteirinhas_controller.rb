@@ -56,7 +56,7 @@ class CarteirinhasController < ApplicationController
 	def consulta		
 		@carteirinha = Carteirinha.find_by_codigo_uso(params[:carteirinha][:codigo_uso])
 		if verify_recaptcha(model: @carteirinha)
-			 respond_to do |format|
+			respond_to do |format|
 				format.html{redirect_to consulta_url}
 				format.js
 			end

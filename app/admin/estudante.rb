@@ -127,22 +127,19 @@ ActiveAdmin.register Estudante do
       f.input :xerox_rg, :hint => "Imagem Atual: #{f.object.xerox_rg_file_name}"
     end
     f.inputs "Dados Estudantis" do
-      f.input :instituicao_ensino
-      #f.input :escolaridade, as: :select, collection: Escolaridades.all
-      f.input :curso
+      f.input :instituicao_ensino, collection: InstituicaoEnsino.all.map{|i| [i.nome, i.id] }, include_blank: false
+      f.input :curso, collection: Curso.all.map{|c| [c.nome, c.id]}, include_blank: false
+      #f.input :escolaridade
       f.input :matricula
       f.input :comprovante_matricula, :hint => "Imagem Atual: #{f.object.comprovante_matricula_file_name}"
-      f.input :instituicao_ensino
-      #f.input :cidade_inst_ensino
-      #f.input :uf_inst_ensino
     end
     f.inputs "Endereço" do
       f.input :logradouro
       f.input :numero
       f.input :complemento
       f.input :cep
-      f.input :cidade
-      f.input :uf
+      f.input :cidade, collection: Cidade.all.map{|c| [c.nome, c.id]}, include_blank: false
+      f.input :uf, collection: Estado.all.map{|e| [e.nome,e.id]}, include_blank: false
     end
     f.actions
   end

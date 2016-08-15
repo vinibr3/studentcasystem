@@ -8,7 +8,6 @@ class Estudante < ActiveRecord::Base
 	has_many :carteirinhas
 	belongs_to :instituicao_ensino
 	belongs_to :curso
-	has_one :escolaridade, through: :curso
 
 	has_attached_file :foto, :styles => {:original => {}}
 	has_attached_file :comprovante_matricula, :styles => {:original => {}}
@@ -194,6 +193,13 @@ class Estudante < ActiveRecord::Base
 
 	def confirmation_required?
 		self.provider.blank?
+	end
+
+	def escolaridade
+		self.curso.escolaridade.nome
+	end
+
+	def escolaridade= escolaridade
 	end
 
 	protected

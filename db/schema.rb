@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 201606060397040) do
+ActiveRecord::Schema.define(version: 20160815141358) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -121,11 +121,10 @@ ActiveRecord::Schema.define(version: 201606060397040) do
     t.integer  "escolaridade_id"
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
-    t.integer  "curso_id"
     t.integer  "instituicao_ensino_id"
   end
 
-  add_index "cursos", ["curso_id"], name: "index_cursos_on_curso_id", using: :btree
+  add_index "cursos", ["escolaridade_id"], name: "index_cursos_on_escolaridade_id", using: :btree
   add_index "cursos", ["instituicao_ensino_id"], name: "index_cursos_on_instituicao_ensino_id", using: :btree
 
   create_table "entidades", force: :cascade do |t|
@@ -133,10 +132,6 @@ ActiveRecord::Schema.define(version: 201606060397040) do
     t.string   "sigla"
     t.string   "email"
     t.string   "cnpj"
-    t.string   "logo_file_name"
-    t.string   "logo_content_type"
-    t.integer  "logo_file_size"
-    t.datetime "logo_updated_at"
     t.string   "valor_carteirinha"
     t.string   "frete_carteirinha"
     t.string   "telefone"
@@ -169,10 +164,10 @@ ActiveRecord::Schema.define(version: 201606060397040) do
     t.string   "url_qr_code"
     t.string   "token_certificado"
     t.string   "url_certificado"
-    t.string   "configuracao_file_name"
-    t.string   "configuracao_content_type"
-    t.integer  "configuracao_file_size"
-    t.datetime "configuracao_updated_at"
+    t.string   "logo_file_name"
+    t.string   "logo_content_type"
+    t.integer  "logo_file_size"
+    t.datetime "logo_updated_at"
   end
 
   create_table "escolaridades", force: :cascade do |t|
@@ -207,7 +202,7 @@ ActiveRecord::Schema.define(version: 201606060397040) do
     t.string   "cidade"
     t.string   "uf"
     t.integer  "instituicao_ensino_id"
-    t.string   "curso_id"
+    t.integer  "curso_id"
     t.string   "matricula"
     t.string   "foto_file_name"
     t.string   "foto_content_type"
@@ -245,16 +240,6 @@ ActiveRecord::Schema.define(version: 201606060397040) do
   add_index "estudantes", ["confirmation_token"], name: "index_estudantes_on_confirmation_token", unique: true, using: :btree
   add_index "estudantes", ["email"], name: "index_estudantes_on_email", unique: true, using: :btree
   add_index "estudantes", ["reset_password_token"], name: "index_estudantes_on_reset_password_token", unique: true, using: :btree
-
-  create_table "instituicao_ensino_cursos", force: :cascade do |t|
-    t.integer  "instituicao_ensino_id"
-    t.integer  "curso_id"
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
-  end
-
-  add_index "instituicao_ensino_cursos", ["curso_id"], name: "index_instituicao_ensino_cursos_on_curso_id", using: :btree
-  add_index "instituicao_ensino_cursos", ["instituicao_ensino_id"], name: "index_instituicao_ensino_cursos_on_instituicao_ensino_id", using: :btree
 
   create_table "instituicao_ensinos", force: :cascade do |t|
     t.string   "nome"
@@ -327,10 +312,8 @@ ActiveRecord::Schema.define(version: 201606060397040) do
   end
 
   add_foreign_key "cidades", "estados"
-  add_foreign_key "cursos", "cursos"
+  add_foreign_key "cursos", "escolaridades"
   add_foreign_key "cursos", "instituicao_ensinos"
-  add_foreign_key "instituicao_ensino_cursos", "cursos"
-  add_foreign_key "instituicao_ensino_cursos", "instituicao_ensinos"
   add_foreign_key "instituicao_ensinos", "cidades"
   add_foreign_key "instituicao_ensinos", "entidades"
   add_foreign_key "instituicao_ensinos", "estados"

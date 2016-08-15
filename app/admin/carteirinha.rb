@@ -7,41 +7,15 @@ ActiveAdmin.register Carteirinha do
    
    status = Carteirinha.status_versao_impressa
 
-   scope :pagamento do |carteirinha|
+   status.each do |status|
+    scope status do |carteirinha|
         if current_admin_user.super_admin?
-            carteirinha.where(status_versao_impressa: status[0])
+            carteirinha.where(status_versao_impressa: status)
         else
-            carteirinha.where(status_versao_impressa: status[0], alterado_por: current_admin_user.usuario)
+            carteirinha.where(status_versao_impressa: status, alterado_por: current_admin_user.usuario)
         end
-   end
-   scope "Documentação" do |carteirinha|
-        if current_admin_user.super_admin?
-            carteirinha.where(status_versao_impressa:  status[1])
-        else
-            carteirinha.where(status_versao_impressa:  status[1], alterado_por: current_admin_user.usuario)
-        end
-   end
-   scope :aprovada do |carteirinha|
-        if current_admin_user.super_admin?
-            carteirinha.where(status_versao_impressa: status[2])
-        else
-            carteirinha.where(status_versao_impressa: status[2], alterado_por: current_admin_user.usuario)
-        end
-   end
-   scope :entregue do |carteirinha|
-        if current_admin_user.super_admin?
-            carteirinha.where(status_versao_impressa: status[3])
-        else
-            carteirinha.where(status_versao_impressa: status[3], alterado_por: current_admin_user.usuario)
-        end
-   end
-   scope :enviada do |carteirinha|
-        if current_admin_user.super_admin?
-            carteirinha.where(status_versao_impressa: status[4])
-        else
-            carteirinha.where(status_versao_impressa: status[4], alterado_por: current_admin_user.usuario)
-        end
-   end
+    end
+   end 
 
     permit_params :nome, :instituicao_ensino, :curso_serie, :matricula, :rg,
 				  :data_nascimento, :cpf, :numero_serie, :validade, :qr_code,
@@ -54,7 +28,7 @@ ActiveAdmin.register Carteirinha do
                   :transaction_id, :certificado
 
 	filter :nome
-    filter :status_versao_impressa, as: :select, collection: proc {Carteirinha.class_variable_get(:@@STATUS_VERSAO_IMPRESSA)}
+    #filter :status_versao_impressa, as: :select, collection: proc {Carteirinha.class_variable_get(:@@STATUS_VERSAO_IMPRESSA)}
 	filter :numero_serie
     filter :transaction_id
 	
@@ -98,7 +72,7 @@ ActiveAdmin.register Carteirinha do
                 row :nao_depois 
                 row :codigo_uso
                 row :qr_code
-               #row :certificado
+                row :certificado
                 row :numero_serie
                 row :layout_carteirinha_id
                 row :estudante_id
@@ -106,7 +80,9 @@ ActiveAdmin.register Carteirinha do
         end
         panel "Dados da Solicitaçao" do 
             attributes_table_for carteirinha do
-                row :status_versao_impressa
+                row "Status" do 
+                    carteirinha.status_versao_impressa
+                end
                 row :valor
                 row :forma_pagamento
                 row :status_pagamento
@@ -125,14 +101,12 @@ ActiveAdmin.register Carteirinha do
                 f.input :rg
                 f.input :cpf
                 f.input :data_nascimento, as: :datepicker
-                #f.input :foto_file_name
+                #f.input :foto
             end
             f.inputs "Dados Escolares" do
-                f.input :instituicao_ensino
-                f.input :cidade_inst_ensino
-                f.input :uf_inst_ensino
-                f.input :escolaridade
-                f.input :curso_serie
+                f.input :instituicao_ensino, collection: InstituicaoEnsino.all.map{|i| [i.nome, i.nome] }, include_blank: false
+                f.input :curso_serie, collection: Curso.all.map{|c| [c.nome, c.nome]}, include_blank: false, label: "Curso"
+                f.input :escolaridade, collection: Escolaridade.all.map{|e| [e.nome, e.nome]}, include_blank: false, label: "Curso"
                 f.input :matricula
             end
             f.inputs "Dados do Documento" do
@@ -147,13 +121,13 @@ ActiveAdmin.register Carteirinha do
             end 
         end
             f.inputs "Dados da Solicitação" do
-                f.input :status_versao_impressa, as: :select, collection: Carteirinha.class_variable_get(:@@STATUS_VERSAO_IMPRESSA)
+                f.input :status_versao_impressa, as: :select, collection: Carteirinha.class_variable_get(:@@STATUS_VERSAO_IMPRESSA), label: "Status"
                 #f.input :status_versao_digital
                 if current_admin_user.super_admin?
                     f.input :alterado_por
-                    f.input :valor
+                    f.input :valor 
                     f.input :forma_pagamento
-                    f.input :status_pagamento
+                    f.input :status_pagamento, collection: Carteirinha.class_variable_get(:@@status_pagamento), include_blank: false
                     f.input :transaction_id
                 end
             end
@@ -163,13 +137,20 @@ ActiveAdmin.register Carteirinha do
 
     before_update do |carteirinha| 
         carteirinha.alterado_por = current_admin_user.usuario
+        if carteirinha.status_versao_impressa_to_i >= 3 # ENVIADA OU ENTREGUE
+            if carteirinha.certificado.blank?
+                flash[:error] = "Não foi possível alterar STATUS. Certificado de Atributo não foi criado para a CIE #{carteirinha.id}."
+                st = Carteirinha.find(carteirinha.id).status_versao_impressa
+                carteirinha.status_versao_impressa = st
+            end
+        end
     end
 
     controller do 
         def update(options={}, &block)
             @carteirinha = Carteirinha.find(params[:id])
             @status_atual = params[:carteirinha][:status_versao_impressa]
-            if @status_atual != @carteirinha.status_versao_impressa
+            if @carteirinha.valid? && @status_atual != @carteirinha.status_versao_impressa 
                EstudanteNotificacoes.status_notificacoes(@carteirinha).deliver
             end
           super do |success, failure| 
@@ -182,12 +163,22 @@ ActiveAdmin.register Carteirinha do
     #Actions
     member_action :download, method: :get do
        carteirinha = Carteirinha.find(params[:id])
-       send_data carteirinha.to_blob, type: 'image/jpg', filename: "#{carteirinha.numero_serie}.jpg"
+       if carteirinha
+        send_data carteirinha.to_blob, type: 'image/jpg', filename: "#{carteirinha.numero_serie}.jpg"
+       else
+        flash[:error]="Dados não encontrados."
+       end
     end
 
     collection_action :download_all, method: :get do
-       data = Carteirinha.zipfile_by_scope params[:scope] 
-       send_data  data[:stream], type:'application/zip', filename: data[:filename]
+       @carteirinhas = Carteirinha.find params[:carteirinhas_ids] if params[:carteirinhas_ids]
+       if @carteirinhas
+        data = Carteirinha.zipfile_by_scope @carteirinhas
+        send_data  data[:stream], type:'application/zip', filename: data[:filename]
+       else
+        flash[:error] =  "Dados não encontrados."
+        redirect_to :back
+       end
     end
     #Action items 
     action_item :download, only: :show do
@@ -195,6 +186,8 @@ ActiveAdmin.register Carteirinha do
     end
 
     action_item :download_all, only: :index do
-        link_to 'Download', download_all_admin_carteirinhas_path
+        ids=Array.new
+        collection.each{ |collection| ids<<collection.id}
+        link_to 'Download', download_all_admin_carteirinhas_path(:carteirinhas_ids => ids)
     end
 end
