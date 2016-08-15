@@ -78,7 +78,7 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def solicitacao_cancelada_ou_revogada?
-		if self.status_versao_impressa == @@STATUS_VERSAO_IMPRESSA[5] || self.status_versao_impressa == @@STATUS_VERSAO_IMPRESSA[6]
+		self.status_versao_impressa == @@STATUS_VERSAO_IMPRESSA[5] || self.status_versao_impressa == @@STATUS_VERSAO_IMPRESSA[6]
 	end
 
 	def nao_mudar_status_se_nao_pago

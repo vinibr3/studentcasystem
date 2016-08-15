@@ -1,5 +1,5 @@
 ActiveAdmin.register LayoutCarteirinha do
-	menu if: proc{current_admin_user.super_admin?}, priority: 5
+	menu if: proc{current_admin_user.super_admin?}, priority: 5, parent: "Configurações"
 	
 	permit_params :anverso, :verso, :nome_posx, :nome_posy, :instituicao_ensino_posx, :instituicao_ensino_posy,
 	              :escolaridade_posx, :escolaridade_posy, :curso_posx, :curso_posy,

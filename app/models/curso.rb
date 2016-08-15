@@ -12,4 +12,12 @@ class Curso < ActiveRecord::Base
 		self.nome.upcase
 	end
 
+	def escolaridade_nome
+		self.escolaridade.nome
+	end
+
+	def instituicao_ensino_nome
+		self.instituicao_ensino.nome
+	end
+
 end
