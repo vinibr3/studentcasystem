@@ -1,6 +1,7 @@
 class PagesController < ApplicationController
   def index
-  	 
+  	 @avisos = Aviso.all
+     @eventos = Evento.all
   end
 
   def meia_entrada

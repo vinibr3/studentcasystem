@@ -1,0 +1,11 @@
+<div class="">
+	<h2> Eventos </h2>
+	<div class="">
+		<% @eventos.each do |e| %>
+			<%=  link_to e do %>
+				<h4><%= e.data.strftime("%d/%m/%y")%> </h4>
+				<span><%= e.titulo %></span>
+			<% end %>
+		<% end %>
+	</div>
+</div>

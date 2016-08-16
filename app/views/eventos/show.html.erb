@@ -1,0 +1,7 @@
+<div class="">
+	<h2> <%= @evento.titulo if @evento.titulo %> </h2>
+	<span><strong>Data:</strong> <%=  @evento.data.strftime("%d/%m/%Y") if @evento.data %> </span> &nbsp; &nbsp;
+	<span><strong>Local:</strong> <%= @evento.local if @evento.local %> <span> 
+	<p><%= image_tag @evento.folder.url if @evento.folder %></p>
+	<p> <%= @evento.texto if @evento.texto %></p>
+</div>

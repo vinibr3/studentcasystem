@@ -41,6 +41,8 @@ Rails.application.routes.draw do
 
   get 'certificados/:chave_acesso', to:"certificados#show"
 
+  resources :eventos, only: [:show]
+
   # Rotas da API 
   namespace :api, defaults:{format: :json} do
     resources :estudantes, only: [:create, :update], param: :oauth_token do
