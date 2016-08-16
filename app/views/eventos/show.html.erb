@@ -3,5 +3,5 @@
 	<span><strong>Data:</strong> <%=  @evento.data.strftime("%d/%m/%Y") if @evento.data %> </span> &nbsp; &nbsp;
 	<span><strong>Local:</strong> <%= @evento.local if @evento.local %> <span> 
 	<p><%= image_tag @evento.folder.url if @evento.folder %></p>
-	<p> <%= @evento.texto if @evento.texto %></p>
+	<p> <%= @evento.texto.html_safe if @evento.texto %></p>
 </div>

@@ -41,7 +41,7 @@ ActiveAdmin.register Evento do
 			f.input :data
 			f.input :local
 			f.input :folder, :hint => "Imagem Atual: #{f.object.folder_file_name}"
-			f.input :texto
+			f.input :texto, as: :wysihtml5
 		end
 		f.actions
 	end
