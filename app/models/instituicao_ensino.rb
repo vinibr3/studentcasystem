@@ -1,4 +1,5 @@
 class InstituicaoEnsino < ActiveRecord::Base
+  
   belongs_to :cidade
   belongs_to :estado
   belongs_to :entidade

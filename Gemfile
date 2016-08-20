@@ -69,6 +69,8 @@ gem "recaptcha", require: "recaptcha/rails"
 # Editor Html5 para active_admin
 gem 'activeadmin-dragonfly', github: 'stefanoverna/activeadmin-dragonfly'
 gem 'activeadmin-wysihtml5', github: 'stefanoverna/activeadmin-wysihtml5'
+# Paperclip Amazon S3
+gem 'aws-sdk', '< 2.0' # Erro uninitialized constant Paperclip::Storage::S3:AWS for '~> 2.0'
 
 group :production do
   #gem 'unicorn'

@@ -25,7 +25,7 @@ ActiveAdmin.register Carteirinha do
                   :cidade_inst_ensino,:escolaridade, :uf_inst_ensino, 
                   :foto_file_name, :nao_antes, :nao_depois, :codigo_uso,
                   :alterado_por, :valor, :forma_pagamento, :status_pagamento, 
-                  :transaction_id, :certificado
+                  :transaction_id, :certificado, :xerox_rg, :xerox_cpf, :comprovante_matricula
 
 	filter :nome
     #filter :status_versao_impressa, as: :select, collection: proc {Carteirinha.class_variable_get(:@@STATUS_VERSAO_IMPRESSA)}
@@ -54,6 +54,12 @@ ActiveAdmin.register Carteirinha do
                 row :foto do 
                     a carteirinha.foto_file_name, class: "show-popup-link", href: carteirinha.foto.url
                 end
+                row :xerox_rg do 
+                    a carteirinha.xerox_rg_file_name, class: "show-popup-link", href: carteirinha.xerox_rg.url
+                end
+                 row :xerox_cpf do
+                    a carteirinha.xerox_cpf_file_name, class: "show-popup-link", href: carteirinha.xerox_cpf.url
+                end
             end
         end
         panel "Dados Escolares" do 
@@ -64,9 +70,12 @@ ActiveAdmin.register Carteirinha do
                 row :escolaridade
                 row :curso_serie
                 row :matricula
+                row :comprovante_matricula do
+                    a carteirinha.comprovante_matricula_file_name, class: "show-popup-link", href: carteirinha.comprovante_matricula.url
+                end
             end
         end
-        panel "Dados do Documento" do
+        panel "Dados da Carteirinha" do
             attributes_table_for carteirinha do 
                 row :nao_antes
                 row :nao_depois 
@@ -101,6 +110,9 @@ ActiveAdmin.register Carteirinha do
                 f.input :rg
                 f.input :cpf
                 f.input :data_nascimento, as: :datepicker
+                f.input :foto, :hint => "Imagem Atual: #{f.object.foto_file_name}"
+                f.input :xerox_rg, :hint => "Imagem Atual: #{f.object.xerox_rg_file_name}"
+                f.input :xerox_cpf, :hint => "Imagem Atual: #{f.object.xerox_cpf_file_name}"
                 #f.input :foto
             end
             f.inputs "Dados Escolares" do
@@ -108,6 +120,7 @@ ActiveAdmin.register Carteirinha do
                 f.input :curso_serie, collection: Curso.all.map{|c| [c.nome, c.nome]}, include_blank: false, label: "Curso"
                 f.input :escolaridade, collection: Escolaridade.all.map{|e| [e.nome, e.nome]}, include_blank: false, label: "Curso"
                 f.input :matricula
+                f.input :comprovante_matricula, :hint => "Imagem Atual: #{f.object.comprovante_matricula_file_name}"
             end
             f.inputs "Dados do Documento" do
                 f.input :nao_antes, as: :datepicker
@@ -135,7 +148,7 @@ ActiveAdmin.register Carteirinha do
 
     end
 
-    before_update do |carteirinha| 
+    before_update do |carteirinha|
         carteirinha.alterado_por = current_admin_user.usuario
         if carteirinha.status_versao_impressa_to_i >= 3 # ENVIADA OU ENTREGUE
             if carteirinha.certificado.blank?

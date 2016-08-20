@@ -30,16 +30,20 @@ ActiveAdmin.register Estudante do
         row :rg
         row :expedidor_rg
         row :uf_expedidor_rg
+        row :foto do
+          a estudante.foto_file_name, class: "show-popup-link", href: estudante.foto.url
+        end
         row :xerox_rg do
           a estudante.xerox_rg_file_name, class: "show-popup-link", href: estudante.xerox_rg.url 
+        end
+        row :xerox_cpf do
+          a estudante.xerox_cpf_file_name, class: "show-popup-link", href: estudante.xerox_cpf.url
         end
         row :sexo
         row :telefone
         row :celular
         row :chave_acesso
-        row :foto do
-          a estudante.foto_file_name, class: "show-popup-link", href: estudante.foto.url
-        end
+        
       end 
     end 
     panel "Dados Escolares" do
@@ -125,6 +129,7 @@ ActiveAdmin.register Estudante do
       f.input :celular
       f.input :foto, :hint => "Imagem Atual: #{f.object.foto_file_name}", as: :jcropable, jcrop_options: {aspectRatio: 0.75, showDimensions: false, maxSize: [400,500]}
       f.input :xerox_rg, :hint => "Imagem Atual: #{f.object.xerox_rg_file_name}"
+      f.input :xerox_cpf, :hint => "Imagem Atual: #{f.object.xerox_cpf_file_name}"
     end
     f.inputs "Dados Estudantis" do
       f.input :instituicao_ensino, collection: InstituicaoEnsino.all.map{|i| [i.nome, i.id] }, include_blank: false

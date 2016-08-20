@@ -1,11 +1,10 @@
 class LayoutCarteirinha < ActiveRecord::Base
 	has_many :carteirinhas
 
-	has_attached_file :verso
-	has_attached_file :anverso
+	url_path = "/admin/:class/:id/:attachment/:style/:filename"
 
-	# @@instance = LayoutCarteirinha.new
-	# @@last_layout = LayoutCarteirinha.last
+	has_attached_file :verso, :styles => {:original => {}}, :path => "#{url_path}"
+	has_attached_file :anverso, :styles => {:original => {}}, :path => "#{url_path}"
 
 	FILES_NAME_PERMIT = [/png\Z/, /jpe?g\Z/]
 	FILES_CONTENT_TYPE = ['image/jpeg', 'image/png']
@@ -22,7 +21,6 @@ class LayoutCarteirinha < ActiveRecord::Base
 	                          :data_nascimento_posx, :data_nascimento_posy, :rg_posx, :rg_posy, 
 	                          :cpf_posx, :cpf_posy, :codigo_uso_posx, :codigo_uso_posy, 
 	                          :nao_depois_posx, :nao_depois_posy, :qr_code_posx, :qr_code_posy, allow_blank: true
-
 
 	def self.instance
 		 last_layout = LayoutCarteirinha.last

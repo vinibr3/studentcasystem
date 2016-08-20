@@ -1,6 +1,9 @@
 class Evento < ActiveRecord::Base
-	has_attached_file :folder
+	
+	url_path = "/admin/:class/:id/:attachment/:style/:filename"
 
+	has_attached_file :folder, :path => "#{url_path}"			  
+					  
 	FILES_NAME_PERMIT = [/png\Z/, /jpe?g\Z/]
 	FILES_CONTENT_TYPE = ['image/jpeg', 'image/png']
 

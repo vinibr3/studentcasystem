@@ -1,5 +1,5 @@
 ActiveAdmin.register Noticia do 
-	menu label: "Notícias", if: proc{current_admin_user.super_admin?}, priority: 4
+	menu label: "Notícias", if: proc{current_admin_user.super_admin?}, priority: 2, parent: "Conteúdo"
 	permit_params :titulo, :autor, :foto, :body
 
 	filter :titulo

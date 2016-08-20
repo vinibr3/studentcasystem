@@ -1,6 +1,9 @@
 class Entidade < ActiveRecord::Base
-	has_attached_file :logo
-	has_attached_file :configuracao
+	
+	url_path = "/admin/:class/:id/:attachment/:style/:filename"
+
+	has_attached_file :logo, :styles => {:original => {}}, :path => "#{url_path}"
+	has_attached_file :configuracao, :styles => {:original => {}}
 	has_many :instituicao_ensinos
 
 	FILES_NAME_PERMIT = [/png\Z/, /jpe?g\Z/]
@@ -58,4 +61,9 @@ class Entidade < ActiveRecord::Base
 			raise "Nenhuma entidade Configurada"
 		end
 	end
+
+	def url_path
+		"/admin/:class/:id/:attachment/:style/:filename"
+	end
+
 end

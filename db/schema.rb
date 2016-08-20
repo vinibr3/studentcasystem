@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160816182129) do
+ActiveRecord::Schema.define(version: 20160820033221) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -106,7 +106,7 @@ ActiveRecord::Schema.define(version: 20160816182129) do
     t.date     "nao_antes"
     t.date     "nao_depois"
     t.string   "qr_code"
-    t.string   "status_versao_impressa", null: false
+    t.string   "status_versao_impressa",             null: false
     t.string   "foto_file_name"
     t.string   "foto_content_type"
     t.integer  "foto_file_size"
@@ -115,12 +115,24 @@ ActiveRecord::Schema.define(version: 20160816182129) do
     t.integer  "estudante_id"
     t.integer  "layout_carteirinha_id"
     t.string   "alterado_por"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.string   "valor"
     t.string   "forma_pagamento"
     t.string   "status_pagamento"
     t.string   "transaction_id"
+    t.string   "comprovante_matricula_file_name"
+    t.string   "comprovante_matricula_content_type"
+    t.integer  "comprovante_matricula_file_size"
+    t.datetime "comprovante_matricula_updated_at"
+    t.string   "xerox_rg_file_name"
+    t.string   "xerox_rg_content_type"
+    t.integer  "xerox_rg_file_size"
+    t.datetime "xerox_rg_updated_at"
+    t.string   "xerox_cpf_file_name"
+    t.string   "xerox_cpf_content_type"
+    t.integer  "xerox_cpf_file_size"
+    t.datetime "xerox_cpf_updated_at"
   end
 
   add_index "carteirinhas", ["estudante_id"], name: "index_carteirinhas_on_estudante_id", using: :btree
@@ -255,6 +267,10 @@ ActiveRecord::Schema.define(version: 20160816182129) do
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
+    t.string   "xerox_cpf_file_name"
+    t.string   "xerox_cpf_content_type"
+    t.integer  "xerox_cpf_file_size"
+    t.datetime "xerox_cpf_updated_at"
   end
 
   add_index "estudantes", ["confirmation_token"], name: "index_estudantes_on_confirmation_token", unique: true, using: :btree

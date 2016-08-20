@@ -1,7 +1,8 @@
 ActiveAdmin.register Evento do 
 	menu priority: 1, parent: "Conteúdo"
 
-	permit_params :titulo, :data, :texto, :local, :folder
+	permit_params :titulo, :data, :texto, :local, :folder,
+				  :url, :text, :title, :rel, :email, :anchor, :alt, :alignment, :scale, :width, :height, :_wysihtml5_mode
 
 	filter :titulo
 	filter :local

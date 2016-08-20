@@ -9,10 +9,13 @@ class Estudante < ActiveRecord::Base
 	belongs_to :instituicao_ensino
 	belongs_to :curso
 
-	has_attached_file :foto, :styles => {:original => {}}
-	has_attached_file :comprovante_matricula, :styles => {:original => {}}
-	has_attached_file :xerox_rg, :styles => {:original => {}}     
+	url_path = "/default/:class/:id/:attachment/:style/:filename"
 
+	has_attached_file :foto, :styles => {:original => {}}, :path => "#{url_path}"
+	has_attached_file :comprovante_matricula, :styles => {:original => {}}, :path => "#{url_path}"
+	has_attached_file :xerox_rg, :styles => {:original => {}}, :path => "#{url_path}"
+	has_attached_file :xerox_cpf, :styles => {:original => {}}, :path => "#{url_path}"
+	
 	FILES_NAME_PERMIT = [/png\Z/, /jpe?g\Z/, /pdf\Z/]
 	FILES_CONTENT_TYPE = ['image/jpeg', 'image/png', 'application/pdf']
 
@@ -46,15 +49,18 @@ class Estudante < ActiveRecord::Base
 	validates :uf_expedidor_rg, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
 	validates :uf, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
 	validates :chave_acesso, length:{is: 10, too_long: "Necessário 10 caracteres", too_short: "Necessário 10 caracteres"}, allow_blank: true
-	validates_attachment_size :foto, :less_than => 2.megabytes
-	validates_attachment_size :xerox_rg, :less_than => 2.megabytes
-	validates_attachment_size :comprovante_matricula, :less_than => 2.megabytes
+	validates_attachment_size :foto, :less_than => 1.megabytes
+	validates_attachment_size :xerox_rg, :less_than => 1.megabytes
+	validates_attachment_size :comprovante_matricula, :less_than => 1.megabytes
+	validates_attachment_size :xerox_cpf, :less_than => 1.megabytes
 	validates_attachment_file_name :foto, :matches => [/png\Z/, /jpe?g\Z/]
 	validates_attachment_file_name :comprovante_matricula, :matches=> FILES_NAME_PERMIT
 	validates_attachment_file_name :xerox_rg, :matches => FILES_NAME_PERMIT
+	validates_attachment_file_name :xerox_cpf, :matches => FILES_NAME_PERMIT
 	validates_attachment_content_type :foto, :content_type=> ['image/png', 'image/jpeg']
 	validates_attachment_content_type :comprovante_matricula, :content_type=> FILES_CONTENT_TYPE
 	validates_attachment_content_type :xerox_rg, :content_type=> FILES_CONTENT_TYPE
+	validates_attachment_content_type :xerox_cpf, :content_type=> FILES_CONTENT_TYPE
 	validates_acceptance_of :termos
     
     validates_length_of :foto_file_name, :comprovante_matricula_file_name, :xerox_rg_file_name, 
@@ -184,7 +190,7 @@ class Estudante < ActiveRecord::Base
 			          :data_nascimento, :sexo, :celular, :logradouro, :numero, 
 			          :cep, :cidade, :uf, :instituicao_ensino_id, :curso_id,
 			          :matricula, :foto_file_name, :comprovante_matricula_file_name, 
-			          :xerox_rg_file_name]
+			          :xerox_rg_file_name, :xerox_cpf]
 		atributos.each do |atr|
 			nao_preenchidos << atr if self[atr].blank?
 		end
@@ -196,7 +202,7 @@ class Estudante < ActiveRecord::Base
 	end
 
 	def escolaridade
-		self.curso.escolaridade.nome
+		self.curso.escolaridade if self.curso
 	end
 
 	def escolaridade= escolaridade
@@ -233,4 +239,9 @@ class Estudante < ActiveRecord::Base
 		def set_instituicao_id
 			self[:instituicao_ensino_id] = InstituicaoEnsino.last.id
 		end
+
+		def url_path
+			"/default/:class/:id/:attachment/:style/:filename"
+		end
+
 end

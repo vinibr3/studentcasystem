@@ -2,7 +2,13 @@ class Carteirinha < ActiveRecord::Base
 	belongs_to :estudante
 	belongs_to :layout_carteirinha
 
-	has_attached_file :foto
+	url_path = "/default/:class/:id/:attachment/:style/:filename"
+
+	has_attached_file :foto, :styles => {:original => {}}, :path => "#{url_path}"
+	has_attached_file :xerox_cpf, :styles => {:original => {}}, :path => "#{url_path}"
+	has_attached_file :xerox_rg, :styles => {:original => {}}, :path => "#{url_path}"
+	has_attached_file :comprovante_matricula, :styles => {:original => {}}, :path => "#{url_path}"
+
 	
 	#@@STATUS_VERSAO_DIGITAL = ["Pagamento", "Documentação", "Download", "Baixada"]
 	@@STATUS_VERSAO_IMPRESSA = ["Pagamento", "Documentação", "Aprovada","Enviada", "Entregue", "Cancelada", "Revogada"]
@@ -34,9 +40,22 @@ class Carteirinha < ActiveRecord::Base
 	validates :uf_inst_ensino, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
 	validates :escolaridade, length:{maximum: 30, too_long: "Máximo de 30 caracteres permitidos!"},
 							 format:{with:LETRAS, message:"Somente letras é permitido"}, allow_blank: true
+	
 	validates_attachment_size :foto, :less_than => 1.megabytes
 	validates_attachment_file_name :foto, :matches => [/png\Z/, /jpe?g\Z/]
 	validates_attachment_content_type :foto, :content_type => ['image/jpeg', 'image/png', 'application/pdf']
+
+	validates_attachment_size :xerox_rg, :less_than => 1.megabytes
+	validates_attachment_file_name :xerox_rg, :matches => [/png\Z/, /jpe?g\Z/]
+	validates_attachment_content_type :xerox_rg, :content_type => ['image/jpeg', 'image/png', 'application/pdf']
+
+	validates_attachment_size :xerox_cpf, :less_than => 1.megabytes
+	validates_attachment_file_name :xerox_cpf, :matches => [/png\Z/, /jpe?g\Z/]
+	validates_attachment_content_type :xerox_cpf, :content_type => ['image/jpeg', 'image/png', 'application/pdf']
+
+	validates_attachment_size :comprovante_matricula, :less_than => 1.megabytes
+	validates_attachment_file_name :comprovante_matricula, :matches => [/png\Z/, /jpe?g\Z/]
+	validates_attachment_content_type :comprovante_matricula, :content_type => ['image/jpeg', 'image/png', 'application/pdf']
 
 	validate :nao_mudar_status_se_nao_pago
 
@@ -132,13 +151,19 @@ class Carteirinha < ActiveRecord::Base
 
 	def gera_dados_se_carteirinha_aprovada
 		if self.status_versao_impressa == @@STATUS_VERSAO_IMPRESSA[2] # Status é 'Aprovada'
+            # Gera informações  
             self.layout_carteirinha_id = LayoutCarteirinha.last_layout_id                 if self.layout_carteirinha_id.blank?
             self.nao_antes = Time.new                                                     if self.nao_antes.blank?
             self.nao_depois = Time.new(Time.new.year+1, 3, 31).to_date                    if self.nao_depois.blank? 
             self.numero_serie = Carteirinha.gera_numero_serie(self.id)                    if self.numero_serie.blank?
             self.codigo_uso = Carteirinha.gera_codigo_uso                                 if self.codigo_uso.blank?
             self.qr_code = Carteirinha.gera_qr_code(self.estudante.chave_acesso)          if self.qr_code.blank?
-            #self.certificado = Carteirinha.gera_certificado(self)                         if self.certificado.blank?
+            # Salva documentação do estudante para a carteirinha
+            estudante = self.estudante
+            self.foto = estudante.foto                                             if self.foto.blank?
+            self.xerox_rg = estudante.xerox_rg                                     if self.xerox_rg.blank?
+            self.xerox_cpf = estudante.xerox_cpf                                   if self.xerox_cpf.blank?
+            self.comprovante_matricula = estudante.comprovante_matricula           if self.comprovante_matricula.blank?
        end
 	end
 

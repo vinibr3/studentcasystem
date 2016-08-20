@@ -1,5 +1,5 @@
 ActiveAdmin.register Aviso do
-	menu priority: 2, parent: "Conteúdo"
+	menu priority: 3, parent: "Conteúdo"
 	actions :all
 
 	permit_params :aviso
