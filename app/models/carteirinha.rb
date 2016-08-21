@@ -175,7 +175,7 @@ class Carteirinha < ActiveRecord::Base
 
 	def to_blob
 		lyt = self.layout_carteirinha
-		img = Magick::Image.read(lyt.anverso.path)
+		img = Magick::Image.read(lyt.anverso.url)
 		img = img.first
 
 		# Desenha os dados (texto) no layout
@@ -192,7 +192,7 @@ class Carteirinha < ActiveRecord::Base
 		draw.annotate(img, 0, 0, lyt.codigo_uso_posx, lyt.codigo_uso_posy, self.codigo_uso.upcase)                         		 unless lyt.codigo_uso_posx.blank? && lyt.codigo_uso_posy.blank? 
 		 
 		# Desenha foto 
-		foto = Magick::Image.read(self.foto.path)
+		foto = Magick::Image.read(self.foto.url)
 		draw.composite(lyt.foto_posx, lyt.foto_posy, lyt.foto_width, lyt.foto_height, foto[0])    unless data_foto_blank(lyt)
 		
 		# Cria e Desenha Qr Code

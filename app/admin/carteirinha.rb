@@ -177,14 +177,21 @@ ActiveAdmin.register Carteirinha do
     member_action :download, method: :get do
        carteirinha = Carteirinha.find(params[:id])
        if carteirinha
-        send_data carteirinha.to_blob, type: 'image/jpg', filename: "#{carteirinha.numero_serie}.jpg"
+        if carteirinha.status_versao_impressa_to_i < 2 
+            flash[:error]="Status da CIE não permite o download."
+            redirect_to :back
+        else
+            send_data carteirinha.to_blob, type: 'image/jpg', filename: "#{carteirinha.numero_serie}.jpg" 
+        end
        else
         flash[:error]="Dados não encontrados."
+        redirect_to :back
        end
     end
 
     collection_action :download_all, method: :get do
-       @carteirinhas = Carteirinha.find params[:carteirinhas_ids] if params[:carteirinhas_ids]
+       @carteirinhas = Carteirinha.find(params[:carteirinhas_ids]) if params[:carteirinhas_ids]
+       @carteirinhas.delete_if{|carteirinha| carteirinha.status_versao_impressa_to_i < 2}  if @carteirinhas # Status anterior a 'Aprovada'
        if @carteirinhas
         data = Carteirinha.zipfile_by_scope @carteirinhas
         send_data  data[:stream], type:'application/zip', filename: data[:filename]

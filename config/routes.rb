@@ -21,7 +21,6 @@ Rails.application.routes.draw do
   end
   
   post 'estudantes/senha',   to:"estudantes#update_password", as: :alterar_password
-
   get 'entidades/escolaridades', to:"entidades#escolaridades"
   get 'entidades/cursos', to:"entidades#cursos"
 

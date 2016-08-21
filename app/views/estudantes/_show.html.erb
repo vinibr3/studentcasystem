@@ -46,7 +46,7 @@
 				<div class="panel-body" style="word-break: break-all;white-space: normal;">
 					<table>
 						<tr><td colspan="2"><strong>Curso/Série </strong><%=@estudante.curso.nome if @estudante.curso %> </td></tr>
-						<tr><td><strong>Escolaridade: </strong><%=@estudante.escolaridade if @estudante.escolaridade %> </td></tr>
+						<tr><td><strong>Escolaridade: </strong><%=@estudante.escolaridade.nome if @estudante.escolaridade %> </td></tr>
 						<tr><td><strong>Matrícula: </strong><%=@estudante.matricula %> </td></tr>
 						<tr>
 							<td colspan="2"><strong>Compr. Matrícula: </strong><%= @estudante.comprovante_matricula_file_name.nil? ? '*' : @estudante.comprovante_matricula_file_name %> 

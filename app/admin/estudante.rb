@@ -9,7 +9,7 @@ ActiveAdmin.register Estudante do
                 :instituicao_ensino, :curso_serie, :matricula, :foto, 
                 :comprovante_matricula, :xerox_rg, :email, :password, 
                 :celular, :numero, :expedidor_rg, :uf_expedidor_rg,
-                :cidade_inst_ensino, :uf_inst_ensino
+                :cidade_inst_ensino, :uf_inst_ensino, :xerox_cpf
 
   filter :email
   filter :nome
@@ -143,8 +143,8 @@ ActiveAdmin.register Estudante do
       f.input :numero
       f.input :complemento
       f.input :cep
-      f.input :cidade, collection: Cidade.all.map{|c| [c.nome, c.id]}, include_blank: false
-      f.input :uf, collection: Estado.all.map{|e| [e.nome,e.id]}, include_blank: false
+      f.input :cidade, collection: Cidade.all.map{|c| [c.nome, c.nome]}, include_blank: false
+      f.input :uf, collection: Estado.all.map{|e| [e.sigla, e.sigla]}, include_blank: false
     end
     f.actions
   end
