@@ -1,2 +1,34 @@
 <h3 class="text-primary"> Carteira de Identifição Estudantil </h3>
-<%= render 'carteirinhas/form' %>
+	<%= form_for ([@estudante, @estudante.carteirinhas.build]) do |f| %>
+	<div class="col-md-12">
+		<div class="col-md-7">
+			<%= image_tag(LayoutCarteirinha.anverso.url, :class=>'img img-responsive') if LayoutCarteirinha.anverso%>
+		</div>
+		<div class="col-md-5">
+			<div class="checkbox"><br>
+				<% entidade = Entidade.instance%>
+				<% valor = entidade.valor_carteirinha.to_f %>
+				<% frete = entidade.frete_carteirinha.to_f %>
+				<p><strong>Valor:</strong>&nbsp;R$<%= @entidade.valor_carteirinha.to_f %> </p>
+				<%= f.hidden :valor_carteirinha %>
+				<% if !@entidade.frete_carteirinha.blank? %>
+					<p><strong>Frete:</strong>&nbsp;R$<%= @entidade.frete_carteirinha %> </p>
+					<%= f.hidden :frete_carteirinha %>
+				<%end%>
+				<label>
+					<%= f.check_box :termos %> 
+					<small style="font-size: 12px;"> Aceito os <a class="text-primary" href='#' >termos</a> </small>
+				</label>
+			</div>
+			<div class="input-group" role="group">
+				<span class="input-group-addon bg-success"><strong>Total R$</strong></span>
+				<%= f.label :total, @entidade.valor_carteirinha.to_f+@entidade.frete_carteirinha.to_f, :id=> 'carteirinha_valor', 
+							:size=>'4', :class=>'form-control' %>
+				<span class="input-group-btn" id="pagar_agora">
+					<%= f.submit "Pagar Agora", :class=>'btn btn-success' %>
+				</span>
+			</div>
+		</div>
+	</div>
+	<%end%>
+	

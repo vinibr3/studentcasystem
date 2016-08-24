@@ -213,6 +213,8 @@ GEM
     rack (1.6.4)
     rack-cache (1.6.1)
       rack (>= 0.4)
+    rack-ssl (1.4.1)
+      rack
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.2.6)
@@ -321,6 +323,7 @@ DEPENDENCIES
   pagseguro-oficial (~> 2.6)
   paperclip (= 4.3)
   pg
+  rack-ssl (~> 1.4, >= 1.4.1)
   rails (= 4.2.6)
   recaptcha
   rmagick (~> 2.15, >= 2.15.4)

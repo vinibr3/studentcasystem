@@ -23,34 +23,13 @@ class CarteirinhasController < ApplicationController
 			flash[:alert] = "Campo(s) #{campos} não preenchido(s)."
 			redirect_to estudante_path(current_estudante)
 		else
-			@carteirinha = current_estudante.carteirinhas.new(carteirinha_params) do |c|
-			c.nome = current_estudante.nome
-			c.rg = current_estudante.rg
-			c.cpf = current_estudante.cpf
-			c.data_nascimento = current_estudante.data_nascimento
-			c.matricula = current_estudante.matricula
-			c.expedidor_rg = current_estudante.expedidor_rg
-			c.uf_expedidor_rg = current_estudante.uf_expedidor_rg
-			@instituicao = InstituicaoEnsino.find(current_estudante.instituicao_ensino_id)
-			c.instituicao_ensino = @instituicao.nome
-			c.cidade_inst_ensino = @instituicao.cidade.nome
-			c.escolaridade = current_estudante.escolaridade.nome
-			c.uf_inst_ensino = @instituicao.estado.sigla
-			c.curso_serie = current_estudante.curso.nome
-			c.foto = current_estudante.foto
-			c.layout_carteirinha = LayoutCarteirinha.last
-			status = Carteirinha.class_variable_get(:@@STATUS_VERSAO_IMPRESSA)
-			c.status_versao_impressa = status[0]
-			end 
-
-			if @carteirinha.save!
-				redirect_to checkout_path(id: @carteirinha.id)
-			else
-				flash[:alert] = @carteirinha.errors.messages.to_s
+			if params[:termos] == false
+				flash[:alert] = "Termos devem ser aceitos."
 				redirect_to estudante_path(current_estudante)
-			end
+			else
+				redirect_to checkout_path(valor_carteirinha: params[:valor_carteirinha], frete_carteirinha: params[:frete_carteirinha])
+			end	
 		end
-		
 	end
 
 	def consulta		
@@ -67,6 +46,6 @@ class CarteirinhasController < ApplicationController
 
 	private
 		def carteirinha_params
-			params.require(:carteirinha).permit(:versao_impressa, :valor, :termos, :validade)
+			params.require(:carteirinha).permit(:valor_carteirinha, :termos, :frete_carteirinha)
 		end
 end

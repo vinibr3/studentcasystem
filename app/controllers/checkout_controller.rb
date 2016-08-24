@@ -4,61 +4,57 @@ class CheckoutController < ApplicationController
     # O modo como você irá armazenar os produtos que estão sendo comprados
     # depende de você. Neste caso, temos um modelo Order que referência os
     # produtos que estão sendo comprados.
-    
-    carteirinha = Carteirinha.find(params[:id])
-    estudante = carteirinha.estudante 
 
     payment = PagSeguro::PaymentRequest.new
-    payment.reference = carteirinha.id
+    payment.reference = current_estudante.id
     payment.notification_url = ENV['PAGSEGURO_URL_NOTIFICATION']
     payment.redirect_url = ENV['PAGSEGURO_URL_CALLBACK']
 
-   entidade = Entidade.instance
     # Informações de pagamento da carteirinha
     payment.items << {
-      id: carteirinha.id,
+      id: current_estudante.id,
       quantity: 1,
       description: "Carteira de Identificação Estudantil",
-      amount: entidade.valor_carteirinha
+      amount: params[:valor_carteirinha]
     }
 
     # Taxa de serviço do pagseguro
-    valor_total = entidade.valor_carteirinha.to_f unless entidade.valor_carteirinha.blank?
-    valor_total += entidade.frete_carteirinha.to_f unless entidade.frete_carteirinha.blank?
-    amount = (valor_total+0.4)/0.95
-    amount = amount-valor_total
+    # valor_total = entidade.valor_carteirinha.to_f unless entidade.valor_carteirinha.blank?
+    # valor_total += entidade.frete_carteirinha.to_f unless entidade.frete_carteirinha.blank?
+    # amount = (valor_total+0.4)/0.95
+    # amount = amount-valor_total
     payment.items << {
-      id: carteirinha.id,
+      id: current_estudante.id,
       quantity: 1,
-      description: "Taxa de serviços bancários (Pagseguro)",
-      amount: amount,
-      shipping_cost: entidade.frete_carteirinha,
-    }
+      description: "Frete",
+      amount: params[:frete_carteirinha],
+      shipping_cost: params[:frete_carteirinha],
+    } if prams[:frete_carteirinha]
     
     # Informações do comprador
     payment.sender = {
-      name: estudante.nome,
-      email: estudante.email,
+      name: current_estudante.nome,
+      email: current_estudante.email,
       phone: {
-        area_code: estudante.celular.first(2),
-        number: estudante.celular.from(2)
+        area_code: current_estudante.celular.first(2),
+        number: current_estudante.celular.from(2)
       }
     }
 
     # Configurações de envio
     payment.shipping = {
       type_name: 'not_specified',
-      cost: entidade.frete_carteirinha,
+      cost: params[:frete_carteirinha],
       address: {
-        street: estudante.logradouro,
-        number: estudante.numero,
-        complement: estudante.complemento,
-        district: estudante.setor,
-        city: estudante.cidade,
-        state: estudante.uf,
-        postal_code: estudante.cep
+        street: current_estudante.logradouro,
+        number: current_estudante.numero,
+        complement: current_estudante.complemento,
+        district: current_estudante.setor,
+        city: current_estudante.cidade,
+        state: current_estudante.uf,
+        postal_code: current_estudante.cep
       }
-    } unless entidade.frete_carteirinha.blank?
+    } if params[:frete_carteirinha]
 
     payment.max_uses = 100
     payment.max_age = 3600  # em segundos
@@ -84,7 +80,7 @@ class CheckoutController < ApplicationController
   end
 
   def checkout_params
-  	params.require(:checkout).permit(:id)
+  	params.require(:checkout).permit(:valor_carteirinha, :frete_carteirinha)
   end
 
 end
