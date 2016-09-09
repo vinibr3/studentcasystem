@@ -23,11 +23,11 @@ class CarteirinhasController < ApplicationController
 			flash[:alert] = "Campo(s) #{campos} não preenchido(s)."
 			redirect_to estudante_path(current_estudante)
 		else
-			if params[:termos] == false
-				flash[:alert] = "Termos devem ser aceitos."
+			if carteirinha_params[:termos] == "0"
+				flash[:alert] = "Os Termos de Serviço devem ser aceitos."
 				redirect_to estudante_path(current_estudante)
 			else
-				redirect_to checkout_path(valor_carteirinha: params[:valor_carteirinha], frete_carteirinha: params[:frete_carteirinha])
+				redirect_to checkout_path(valor_carteirinha: carteirinha_params[:valor_carteirinha], frete_carteirinha: carteirinha_params[:frete_carteirinha])
 			end	
 		end
 	end

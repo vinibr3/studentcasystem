@@ -6,18 +6,15 @@
 		</div>
 		<div class="col-md-5">
 			<div class="checkbox"><br>
-				<% entidade = Entidade.instance%>
-				<% valor = entidade.valor_carteirinha.to_f %>
-				<% frete = entidade.frete_carteirinha.to_f %>
 				<p><strong>Valor:</strong>&nbsp;R$<%= @entidade.valor_carteirinha.to_f %> </p>
-				<%= f.hidden :valor_carteirinha %>
+				<%= f.hidden_field :valor_carteirinha, :value => @entidade.valor_carteirinha.to_f %>
 				<% if !@entidade.frete_carteirinha.blank? %>
 					<p><strong>Frete:</strong>&nbsp;R$<%= @entidade.frete_carteirinha %> </p>
-					<%= f.hidden :frete_carteirinha %>
+					<%= f.hidden_field :frete_carteirinha, :value => @entidade.frete_carteirinha %>
 				<%end%>
 				<label>
 					<%= f.check_box :termos %> 
-					<small style="font-size: 12px;"> Aceito os <a class="text-primary" href='#' >termos</a> </small>
+					<small style="font-size: 12px;"> Aceito os <a class="text-primary" href='#' >Termos de Serviço</a> </small>
 				</label>
 			</div>
 			<div class="input-group" role="group">

@@ -57,7 +57,7 @@ gem 'figaro', '~> 1.1', '>= 1.1.1'
 # Edita imagens
 gem 'rmagick', '~> 2.15', '>= 2.15.4'
 # Verifica certificados ou fornece um quando não há
-gem 'certified', '~> 1.0'
+#gem 'certified', '~> 1.0'
 # Gera arquivo .zip
 gem 'rubyzip', '~> 1.0'
 # Cria e salva QR-Code

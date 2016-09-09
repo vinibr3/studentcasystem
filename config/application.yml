@@ -32,7 +32,7 @@ production:
 
 development:
  PAGSEGURO_URL_NOTIFICATION: 'http://localhost:3000/payment/notifications'
- PAGSEGURO_URL_CALLBACK: 'http://localhost:3000/estudantes'
+ PAGSEGURO_URL_CALLBACK: 'http://localhost:3000/payment/confirmacao'
  PAGSEGURO_TOKEN: '8EA9624D2D454FFD9FF2B48C2E939380'
  PAGSEGURO_EMAIL: 'vinicius.deoliveira@outlook.com'
  PAGSEGURO_ENVIRONMENT: 'sandbox'

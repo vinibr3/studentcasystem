@@ -32,9 +32,10 @@ Rails.application.routes.draw do
                                                                 registration: 'register', sign_up: 'cmon_let_me_in' }
 
   # Rotas Pagseguro Payment
-  get 'payment/checkout', to:'checkout#create', as: :checkout
-  post 'payment/notifications', to:'notifications#create'
-
+  get 'payment/checkout',          to:'checkout#create',        as: :checkout
+  get 'payment/confirmacao',      to:'checkout#confirmacao'
+  post 'payment/notifications',    to:'notifications#create'
+  
   get 'carteirinhas/image', to:'carteirinhas#carteirinha_image'
   post 'carteirinhas/consulta',   to:"carteirinhas#consulta", as: :consulta_carteirinha
 

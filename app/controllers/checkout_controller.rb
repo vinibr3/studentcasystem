@@ -1,5 +1,7 @@
 class CheckoutController < ApplicationController
   
+  before_filter :authenticate_estudante!
+
   def create
     # O modo como você irá armazenar os produtos que estão sendo comprados
     # depende de você. Neste caso, temos um modelo Order que referência os
@@ -29,7 +31,7 @@ class CheckoutController < ApplicationController
       description: "Frete",
       amount: params[:frete_carteirinha],
       shipping_cost: params[:frete_carteirinha],
-    } if prams[:frete_carteirinha]
+    } if params[:frete_carteirinha]
     
     # Informações do comprador
     payment.sender = {
@@ -79,8 +81,12 @@ class CheckoutController < ApplicationController
     end
   end
 
+  def confirmacao
+    @transaction_id = params[:transaction_id]
+  end
+
   def checkout_params
-  	params.require(:checkout).permit(:valor_carteirinha, :frete_carteirinha)
+  	params.require(:checkout).permit(:valor_carteirinha, :frete_carteirinha, :transaction_id)
   end
 
 end

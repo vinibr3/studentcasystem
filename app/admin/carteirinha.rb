@@ -18,14 +18,14 @@ ActiveAdmin.register Carteirinha do
    end 
 
     permit_params :nome, :instituicao_ensino, :curso_serie, :matricula, :rg,
-				  :data_nascimento, :cpf, :numero_serie, :validade, :qr_code,
-				  :layout_carteirinha_id, :versao_digital, :versao_impressa,
-				  :vencimento, :estudante_id, :foto, :status_versao_digital, 
+				          :data_nascimento, :cpf, :numero_serie, :validade, :qr_code,
+				          :layout_carteirinha_id, :vencimento, :estudante_id, :foto, 
                   :status_versao_impressa, :expedidor_rg, :uf_expedidor_rg,
                   :cidade_inst_ensino,:escolaridade, :uf_inst_ensino, 
                   :foto_file_name, :nao_antes, :nao_depois, :codigo_uso,
                   :alterado_por, :valor, :forma_pagamento, :status_pagamento, 
-                  :transaction_id, :certificado, :xerox_rg, :xerox_cpf, :comprovante_matricula
+                  :transaction_id, :certificado, :xerox_rg, :xerox_cpf, 
+                  :comprovante_matricula, :carteirinha, :id
 
 	filter :nome
     #filter :status_versao_impressa, as: :select, collection: proc {Carteirinha.class_variable_get(:@@STATUS_VERSAO_IMPRESSA)}
@@ -134,7 +134,7 @@ ActiveAdmin.register Carteirinha do
             end 
         end
             f.inputs "Dados da Solicitação" do
-                f.input :status_versao_impressa, as: :select, collection: Carteirinha.class_variable_get(:@@STATUS_VERSAO_IMPRESSA), label: "Status"
+                f.input :status_versao_impressa, as: :select, collection: resource.show_status_carteirinha_apartir_do_status_pagamento, label: "Status", include_blank: false
                 #f.input :status_versao_digital
                 if current_admin_user.super_admin?
                     f.input :alterado_por
@@ -150,27 +150,19 @@ ActiveAdmin.register Carteirinha do
 
     before_update do |carteirinha|
         carteirinha.alterado_por = current_admin_user.usuario
-        if carteirinha.status_versao_impressa_to_i >= 3 # ENVIADA OU ENTREGUE
-            if carteirinha.certificado.blank?
-                flash[:error] = "Não foi possível alterar STATUS. Certificado de Atributo não foi criado para a CIE #{carteirinha.id}."
-                st = Carteirinha.find(carteirinha.id).status_versao_impressa
-                carteirinha.status_versao_impressa = st
-            end
-        end
     end
 
-    controller do 
-        def update(options={}, &block)
-            @carteirinha = Carteirinha.find(params[:id])
-            @status_atual = params[:carteirinha][:status_versao_impressa]
-            if @carteirinha.valid? && @status_atual != @carteirinha.status_versao_impressa 
-               EstudanteNotificacoes.status_notificacoes(@carteirinha).deliver
-            end
-          super do |success, failure| 
-            block.call(success, failure) if block
-            failure.html { render :edit }
-          end
+    controller do
+      def update(options={}, &block)
+        puts "OPTIONS: #{options}"
+        if resource.status_versao_impressa != params[:carteirinha][:status_versao_impressa]  
+          #EstudanteNotificacoes.status_notificacoes(@carteirinha).deliver_now if resource.update_attributes(permitted_params[:carteirinha])
         end
+        super do |success, failure| 
+          block.call(success, failure) if block
+          failure.html { render :edit }
+        end
+      end
     end
 
     #Actions

@@ -6,9 +6,9 @@ class NotificationsController < ApplicationController
     @estudante = Estudante.find(transaction.reference)
 
     if transaction.errors.empty?
-      Carteirinha.where(transaction_id: transaction.code) do |c|
-        transaction.status.id <= 3 # status pagamento é anterior ou igual a 'Pago'
-          c.nome = @estudante.nome                                                  
+      if transaction.status.id.to_i <= 3 # status pagamento é anterior ou igual a 'Pago'
+        cart = Carteirinha.where(transaction_id: transaction.code.to_s).first_or_create! do |c|
+          c.nome = @estudante.nome                                             
           c.rg = @estudante.rg
           c.cpf = @estudante.cpf
           c.data_nascimento = @estudante.data_nascimento
@@ -22,16 +22,21 @@ class NotificationsController < ApplicationController
           c.uf_inst_ensino = @instituicao.estado.sigla
           c.curso_serie = @estudante.curso.nome
           c.foto = @estudante.foto
-          c.layout_carteirinha = LayoutCarteirinha.last
+          c.xerox_rg = @estudante.xerox_rg
+          c.xerox_cpf = @estudante.xerox_cpf
+          c.comprovante_matricula = @estudante.comprovante_matricula
+          c.status_versao_impressa = Carteirinha.status_versao_impressa[0]
+          c.layout_carteirinha = LayoutCarteirinha.instance
           c.estudante_id = @estudante.id
-          c.status_pagamento = transaction.status.id
-          c.forma_pagamento = transaction.payment_method.description
-          c.transaction_id = transaction.code
-          c.valor = transaction.gross_amount.to_f
           c.forma_pagamento = transaction.payment_method.description
           c.status_pagamento = transaction.status.id
           c.transaction_id = transaction.code
           c.valor = transaction.gross_amount.to_f
+        end
+        if cart.status_pagamento_to_i <= 2 && transaction.status.id == "3" # status avançou para 'pago'
+            cart.update_attribute(status_versao_impressa: Carteirinha.status_versao_impressa[1]) # muda status para 'Documentação'
+        end
+        cart.update_attribute(:status_pagamento, transaction.status.id)
       end
     end
       render nothing: true, status: 200

@@ -9,7 +9,9 @@ class Carteirinha < ActiveRecord::Base
 	has_attached_file :xerox_rg, :styles => {:original => {}}, :path => "#{url_path}"
 	has_attached_file :comprovante_matricula, :styles => {:original => {}}, :path => "#{url_path}"
 
-	
+	FILES_NAME_PERMIT = [/png\Z/, /jpe?g\Z/, /pdf\Z/]
+	FILES_CONTENT_TYPE = ['image/jpeg', 'image/png', 'application/pdf']
+
 	#@@STATUS_VERSAO_DIGITAL = ["Pagamento", "Documentação", "Download", "Baixada"]
 	@@STATUS_VERSAO_IMPRESSA = ["Pagamento", "Documentação", "Aprovada","Enviada", "Entregue", "Cancelada", "Revogada"]
 	EMAIL_REGEX = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/
@@ -29,7 +31,7 @@ class Carteirinha < ActiveRecord::Base
 	validates :curso_serie, length:{maximum: 40, too_long: "Máximo de 40 caracteres permitidos!."}, format:{with: LETRAS}, allow_blank: true
 	#validates :codigo_uso, allow_blank: true
 	validates :termos, acceptance: true
-	validates :status_versao_impressa, inclusion:{in: %w(Pagamento Documentação Aprovada Enviada Entregue)}
+	validates :status_versao_impressa, inclusion:{in: @@STATUS_VERSAO_IMPRESSA}
 	#validates :status_versao_digital, inclusion:{in: %w(Pagamento Documentação Download Baixada)}
 	#validates :valor, length:{maximum: 4}
 	validates :numero_serie, numericality: true, uniqueness: true, allow_blank: true
@@ -40,27 +42,26 @@ class Carteirinha < ActiveRecord::Base
 	validates :uf_inst_ensino, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
 	validates :escolaridade, length:{maximum: 30, too_long: "Máximo de 30 caracteres permitidos!"},
 							 format:{with:LETRAS, message:"Somente letras é permitido"}, allow_blank: true
-	
+	#foto
 	validates_attachment_size :foto, :less_than => 1.megabytes
 	validates_attachment_file_name :foto, :matches => [/png\Z/, /jpe?g\Z/]
 	validates_attachment_content_type :foto, :content_type => ['image/jpeg', 'image/png', 'application/pdf']
-
+	#xerox_rg
 	validates_attachment_size :xerox_rg, :less_than => 1.megabytes
-	validates_attachment_file_name :xerox_rg, :matches => [/png\Z/, /jpe?g\Z/]
-	validates_attachment_content_type :xerox_rg, :content_type => ['image/jpeg', 'image/png', 'application/pdf']
-
+	validates_attachment_file_name :xerox_rg, :matches => FILES_NAME_PERMIT
+	validates_attachment_content_type :xerox_rg, :content_type => FILES_CONTENT_TYPE
+	#xerox-cpf
 	validates_attachment_size :xerox_cpf, :less_than => 1.megabytes
-	validates_attachment_file_name :xerox_cpf, :matches => [/png\Z/, /jpe?g\Z/]
-	validates_attachment_content_type :xerox_cpf, :content_type => ['image/jpeg', 'image/png', 'application/pdf']
-
+	validates_attachment_file_name :xerox_cpf, :matches => FILES_NAME_PERMIT
+	validates_attachment_content_type :xerox_cpf, :content_type => FILES_CONTENT_TYPE
+	#comprovante_matricula
 	validates_attachment_size :comprovante_matricula, :less_than => 1.megabytes
-	validates_attachment_file_name :comprovante_matricula, :matches => [/png\Z/, /jpe?g\Z/]
-	validates_attachment_content_type :comprovante_matricula, :content_type => ['image/jpeg', 'image/png', 'application/pdf']
+	validates_attachment_file_name :comprovante_matricula, :matches => FILES_NAME_PERMIT
+	validates_attachment_content_type :comprovante_matricula, :content_type => FILES_CONTENT_TYPE
 
-	validate :nao_mudar_status_se_nao_pago
+	validate :so_muda_status_versao_impressa_se_pagamento_confirmado, :nao_avancar_status_se_dados_em_branco
 
-	before_update :gera_dados_se_carteirinha_aprovada, :muda_status_carteirinha_para_documentacao_se_pago, 
-	              :muda_status_carteirinha_from_status_pagamento
+	before_update :gera_dados_se_carteirinha_aprovada, :muda_status_carteirinha_apartir_status_pagamento
 
 	def dias_validade 
 		nao_depois  = self.nao_depois
@@ -100,10 +101,20 @@ class Carteirinha < ActiveRecord::Base
 		self.status_versao_impressa == @@STATUS_VERSAO_IMPRESSA[5] || self.status_versao_impressa == @@STATUS_VERSAO_IMPRESSA[6]
 	end
 
-	def nao_mudar_status_se_nao_pago
-		if self.status_pagamento != @@status_pagamento[3] # não pago
+	def so_muda_status_versao_impressa_se_pagamento_confirmado
+		if status_pagamento_to_i < 3 # pagamento nao confirmado
 			errors.add(:status_versao_impressa, "pagamento da CIE não foi realizado") if status_versao_impressa_to_i >= 1
 		end
+	end
+
+	def nao_avancar_status_se_dados_em_branco
+		if self.status_versao_impressa_to_i >= 3 # ENVIADA OU ENTREGUE
+            variavel = [:nao_antes, :nao_depois, :codigo_uso, :qr_code, :certificado, 
+            	        :numero_serie, :layout_carteirinha_id, :estudante_id]
+            variavel.each do |v|
+            	errors.add(v, "não pode ficar em branco") if self[v].blank? || self[v].nil?
+            end
+        end
 	end
 
 	def status_pagamento
@@ -139,13 +150,18 @@ class Carteirinha < ActiveRecord::Base
 		end
 	end
 
-	def muda_status_carteirinha_from_status_pagamento
-		if status_pagamento_to_i <= 2 #em processamento
-			self.status_versao_impressa = @@STATUS_VERSAO_IMPRESSA[0]
-		elsif status_pagamento_to_i == 3 || 4 # paga ou disponível
-			
-		elsif status_pagamento >= 5 #cancelada
-			self.status_versao_impressa == @@STATUS_VERSAO_IMPRESSA[5]
+	def muda_status_carteirinha_apartir_status_pagamento
+		#em processamento
+		self.status_versao_impressa = @@STATUS_VERSAO_IMPRESSA[0] if status_pagamento_to_i <= 2
+	end
+
+	def show_status_carteirinha_apartir_do_status_pagamento
+		case self.status_pagamento_to_i
+			when 0 then @@STATUS_VERSAO_IMPRESSA[0]
+			when 1 then @@STATUS_VERSAO_IMPRESSA[0]
+			when 2 then @@STATUS_VERSAO_IMPRESSA[0]
+		else 
+			@@STATUS_VERSAO_IMPRESSA.from(1)
 		end
 	end
 
@@ -165,12 +181,6 @@ class Carteirinha < ActiveRecord::Base
             self.xerox_cpf = estudante.xerox_cpf                                   if self.xerox_cpf.blank?
             self.comprovante_matricula = estudante.comprovante_matricula           if self.comprovante_matricula.blank?
        end
-	end
-
-	def muda_status_carteirinha_para_documentacao_se_pago
-		if self.status_pagamento == @@status_pagamento[3] && self.status_versao_impressa == @@STATUS_VERSAO_IMPRESSA[0]
-			self.status_versao_impressa = @@STATUS_VERSAO_IMPRESSA[1] # status muda de pagamento para documentaçao
-		end
 	end
 
 	def to_blob

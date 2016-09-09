@@ -23,7 +23,7 @@ class LayoutCarteirinha < ActiveRecord::Base
 	                          :nao_depois_posx, :nao_depois_posy, :qr_code_posx, :qr_code_posy, allow_blank: true
 
 	def self.instance
-		 last_layout = LayoutCarteirinha.last
+		last
 	end
 
 	def self.last_layout_id

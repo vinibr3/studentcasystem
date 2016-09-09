@@ -81,21 +81,6 @@ class Estudante < ActiveRecord::Base
 		def first_name 
 			string_to_substring(self.nome, " ")
 		end
-
-		# def atributos_em_branco
-		# 	atributos = [:nome, :email, :cpf, :rg, :data_nascimento, :sexo,  
-		# 				:logradouro, :complemento, :cep, :cidade, :estado, :instituicao_ensino_id, 
-		# 				:curso_serie, :matricula, :foto_file_name, :comprovante_matricula_file_name, 
-		# 				:xerox_rg_file_name, :celular, :numero]
-
-		# 	atributos_em_branco = Array.new
-		# 	atributos.each do |atributo|
-		# 		if self[atributo].nil?
-		# 			atributos_em_branco.push(atributo)
-		# 		end 
-		# 	end
-		# 	atributos_em_branco
-		# end
 		
 	def self.from_omniauth(auth)
 		where(provider: auth.provider, uid: auth.uid).first_or_create do |estudante|
@@ -190,7 +175,7 @@ class Estudante < ActiveRecord::Base
 			          :data_nascimento, :sexo, :celular, :logradouro, :numero, 
 			          :cep, :cidade, :uf, :instituicao_ensino_id, :curso_id,
 			          :matricula, :foto_file_name, :comprovante_matricula_file_name, 
-			          :xerox_rg_file_name, :xerox_cpf]
+			          :xerox_rg_file_name, :xerox_cpf_file_name]
 		atributos.each do |atr|
 			nao_preenchidos << atr if self[atr].blank?
 		end
@@ -238,10 +223,6 @@ class Estudante < ActiveRecord::Base
 
 		def set_instituicao_id
 			self[:instituicao_ensino_id] = InstituicaoEnsino.last.id
-		end
-
-		def url_path
-			"/default/:class/:id/:attachment/:style/:filename"
 		end
 
 end
