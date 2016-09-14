@@ -4,7 +4,11 @@ class Entidade < ActiveRecord::Base
 
 	has_attached_file :logo, :styles => {:original => {}}, :path => "#{url_path}"
 	has_attached_file :configuracao, :styles => {:original => {}}
+	
+	has_many :estudantes
+	has_many :carteirinhas, through: :estudantes
 	has_many :instituicao_ensinos
+	has_many :layout_carteirinhas
 
 	FILES_NAME_PERMIT = [/png\Z/, /jpe?g\Z/]
 	FILES_CONTENT_TYPE = ['image/jpeg', 'image/png']
@@ -52,7 +56,7 @@ class Entidade < ActiveRecord::Base
 	validates :cep_presidente, length:{is: 8, wrong_length: "8 caracteres."}, numericality: true, allow_blank: true
 	validates :cidade_presidente, length: {maximum: 50, too_long: "Máximo de #{count} caracteres permitidos."}, allow_blank: true
 	validates :uf_presidente, length: {is: 2, wrong_length: "Máximo de 2 caracteres permitidos."}, format: {with: STRING_REGEX}, allow_blank: true
-	
+
 	def self.instance
 		entidade = Entidade.last
 		if entidade 
@@ -61,9 +65,4 @@ class Entidade < ActiveRecord::Base
 			raise "Nenhuma entidade Configurada"
 		end
 	end
-
-	def url_path
-		"/admin/:class/:id/:attachment/:style/:filename"
-	end
-
 end

@@ -1,5 +1,6 @@
 class Carteirinha < ActiveRecord::Base
 	belongs_to :estudante
+	belongs_to :entidade
 	belongs_to :layout_carteirinha
 
 	url_path = "/default/:class/:id/:attachment/:style/:filename"

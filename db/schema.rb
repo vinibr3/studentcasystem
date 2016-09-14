@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160820033221) do
+ActiveRecord::Schema.define(version: 20160914043417) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -133,8 +133,10 @@ ActiveRecord::Schema.define(version: 20160820033221) do
     t.string   "xerox_cpf_content_type"
     t.integer  "xerox_cpf_file_size"
     t.datetime "xerox_cpf_updated_at"
+    t.integer  "entidade_id"
   end
 
+  add_index "carteirinhas", ["entidade_id"], name: "index_carteirinhas_on_entidade_id", using: :btree
   add_index "carteirinhas", ["estudante_id"], name: "index_carteirinhas_on_estudante_id", using: :btree
   add_index "carteirinhas", ["layout_carteirinha_id"], name: "index_carteirinhas_on_layout_carteirinha_id", using: :btree
 
@@ -200,6 +202,8 @@ ActiveRecord::Schema.define(version: 20160820033221) do
     t.string   "logo_content_type"
     t.integer  "logo_file_size"
     t.datetime "logo_updated_at"
+    t.string   "auth_info_access"
+    t.string   "crl_dist_points"
   end
 
   create_table "escolaridades", force: :cascade do |t|
@@ -271,10 +275,12 @@ ActiveRecord::Schema.define(version: 20160820033221) do
     t.string   "xerox_cpf_content_type"
     t.integer  "xerox_cpf_file_size"
     t.datetime "xerox_cpf_updated_at"
+    t.integer  "entidade_id"
   end
 
   add_index "estudantes", ["confirmation_token"], name: "index_estudantes_on_confirmation_token", unique: true, using: :btree
   add_index "estudantes", ["email"], name: "index_estudantes_on_email", unique: true, using: :btree
+  add_index "estudantes", ["entidade_id"], name: "index_estudantes_on_entidade_id", using: :btree
   add_index "estudantes", ["reset_password_token"], name: "index_estudantes_on_reset_password_token", unique: true, using: :btree
 
   create_table "eventos", force: :cascade do |t|
@@ -346,7 +352,10 @@ ActiveRecord::Schema.define(version: 20160820033221) do
     t.integer  "foto_posy"
     t.integer  "foto_width"
     t.integer  "foto_height"
+    t.integer  "entidade_id"
   end
+
+  add_index "layout_carteirinhas", ["entidade_id"], name: "index_layout_carteirinhas_on_entidade_id", using: :btree
 
   create_table "noticias", force: :cascade do |t|
     t.string   "foto_file_name"
@@ -360,10 +369,13 @@ ActiveRecord::Schema.define(version: 20160820033221) do
     t.datetime "updated_at",        null: false
   end
 
+  add_foreign_key "carteirinhas", "entidades"
   add_foreign_key "cidades", "estados"
   add_foreign_key "cursos", "escolaridades"
   add_foreign_key "cursos", "instituicao_ensinos"
+  add_foreign_key "estudantes", "entidades"
   add_foreign_key "instituicao_ensinos", "cidades"
   add_foreign_key "instituicao_ensinos", "entidades"
   add_foreign_key "instituicao_ensinos", "estados"
+  add_foreign_key "layout_carteirinhas", "entidades"
 end

@@ -12,16 +12,14 @@
 			    </div>
 			    <div class="progress">
 			    	<% if carteirinha.solicitacao_cancelada_ou_revogada? %>
-			    		<div class="progress-bar progress-bar-danger" role="progress-bar" style="width:100%;"> carteirinha.status_versao_impressa </div>
+			    		<div class="progress-bar progress-bar-danger" role="progress-bar" style="width:100%;"> <%= carteirinha.status_versao_impressa %></div>
 			    	<% else %>
 			    		<% carteirinha.status_take_while.each do |status| %>
 				    		<div class="progress-bar progress-bar-success" role="progress-bar" style="width: 20%">
 				    			<%= status %>
 			    			</div>
 			    		<% end %>
-			    	<% end %> 
-
-			    	
+			    	<% end %>   	
 			    </div>
 			</div>
 	</div>

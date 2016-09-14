@@ -1,5 +1,5 @@
 class Api::CertificadosController < API::AuthenticateBase
-	before_action :http_base_authentication_with_entidade_data, only: [:create]
+	before_action :http_base_authentication_with_entidade_data
 
 	def create
 		params[:certificados].each do |certificado|

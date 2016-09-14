@@ -18,15 +18,14 @@ ActiveAdmin.register Carteirinha do
    end 
 
     permit_params :nome, :instituicao_ensino, :curso_serie, :matricula, :rg,
-				          :data_nascimento, :cpf, :numero_serie, :validade, :qr_code,
-				          :layout_carteirinha_id, :vencimento, :estudante_id, :foto, 
+				  :data_nascimento, :cpf, :numero_serie, :validade, :qr_code,
+				  :layout_carteirinha_id, :vencimento, :estudante_id, :foto, 
                   :status_versao_impressa, :expedidor_rg, :uf_expedidor_rg,
                   :cidade_inst_ensino,:escolaridade, :uf_inst_ensino, 
                   :foto_file_name, :nao_antes, :nao_depois, :codigo_uso,
                   :alterado_por, :valor, :forma_pagamento, :status_pagamento, 
                   :transaction_id, :certificado, :xerox_rg, :xerox_cpf, 
                   :comprovante_matricula, :carteirinha, :id
-
 	filter :nome
     #filter :status_versao_impressa, as: :select, collection: proc {Carteirinha.class_variable_get(:@@STATUS_VERSAO_IMPRESSA)}
 	filter :numero_serie

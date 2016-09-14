@@ -1,5 +1,6 @@
 class LayoutCarteirinha < ActiveRecord::Base
 	has_many :carteirinhas
+	belongs_to :entidade
 
 	url_path = "/admin/:class/:id/:attachment/:style/:filename"
 

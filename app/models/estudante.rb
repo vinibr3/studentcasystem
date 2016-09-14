@@ -6,6 +6,7 @@ class Estudante < ActiveRecord::Base
          :omniauthable, :omniauth_providers => [:facebook]
 	
 	has_many :carteirinhas
+	belongs_to :entidade
 	belongs_to :instituicao_ensino
 	belongs_to :curso
 

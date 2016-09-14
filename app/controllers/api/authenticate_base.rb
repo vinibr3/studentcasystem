@@ -28,4 +28,7 @@ class API::AuthenticateBase < ApplicationController
 			end
 		end
 
+		def render_erro message, erro_code
+			render json: {erro: message, type: 'erro'}, status: erro_code
+		end	
 end

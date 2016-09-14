@@ -10,14 +10,13 @@ class Api::EstudantesController < API::AuthenticateBase
 				if @estudante.valid_password?(params[:password])
 					respond_with @estudante, :status => 200
 				else
-					render json: {errors: @estudante.errors, type: 'erro'}, :status => 400
+					render_erro @estudante.errors, 404
 				end
 			else
-				message = "Estudante não encontrado. Email : #{params[:email]}"
-				render json: {errors: message, type: "erro"}, :status => 404
+				render_erro "Estudante não encontrado. Email : #{params[:email]}", 404
 			end
 		rescue Exception => ex
-			render json: {errors: ex.message, type: "erro"}
+			render_erro ex.message, 500
 		end
 	end
 
@@ -27,16 +26,16 @@ class Api::EstudantesController < API::AuthenticateBase
 			if @estudante.persisted? 
 				respond_with @estudante, :status => 200
 			else
-				render json: {errors: @estudante.errors, type: 'erro'}, :status => 422
+				render_erro @estudante.errors, 422
 			end
 		rescue Koala::Facebook::APIError => error
-			render json: {errors: error.fb_error_message, type: 'erro'}, :status => error.http_status
+			render_erro error.fb_error_message, error.http_status
 		rescue Koala::Facebook::AppSecretNotDefinedError => error
-			render json: {errors: error, type: 'erro'}, :status => 500
+			render_erro error.fb_error_message, error.http_status
 		rescue Koala::Facebook::OAuthSignatureError => error
-			render json: {errors: error, type: 'erro'}, :status => 500
+			render_erro error.fb_error_message, error.http_status
 		rescue Exception => ex
-			render json: {errors: ex.message, type: 'erro'}, :status => 500
+			render_erro error.fb_error_message, error.http_status
 		end
 	end
 
@@ -46,10 +45,10 @@ class Api::EstudantesController < API::AuthenticateBase
 			if @estudante.save
 				respond_with @estudante, :status => 201
 			else 
-				render json:{errors: @estudante.errors, type: 'erro'}, :status => 400
+				render_erro @estudante.errors, :status => 400
 			end
 		rescue Exception => ex
-			render json: {errors: ex.message, type: 'erro'}, :status => 500
+			render_erro ex.message, :status => 500
 		end
 	end
 
@@ -60,11 +59,10 @@ class Api::EstudantesController < API::AuthenticateBase
 				if @estudante.update_attributes(estudante_params)
 					head 204
 				else
-					render json:{errors: @estudante.errors, type: 'erro'}, :status => 422
+					render_erro @estudante.errors, :status => 422
 				end
 			else
-				message = "Estudante não encontrado. Email: #{params[:estudante][:email]}"
-				render json: {errors: message, type: 'erro'}, :status => 404
+				render_erro "Estudante não encontrado. Email: #{params[:estudante][:email]}", :status => 404
 			end
 		# rescue Exception => ex
 		# 	render json: {errors: ex.message}, :status => 500

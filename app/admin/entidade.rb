@@ -11,7 +11,7 @@ ActiveAdmin.register Entidade do
 	              :logradouro_presidente, :numero_presidente, :complemento_presidente,
 	              :cep_presidente, :cidade_presidente, :uf_presidente, 
 	              :usuario, :url_qr_code, :token_certificado, 
-	              :url_certificado, :configuracao
+	              :url_certificado, :auth_info_access, :crl_dist_points
 
 	filter :nome
 	filter :sigla
@@ -43,6 +43,8 @@ ActiveAdmin.register Entidade do
 				row :token_certificado, "Senha"
 				row :url_qr_code, "URl QR-Code"
 				row :url_certificado, "URL Certificado"
+				row :auth_info_access, "Autoridade de Acesso à Informação (URL)"
+				row :crl_dist_points, "CRL Ponto de Distribuição (URL)"
 			end
 		end
 		panel "Endereço da Entidade" do 
@@ -94,6 +96,8 @@ ActiveAdmin.register Entidade do
 			f.input :token_certificado, label: "Senha"
 			f.input :url_qr_code, label: "URL Qr-Code"
 			f.input :url_certificado, label: "URL Certificado"
+			f.input :auth_info_access, label: "Autoridade de Acesso à Informação (URL)"
+			f.input :crl_dist_points, label: "CRL Ponto de Distribuição (URL)"
 		end
 		f.inputs "Endereço da Entidade" do 
 			f.input :logradouro

@@ -4,13 +4,24 @@ class Api::CarteirinhasController < API::AuthenticateBase
 	before_action :http_token_authentication, only: [:show, :create]
 
 	def index
-		@carteirinhas = Carteirinha.where(status_versao_impressa: params[:status_versao_impressa])
 		status = Carteirinha.status_versao_impressa[2]
+		@carteirinhas = Carteirinha.where("status_versao_impressa = ? AND certificado = ?", status, "")
 		if @carteirinhas.empty?
-			message = "Nenhuma Carteira de Identificação Estudantil com status #{status} encontrada."
-			render json: {errors: message, type: 'erro'}, :status => 200
+			render_erro "Nenhuma Carteira de Identificação Estudantil com status #{status} encontrada.", 404
 		else
-			respond_with @carteirinhas
+			entidade = Entidade.instance
+			if entidade.nil?
+				render_erro "Nenhuma entidade encontrada.", 404
+			else
+				if entidade.auth_info_access.blank? || entidade.crl_dist_points.blank?
+					render_erro "'Autoridade de Acesso à Informação' e/ou 'CRL Ponto de Distribuição' não estão preenchidos.", 500 
+				else
+					json = {:entidade => {:auth_info_access => entidade.auth_info_access, 
+										  :crl_dist_points => entidade.crl_dist_points, 
+					        			  :carteirinhas => @carteirinhas.map{|c| CarteirinhaSerializer.new(c)}}}
+					respond_with json
+				end
+			end
 		end
 	end
 
@@ -19,17 +30,15 @@ class Api::CarteirinhasController < API::AuthenticateBase
 			@estudante = Estudante.find_by_oauth_token(params[:estudante_oauth_token])
 			if @estudante
 				if @estudante.carteirinha.empty?
-					message = "Nenhuma Carteira de Identificação Estudantil encontrada."
-		    	render json: {errors: message, type: 'erro'}, :status => 404 
+		    	render_erro "Nenhuma Carteira de Identificação Estudantil encontrada.", 404
 		    else
 		    	respond_with @estudante.carteirinha.last, :status => 200
 		    end
 		  else
-		  	message = "Estudante não encontrado, oauth_token: #{params[:estudante_oauth_token]}"
-		  	render json: {errors: message, type: 'erro'}, :status => 404
+		  	render_erro "Estudante não encontrado, oauth_token: #{params[:estudante_oauth_token]}", 404
 		  end
 		rescue Exception => ex
-			render json: {errors: ex.message, type: 'erro'}, :status => 500
+			render_erro ex.message, 500
 		end
 	end
 
@@ -42,9 +51,8 @@ class Api::CarteirinhasController < API::AuthenticateBase
 					if @carteirinhas && @carteirinhas.last && @carteirinhas.last.em_solicitacao?
 						@last_carteirinha = @carteirinhas.last
 						message = "Carteira de Identificação Estudantil já solicitada"
-						render json: {errors: message, status_versao_digital: @last_carteirinha.status_versao_digital,
-							                             status_versao_impressa: @last_carteirinha.status_versao_impressa,
-							                             type: 'erro'}, :status => 422
+						render json: {erros: message, status_versao_impressa: @last_carteirinha.status_versao_impressa,
+							            type: 'erro'}, :status => 422
 					else
 						nova_carteirinha = @estudante.carteirinha.new(carteirinha_params) do |c|
 							c.nome = @estudante.nome
@@ -65,15 +73,13 @@ class Api::CarteirinhasController < API::AuthenticateBase
 					end
 				else
 					atributos_em_branco = @estudante.atributos_em_branco.to_s
-					message = "Dados não preenchidos: #{atributos_em_branco}"
-					render json: {errors: message, type: 'erro'}, :status => 422
+					render_erro "Dados não preenchidos: #{atributos_em_branco}", 422
 				end
 			else
-				message = "Estudante não encontrado, oauth_token: #{params[:estudante_oauth_token]}"
-				render json: {errors: message, type: 'erro'}, :status => 404
+				render_erro "Estudante não encontrado, oauth_token: #{params[:estudante_oauth_token]}", 404
 			end
 		rescue => ex
-			render json: {errors: ex.message, type: 'erro'}, :status => 500
+			render_erro ex.message, 500
 		end
 	end
 
