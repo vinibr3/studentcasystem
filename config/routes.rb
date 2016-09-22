@@ -45,12 +45,13 @@ Rails.application.routes.draw do
 
   # Rotas da API 
   namespace :api, defaults:{format: :json} do
-    resources :estudantes, only: [:create, :update], param: :oauth_token do
+    resources :estudantes, only: [:update], param: :oauth_token do
       resources :carteirinhas, only: [:create, :show]
     end
-    get 'carteirinhas', to: 'carteirinhas#index'
-    get 'estudantes/login', to: 'estudantes#login'   
-    get 'estudantes/login/facebook', to: 'estudantes#facebook'
+    get 'carteirinhas',          to: 'carteirinhas#index'
+    post 'sessions/new',         to: 'sessions#create'   
+    get 'sessions/new/facebook', to: 'sessions#facebook'
+    post 'registration/new',     to: 'registration#create'
     resources :noticias, only:[:index]
 
     # Certificado de atributo

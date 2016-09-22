@@ -6,8 +6,7 @@ class API::AuthenticateBase < ApplicationController
 	protected 
 		def http_base_authentication
 			authenticate_or_request_with_http_basic do | username , password |
-				encrypted_password = Digest::MD5.hexdigest(password) #"c430b1d23b6cd314543e5931a998b0e6"
-				username == "adminuser" && encrypted_password == "da859219a0edfdc3c2f0cd2f9f8c39c4"
+				username == ENV['STUDENTCASYSTEM_API_USERNAME'] && password == ENV['STUDENTCASYSTEM_API_PASSWORD']
 				# "adminuser:c430b1d23b6cd314543e5931a998b0e6" Base64 => YWRtaW51c2VyOmM0MzBiMWQyM2I2Y2QzMTQ1NDNlNTkzMWE5OThiMGU2
 			end
 		end
@@ -18,6 +17,13 @@ class API::AuthenticateBase < ApplicationController
 					head 401
 				end
 				Estudante.exists?(oauth_token: token)
+			end
+		end
+
+		def http_login_password_authentication
+			authenticate_or_request_with_http_basic do |username, password|
+				estudante = Estudante.find_by_email(username)
+				estudante && estudante.valid_password?(password)
 			end
 		end
 

@@ -1,11 +1,12 @@
 class EstudanteSerializer < ActiveModel::Serializer
   ActiveModel::Serializer.root = false
   attributes :type, :id, :nome, :email,:encrypted_password, :data_nascimento,
-  					 :cpf, :rg_certidao, :sexo, :telefone, :celular, :foto, :xerox_rg, 
-  					 :instituicao_ensino, :curso_serie, :matricula, :comprovante_matricula, 
-  					 :oauth_token, :oauth_expires_at, :provider, :endereco, :carteirinha
-  
- 	def carteirinha
+  			 :cpf, :rg, :sexo, :telefone, :celular, :foto_file_name, :xerox_rg_file_name, 
+  			 :xerox_cpf_file_name,:instituicao_ensino, :curso, :matricula, 
+  			 :comprovante_matricula_file_name,:oauth_token, :oauth_expires_at, 
+  			 :provider, :endereco, :carteirinha_valida
+
+ 	def carteirinha_valida
  		carteirinha = object.last_valid_carteirinha
  		carteirinha.nil? ? nil : CarteirinhaSerializer.new(carteirinha) 
  	end
@@ -18,8 +19,16 @@ class EstudanteSerializer < ActiveModel::Serializer
  		object.cpf.to_i
  	end
 
- 	def rg_certidao
- 		object.rg_certidao.to_i
+ 	def rg
+ 		object.rg.to_i
+ 	end
+
+ 	def instituicao_ensino
+ 		InstituicaoEnsinoSerializer.new(object.instituicao_ensino)
+ 	end
+
+ 	def curso
+ 		CursoSerializer.new(object.curso)
  	end
 
 end
