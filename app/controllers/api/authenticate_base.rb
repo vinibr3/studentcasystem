@@ -1,4 +1,4 @@
-class API::AuthenticateBase < ApplicationController
+class Api::AuthenticateBase < ApplicationController
 			
 	respond_to :json
 	#before_action :http_token_authentication
@@ -13,16 +13,15 @@ class API::AuthenticateBase < ApplicationController
 
 		def http_token_authentication
 			authenticate_or_request_with_http_token do |token, options|
-				if token != (params[:estudante_oauth_token] || params[:oauth_token])
-					head 401
-				end
-				Estudante.exists?(oauth_token: token)
+				Estudante.exists?(oauth_token: token, id: params[:id])
 			end
 		end
 
 		def http_login_password_authentication
-			authenticate_or_request_with_http_basic do |username, password|
-				estudante = Estudante.find_by_email(username)
+			authenticate_or_request_with_http_basic do |email, password|
+				puts "Email: #{email}"
+				puts "password: #{password}"
+				estudante = Estudante.find_by_email(email)
 				estudante && estudante.valid_password?(password)
 			end
 		end
@@ -35,6 +34,10 @@ class API::AuthenticateBase < ApplicationController
 		end
 
 		def render_erro message, erro_code
-			render json: {erro: message, type: 'erro'}, status: erro_code
+			render json: {message: message, type: 'erro'}, status: erro_code
 		end	
+
+		def render_sucess message, erro_code
+			render json: {message: message, type: 'sucess'}, status: erro_code
+		end
 end

@@ -1,4 +1,4 @@
-class Api::CarteirinhasController < API::AuthenticateBase
+class Api::CarteirinhasController < Api::AuthenticateBase
 
 	before_action :http_base_authentication_with_entidade_data, only: [:index]
 	before_action :http_token_authentication, only: [:show, :create]

@@ -9,7 +9,7 @@ ActiveAdmin.register Estudante do
                 :instituicao_ensino, :curso_serie, :matricula, :foto, 
                 :comprovante_matricula, :xerox_rg, :email, :password, 
                 :celular, :numero, :expedidor_rg, :uf_expedidor_rg,
-                :cidade_inst_ensino, :uf_inst_ensino, :xerox_cpf
+                :cidade_inst_ensino, :uf_inst_ensino, :xerox_cpf, :instituicao_ensino_id, :curso_id
 
   filter :email
   filter :nome

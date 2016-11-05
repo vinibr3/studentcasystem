@@ -49,13 +49,17 @@ Rails.application.routes.draw do
       resources :carteirinhas, only: [:create, :show]
     end
     get 'carteirinhas',          to: 'carteirinhas#index'
-    post 'sessions/new',         to: 'sessions#create'   
+    get 'sessions/new',          to: 'sessions#create'   
     get 'sessions/new/facebook', to: 'sessions#facebook'
-    post 'registration/new',     to: 'registration#create'
+    get 'registration/new',      to: 'registration#create'
     resources :noticias, only:[:index]
 
     # Certificado de atributo
     post 'certificados/create', to:'certificados#create'  # cria certificados
+  
+    # Controla Attachments
+    get 'estudantes/:id/attachments/:name', to: 'attachments#show' 
+    put 'estudantes/:id/attachments/update/:name', to: 'attachments#update'
   end
 
   # The priority is based upon order of creation: first created -> highest priority.
