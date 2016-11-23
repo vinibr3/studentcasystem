@@ -73,7 +73,7 @@ gem 'activeadmin-wysihtml5', github: 'stefanoverna/activeadmin-wysihtml5'
 gem 'aws-sdk', '< 2.0' # Erro uninitialized constant Paperclip::Storage::S3:AWS for '~> 2.0'
 
 group :production do
-  #gem 'unicorn'
+  gem 'unicorn'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

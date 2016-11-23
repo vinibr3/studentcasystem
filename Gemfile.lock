@@ -16,7 +16,7 @@ GIT
       activeadmin-dragonfly
 
 GEM
-  remote: https://rubygems.org/
+  remote: http://rubygems.org/
   specs:
     actionmailer (4.2.6)
       actionpack (= 4.2.6)
