@@ -1,4 +1,4 @@
-class Api::RegistrationsController < API:AuthenticateBase
+class Api::RegistrationsController < API::AuthenticateBase
 	before_action :http_base_authentication
 
 	def create
