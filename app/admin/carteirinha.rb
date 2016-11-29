@@ -1,7 +1,7 @@
 require 'zip'
 ActiveAdmin.register Carteirinha do
    menu priority: 3
-   actions :all, except: [:delete]
+   actions :all, except: [:new,:delete]
    
    scope "Todas", :all, default: true
    
@@ -54,10 +54,10 @@ ActiveAdmin.register Carteirinha do
                     a carteirinha.foto_file_name, class: "show-popup-link", href: carteirinha.foto.url
                 end
                 row :xerox_rg do 
-                    a carteirinha.xerox_rg_file_name, class: "show-popup-link", href: carteirinha.xerox_rg.url
+                    a carteirinha.xerox_rg_file_name, href: carteirinha.xerox_rg.url
                 end
                  row :xerox_cpf do
-                    a carteirinha.xerox_cpf_file_name, class: "show-popup-link", href: carteirinha.xerox_cpf.url
+                    a carteirinha.xerox_cpf_file_name, href: carteirinha.xerox_cpf.url
                 end
             end
         end
@@ -70,7 +70,7 @@ ActiveAdmin.register Carteirinha do
                 row :curso_serie
                 row :matricula
                 row :comprovante_matricula do
-                    a carteirinha.comprovante_matricula_file_name, class: "show-popup-link", href: carteirinha.comprovante_matricula.url
+                    a carteirinha.comprovante_matricula_file_name, href: carteirinha.comprovante_matricula.url
                 end
             end
         end

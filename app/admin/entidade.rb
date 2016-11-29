@@ -1,5 +1,5 @@
 ActiveAdmin.register Entidade do 
-	menu if: proc{current_admin_user.super_admin?}, label: "Entidade", priority: 6, parent: "Configurações"
+	menu if: proc{current_admin_user.super_admin?}, label: "Entidade", priority: 4
 
 	permit_params :nome, :sigla, :email, :cnpj, :chave_privada, :password,
 	              :instituicao_ensino, :organizational_unit, :valor_carteirinha,

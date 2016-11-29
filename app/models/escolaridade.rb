@@ -15,4 +15,13 @@ class Escolaridade < ActiveRecord::Base
 		self[:status] = '1'
 	end
 
+	def self.escolaridades
+		where status: '1'
+	end
+
+	def self.cursos id
+		escolaridade = find id
+		escolaridade.cursos if escolaridade.cursos
+	end
+
 end

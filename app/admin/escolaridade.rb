@@ -1,5 +1,5 @@
 ActiveAdmin.register Escolaridade do 
-	menu priority: 7, parent: "Configurações"
+	menu priority: 3, parent: "Configurações"
 	actions :all, except: [:destroy]
 
 	permit_params :nome, :status

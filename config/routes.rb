@@ -31,6 +31,17 @@ Rails.application.routes.draw do
                                                                 confirmation: 'verification', unlock: 'unblock', 
                                                                 registration: 'register', sign_up: 'cmon_let_me_in' }
 
+  # Rotas de Escolaridades/Cursos (usadas para obter lista de cursos)                                                           
+  #get 'escolaridade/:escolaridade_id/curso', to:'cursos#show'
+  resources :escolaridades, only: [:show] do
+    resource :cursos, only: [:show]
+  end
+
+  # Rotas de UF/Cidades (usadas para obter lista de cidades)
+  resources :estados, only: [:show] do
+    resource :cidades, only: [:show]
+  end
+
   # Rotas Pagseguro Payment
   get 'payment/checkout',          to:'checkout#create',        as: :checkout
   get 'payment/confirmacao',      to:'checkout#confirmacao'

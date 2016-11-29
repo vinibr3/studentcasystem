@@ -1,5 +1,6 @@
 ActiveAdmin.register AdminUser do
-  menu if: proc{current_admin_user.super_admin?}, priority: 7
+  menu if: proc{current_admin_user.super_admin?}, priority: 5, label: "Usuários"
+  actions :all, except: [:destroy]
 
   scope "Todos", :all, default: true
   scope("Ativos"){|scope| scope.where(status: "1")}
@@ -8,7 +9,8 @@ ActiveAdmin.register AdminUser do
   permit_params :nome, :email, :cpf, :rg, :expedidor_rg, :uf_expedidor_rg,
                 :data_nascimento, :sexo, :celular, :telefone, :logradouro,
                 :numero, :complemento, :setor, :cep, :cidade, :uf, :usuario,
-                :super_admin, :status, :password, :password_confirmation
+                :super_admin, :status, :password, :password_confirmation,
+                :cidade_id
 
   filter :nome
   filter :usuario
@@ -18,14 +20,14 @@ ActiveAdmin.register AdminUser do
     selectable_column
     #id_column
     column :nome
-    column :usuario
+    column "Usuário", :usuario
     column :email
-    column :data_nascimento
-    column :sexo
+    column "Status" do |admin_user|
+      status_tag(admin_user.status, admin_user.ativo? ? :ok : :warning)
+    end
     column :telefone
-    column :logradouro
-    column :cidade
-    column :uf
+    column "Cidade", :cidade_nome
+    column "UF", :uf_nome
     actions
   end
 
@@ -48,7 +50,9 @@ ActiveAdmin.register AdminUser do
             row :expedidor_rg
             row :uf_expedidor_rg
             row :data_nascimento
-            row :sexo
+            row "Gênero" do
+              admin_user.sexo
+            end
             row :celular
             row :telefone
           end
@@ -56,28 +60,38 @@ ActiveAdmin.register AdminUser do
         panel "Endereço" do 
           attributes_table_for admin_user do
             row :logradouro
-            row :numero
+            row "Número" do
+              admin_user.numero
+            end
             row :complemento
-            row :setor  
+            row "BAIRRO" do
+              admin_user.setor
+            end  
             row :cep
-            row :cidade
-            row :uf
+            row "Cidade" do
+              admin_user.cidade_nome
+            end
+            row "UF" do
+              cidade = admin_user.cidade if admin_user.cidade
+              estado = cidade.estado if cidade
+              estado.sigla if estado
+            end
           end
         end
-        panel "Meta Dados" do 
-          attributes_table_for admin_user do 
-            row :reset_password_token
-            row :reset_password_sent_at
-            row :remember_created_at
-            row :sign_in_count
-            row :current_sign_in_at
-            row :last_sign_in_at
-            row :current_sign_in_ip
-            row :last_sign_in_ip
-            row :created_at
-            row :update_at
-          end
-        end
+        # panel "Meta Dados" do 
+        #   attributes_table_for admin_user do 
+        #     row :reset_password_token
+        #     row :reset_password_sent_at
+        #     row :remember_created_at
+        #     row :sign_in_count
+        #     row :current_sign_in_at
+        #     row :last_sign_in_at
+        #     row :current_sign_in_ip
+        #     row :last_sign_in_ip
+        #     row :created_at
+        #     row :update_at
+        #   end
+        # end
     end
 
   form do |f|
@@ -88,29 +102,40 @@ ActiveAdmin.register AdminUser do
       f.input :email
       f.input :password
       f.input :password_confirmation
-      f.input :super_admin, as: :select, collection: ["1", "0"]
-      f.input :status, as: :select, collection: ["1", "0"]
+      f.input :super_admin, as: :radio
+      f.input :status, as: :radio
     end
     f.inputs "Dados Pessoais" do
-      f.input :cpf
-      f.input :rg
-      f.input :expedidor_rg
-      f.input :uf_expedidor_rg
-      f.input :data_nascimento, as: :date_picker
-      f.input :sexo, as: :select, collection: ["masculino", "feminino"]
+      f.input :cpf, label:"CPF"
+      f.input :rg, label:"RG"
+      f.input :expedidor_rg, label:"Expedidor RG"
+      f.input :uf_expedidor_rg, label:"UF Expedidor RG"
+      f.input :data_nascimento, label: "Data Nascimento"
+      f.input :sexo, as: :radio, collection: ["Masculino", "Feminino"], label: "Gênero"
       f.input :celular
       f.input :telefone
     end
     f.inputs "Endereço" do 
       f.input :logradouro
-      f.input :numero
+      f.input :numero, label: "Número"
       f.input :complemento
-      f.input :setor 
-      f.input :cep
-      f.input :cidade 
-      f.input :uf 
+      f.input :setor , label:"Bairro"
+      f.input :cep, label: "CEP"
+      f.input :estado_id, label: "UF", prompt: "Selecione a UF", :input_html=>{:id=>"uf-select"},
+              collection: Estado.all.map{|e| [e.sigla, e.id]}, include_blank: false
+      f.input :cidade_id, :input_html=>{:id=>"cidades-select"}, prompt: "Selecione a Cidade", as: :select,
+              collection: Cidade.where(estado_id: f.object.estado_id).map{|c| [c.nome, c.id]}
     end
     f.actions
+    # Script para escolher 'cidade' a partir de 'uf'
+    render inline: "<script type='text/javascript'> $('#uf-select').change(function(){ 
+      var uf_id = $('#uf-select').val();
+      var url = '/estados/'.concat(uf_id).concat('/cidades.js');
+      $.ajax({
+          url: url,
+          dataType: 'script'
+        });
+      });</script>"
   end
 
 end

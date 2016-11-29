@@ -8,38 +8,39 @@ require 'json'
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-AdminUser.create!(email: 'doti@doti.com.br', password: 'admindoti', password_confirmation: 'admindoti', 
+AdminUser.create!(nome: "Super Admin", email: 'doti@doti.com.br', password: 'admindoti', password_confirmation: 'admindoti', 
                   super_admin: "1", usuario: "superadmin") unless AdminUser.exists?(email: 'doti@doti.com.br')
 
- # module BRPopulate
- #    def self.estados
- #      http = Net::HTTP.new('raw.githubusercontent.com', 443); http.use_ssl = true
- #      JSON.parse http.get('/celsodantas/br_populate/master/states.json').body
- #    end
+ module BRPopulate
+    def self.estados
+      http = Net::HTTP.new('raw.githubusercontent.com', 443); http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      JSON.parse http.get('/celsodantas/br_populate/master/states.json').body
+    end
 
- #    def self.capital?(cidade, estado)
- #      cidade["name"] == estado["capital"]
- #    end
+    def self.capital?(cidade, estado)
+      cidade["name"] == estado["capital"]
+    end
 
- #    def self.populate
- #      estados.each do |estado|
- #        estado_obj = Estado.new(:sigla => estado["acronym"], :nome => estado["name"])
- #        estado_obj.save
+    def self.populate
+      estados.each do |estado|
+        estado_obj = Estado.new(:sigla => estado["acronym"], :nome => estado["name"])
+        estado_obj.save
         
- #        estado["cities"].each do |cidade|
- #          c = Cidade.new
- #          c.nome = cidade["name"]
- #          c.estado = estado_obj
- #          c.capital = capital?(cidade, estado)
- #          c.save
- #        end
- #      end
- #    end
- #  end
+        estado["cities"].each do |cidade|
+          c = Cidade.new
+          c.nome = cidade["name"]
+          c.estado = estado_obj
+          c.capital = capital?(cidade, estado)
+          c.save
+        end
+      end
+    end
+  end
 
- # BRPopulate.populate
+ BRPopulate.populate
 #Entidade
-entidade = Entidade.create!(nome: "Entidade", email: "contato@entidade.com", cnpj:"12345678912345", 
+entidade = Entidade.create!(nome: "Entidade", email: "contato@entidade.com", cnpj:"12345678912345", sigla: "ENT",
                             valor_carteirinha: 25, cep: "11111111", nome_presidente: "Presidente", 
                             email_presidente: "email@email.com") unless Entidade.exists?(nome: "Entidade")
 # Instituições de Ensino

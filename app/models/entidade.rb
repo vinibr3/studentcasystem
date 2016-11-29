@@ -21,7 +21,7 @@ class Entidade < ActiveRecord::Base
 	validates :nome, length: { maximum: 70, too_long: "Máximo de #{count} caracteres permitidos."}, 
 	                 format: {with: LETRAS, message:"Somente letras é permitidos."}
 	validates :sigla, length: {maximum: 10, too_long: "Máximo de #{count} caracteres permitidos."},
-					  format: {with: STRING_REGEX, message: "Somente letras é permitido"}, allow_blank: true				  
+					  format: {with: STRING_REGEX, message: "Somente letras é permitido"}, allow_blank: false				  
 	validates :email, uniqueness: {message: "Email já utilizado"}, format: {with: EMAIL_REGEX, on: :create}
 	validates :cnpj, numericality: true, length: {is: 14, wrong_length: "14 caracteres."}
 	validates :valor_carteirinha, numericality: true

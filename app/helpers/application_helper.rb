@@ -1,4 +1,5 @@
 module ApplicationHelper
+	
 	def presentation_name nome
 		if nome
 			nome = current_estudante.first_name

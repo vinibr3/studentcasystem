@@ -1,4 +1,5 @@
 class Estado < ActiveRecord::Base
+ has_many :cidades, -> { order "nome ASC"}
 
  STRING_REGEX = /\A[A-Z]+\z/
  LETRAS = /[A-Z a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+/

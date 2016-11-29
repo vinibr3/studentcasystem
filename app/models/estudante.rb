@@ -9,6 +9,9 @@ class Estudante < ActiveRecord::Base
 	belongs_to :entidade
 	belongs_to :instituicao_ensino
 	belongs_to :curso
+	belongs_to :cidade
+	has_one :estado, through: :cidade
+	has_one :escolaridade, through: :curso
 
 	url_path = "/default/:class/:id/:attachment/:style/:filename"
 
@@ -25,15 +28,16 @@ class Estudante < ActiveRecord::Base
 	STRING_REGEX = /\A[a-z A-Z]+\z/
 	LETRAS = /[A-Z a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+/
 
+	@@GENEROS = %w(Masculino Feminino)
+
 	before_create :create_oauth_token, :create_chave_acesso
-	before_update :set_instituicao_id
 
 	# validações
 	validates :nome, length: { maximum: 70, too_long: "Máximo de 70 caracteres permitidos!"}, 
 	                 		   format:{with: LETRAS, message:"Somente letras é permitido!"},
 	                 		   allow_blank: true
 	validates :email, uniqueness: true, format: {with: EMAIL_REGEX , on: :create}
-	validates :sexo, inclusion: %w(Masculino Feminino), allow_blank: true
+	validates :sexo, inclusion: @@GENEROS, allow_blank: true
 	validates :telefone, length:{in: 10..11}, numericality: true, allow_blank: true
 	validates :logradouro, length:{maximum: 50}, allow_blank: true
 	validates :complemento, length:{maximum: 50}, allow_blank: true
@@ -48,7 +52,6 @@ class Estudante < ActiveRecord::Base
 	validates :expedidor_rg, length:{maximum: 10, too_long:"Máximo de 10 caracteres permitidos!"}, 
 							 format:{with:STRING_REGEX, message: "Somente letras é permitido!"}, allow_blank: true
 	validates :uf_expedidor_rg, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
-	validates :uf, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
 	validates :chave_acesso, length:{is: 10, too_long: "Necessário 10 caracteres", too_short: "Necessário 10 caracteres"}, allow_blank: true
 	validates_attachment_size :foto, :less_than => 1.megabytes
 	validates_attachment_size :xerox_rg, :less_than => 1.megabytes
@@ -165,8 +168,10 @@ class Estudante < ActiveRecord::Base
 		array << self.instituicao_ensino
 		array << self.periodo
 		array << self.curso_serie
-		array << self.cidade
-		array << self.uf
+		array << self.instituicao_ensino.cidade.nome if self.instituicao_ensino && self.instituicao_ensino.cidade
+		array << self.instituicao_ensino.cidade.estado.nome if self.instituicao_ensino && 
+																												self.instituicao_ensino.cidade && 
+																												self.instituicao_ensino.cidade.estado
 		array
 	end
 
@@ -174,7 +179,7 @@ class Estudante < ActiveRecord::Base
 		nao_preenchidos = Array.new
 		atributos = [:nome, :email, :cpf, :rg, :expedidor_rg, :uf_expedidor_rg, 
 			          :data_nascimento, :sexo, :celular, :logradouro, :numero, 
-			          :cep, :cidade, :uf, :instituicao_ensino_id, :curso_id,
+			          :cep, :cidade, :instituicao_ensino_id, :curso_id,
 			          :matricula, :foto_file_name, :comprovante_matricula_file_name, 
 			          :xerox_rg_file_name, :xerox_cpf_file_name]
 		atributos.each do |atr|
@@ -187,11 +192,31 @@ class Estudante < ActiveRecord::Base
 		self.provider.blank?
 	end
 
-	def escolaridade
-		self.curso.escolaridade if self.curso
+	def curso_nome
+		self.curso.nome if self.curso
 	end
 
-	def escolaridade= escolaridade
+	def escolaridade_nome
+		self.curso.escolaridade_nome if self.curso
+	end
+
+	def escolaridade_id
+		escolaridade = self.curso.escolaridade if self.curso
+		escolaridade.id if escolaridade
+	end
+
+	def instituicao_ensino_nome
+		self.instituicao_ensino.nome if self.instituicao_ensino
+	end
+
+	def estado_nome
+		estado = self.cidade.estado if self.cidade
+		estado.nome if estado
+	end
+
+	def estado_id
+		estado = self.cidade.estado if self.cidade
+		estado.id if estado
 	end
 
 	protected
@@ -200,10 +225,9 @@ class Estudante < ActiveRecord::Base
 	 		endereco['logradouro'] = self[:logradouro]
 	 		endereco['numero'] = self[:numero].to_i
 	 		endereco['complemento'] = self[:complemento]
-	 		endereco['estado'] = self[:estado]
 	 		endereco['cidade'] = self[:cidade]
 	 		endereco['cep'] = self[:cep].to_i
-	 		endereco['uf'] = self[:estado]
+	 		endereco['uf'] = self[:cidade].estado.nome if self[:cidade] && self[:cidade].estado
 	 		endereco
 	 	end
 
@@ -220,10 +244,6 @@ class Estudante < ActiveRecord::Base
 
 		def create_chave_acesso
 			self[:chave_acesso] = SecureRandom.hex(5).upcase
-		end
-
-		def set_instituicao_id
-			self[:instituicao_ensino_id] = InstituicaoEnsino.last.id
 		end
 
 end

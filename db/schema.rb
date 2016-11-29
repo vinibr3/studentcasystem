@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161124180904) do
+ActiveRecord::Schema.define(version: 20161129190426) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,8 +48,6 @@ ActiveRecord::Schema.define(version: 20161124180904) do
     t.string   "complemento"
     t.string   "setor"
     t.string   "cep"
-    t.string   "cidade"
-    t.string   "uf"
     t.string   "super_admin",            limit: 1, default: "0", null: false
     t.string   "status",                 limit: 1, default: "1", null: false
     t.string   "encrypted_password",               default: "",  null: false
@@ -63,8 +61,10 @@ ActiveRecord::Schema.define(version: 20161124180904) do
     t.inet     "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "cidade_id"
   end
 
+  add_index "admin_users", ["cidade_id"], name: "index_admin_users_on_cidade_id", using: :btree
   add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
 
@@ -153,9 +153,10 @@ ActiveRecord::Schema.define(version: 20161124180904) do
   create_table "cursos", force: :cascade do |t|
     t.string   "nome"
     t.integer  "escolaridade_id"
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
     t.integer  "instituicao_ensino_id"
+    t.string   "status",                limit: 1, default: "1"
   end
 
   add_index "cursos", ["escolaridade_id"], name: "index_cursos_on_escolaridade_id", using: :btree
@@ -236,7 +237,6 @@ ActiveRecord::Schema.define(version: 20161124180904) do
     t.string   "complemento"
     t.string   "setor"
     t.string   "cep"
-    t.string   "cidade"
     t.string   "uf"
     t.integer  "instituicao_ensino_id"
     t.integer  "curso_id"
@@ -277,8 +277,10 @@ ActiveRecord::Schema.define(version: 20161124180904) do
     t.integer  "xerox_cpf_file_size"
     t.datetime "xerox_cpf_updated_at"
     t.integer  "entidade_id"
+    t.integer  "cidade_id"
   end
 
+  add_index "estudantes", ["cidade_id"], name: "index_estudantes_on_cidade_id", using: :btree
   add_index "estudantes", ["confirmation_token"], name: "index_estudantes_on_confirmation_token", unique: true, using: :btree
   add_index "estudantes", ["email"], name: "index_estudantes_on_email", unique: true, using: :btree
   add_index "estudantes", ["entidade_id"], name: "index_estudantes_on_entidade_id", using: :btree
@@ -370,10 +372,12 @@ ActiveRecord::Schema.define(version: 20161124180904) do
     t.datetime "updated_at",        null: false
   end
 
+  add_foreign_key "admin_users", "cidades"
   add_foreign_key "carteirinhas", "entidades"
   add_foreign_key "cidades", "estados"
   add_foreign_key "cursos", "escolaridades"
   add_foreign_key "cursos", "instituicao_ensinos"
+  add_foreign_key "estudantes", "cidades"
   add_foreign_key "estudantes", "entidades"
   add_foreign_key "instituicao_ensinos", "cidades"
   add_foreign_key "instituicao_ensinos", "entidades"

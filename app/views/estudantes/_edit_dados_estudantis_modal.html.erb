@@ -10,6 +10,10 @@
 				</div>
 				<div class="modal-body>" style="margin-top: 23px;">
 					<div class="form-group">
+							<%= f.label :instituicao_ensino_id, "Curso/Série", :class=>'control-label col-sm-4 col-sm-offset-1' %>
+						<div class="col-sm-6"><%= f.select :estudante, :instituicao_ensino_id, InstituicaoEnsino.all.collect{|i| [i.nome, i.nome]}, {include_blank: "Selecione Instituição de Ensino"}, :class=>'form-control'%></div>
+					</div>
+					<div class="form-group">
 							<%= f.label :curso_id, "Curso/Série", :class=>'control-label col-sm-4 col-sm-offset-1' %>
 						<div class="col-sm-6"><%= f.grouped_collection_select :curso_id, Escolaridade.all, :cursos, :nome, :id, :nome, prompt: "Selecione o Curso" , :class=>'form-control'%></div>
 					</div>
