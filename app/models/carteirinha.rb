@@ -14,12 +14,21 @@ class Carteirinha < ActiveRecord::Base
 	FILES_CONTENT_TYPE = ['image/jpeg', 'image/png', 'application/pdf']
 
 	#@@STATUS_VERSAO_DIGITAL = ["Pagamento", "Documentação", "Download", "Baixada"]
-	@@STATUS_VERSAO_IMPRESSA = ["Pagamento", "Documentação", "Aprovada","Enviada", "Entregue", "Cancelada", "Revogada"]
+	#@@STATUS_VERSAO_IMPRESSA = ["Pagamento", "Documentação", "Aprovada","Enviada", "Entregue", "Cancelada", "Revogada"]
 	EMAIL_REGEX = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/
 	STRING_REGEX = /\A[a-z A-Z]+\z/
 	LETRAS = /[A-Z a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+/
 
-	@@status_pagamento = ["Iniciada","Aguardando Pagamento","Em Análise","Pago","Disponível","Em disputa","Estornado","Cancelado","Devolvido","Contestado"]
+	enum status_versao_impressa: {pagamento: "Pagamento", documentacao: "Documentação", aprovada: "Aprovada", 
+								   							enviada: "Enviada", entregue: "Entregue", cancelada: "Cancelada", revogada: "Revogada"}
+
+	enum forma_pagamento: {cartao_de_credito: "Cartão de crédito", boleto: "Boleto", a_definir: "A definir",
+												 debito_online: "Débito online", saldo_pagseguro: "Saldo PagSeguro", 
+												 oi_pago: "Oi Paggo", deposito_em_conta: "Depósito em conta", dinheiro: "Dinheiro"}
+	
+	enum status_pagamento: {iniciada: "Iniciada", aguardando_pagamento: "Aguardando pagamento", em_analise: "Em análise",
+							 pago: "Pago", disponivel: "Disponível", em_disputa: "Em disputa", devolvida: "Devolvida",
+							 cancelado: "Cancelada", contestada: "Contestada"}
 
 	# validações
 	validates :nome, length: { maximum: 70, too_long: "Máximo de 70 caracteres permitidos"}, format:{with: LETRAS, message:"Somente letras é permitido!"}
@@ -32,7 +41,6 @@ class Carteirinha < ActiveRecord::Base
 	validates :curso_serie, length:{maximum: 40, too_long: "Máximo de 40 caracteres permitidos!."}, format:{with: LETRAS}, allow_blank: true
 	#validates :codigo_uso, allow_blank: true
 	validates :termos, acceptance: true
-	validates :status_versao_impressa, inclusion:{in: @@STATUS_VERSAO_IMPRESSA}
 	#validates :status_versao_digital, inclusion:{in: %w(Pagamento Documentação Download Baixada)}
 	#validates :valor, length:{maximum: 4}
 	validates :numero_serie, numericality: true, uniqueness: true, allow_blank: true
@@ -83,7 +91,7 @@ class Carteirinha < ActiveRecord::Base
 
 	def em_solicitacao?
 		if valid
-			if self.status_versao_impressa == @@STATUS_VERSAO_IMPRESSA[3]
+			if self.status_versao_impressa.aprovada?
 				return false
 			else
 				return true
@@ -95,11 +103,12 @@ class Carteirinha < ActiveRecord::Base
 
 	def status_take_while
 		index = self.status_versao_impressa_to_i+1
-		@@STATUS_VERSAO_IMPRESSA.take index
+		statuses = status_versao_impressas{|x| x.second}
+		statuses.take index
 	end
 
 	def solicitacao_cancelada_ou_revogada?
-		self.status_versao_impressa == @@STATUS_VERSAO_IMPRESSA[5] || self.status_versao_impressa == @@STATUS_VERSAO_IMPRESSA[6]
+		self.status_versao_impressa.cancelada? || self.status_versao_impressa.revogada?
 	end
 
 	def so_muda_status_versao_impressa_se_pagamento_confirmado
@@ -118,56 +127,32 @@ class Carteirinha < ActiveRecord::Base
         end
 	end
 
-	def status_pagamento
-		status = self[:status_pagamento]
-		case status
-			when "0" then self[:status_pagamento] = @@status_pagamento[0]
-			when "1" then self[:status_pagamento] = @@status_pagamento[1]
-			when "2" then self[:status_pagamento] = @@status_pagamento[2]
-			when "3" then self[:status_pagamento] = @@status_pagamento[3]
-			when "4" then self[:status_pagamento] = @@status_pagamento[4]
-			when "5" then self[:status_pagamento] = @@status_pagamento[5]
-			when "6" then self[:status_pagamento] = @@status_pagamento[6]
-			when "7" then self[:status_pagamento] = @@status_pagamento[7]
-			when "8" then self[:status_pagamento] = @@status_pagamento[8]	
-			when "9" then self[:status_pagamento] = @@status_pagamento[9]		
-		end
-		self[:status_pagamento]
-	end
-
 	def status_versao_impressa_to_i
-		@@STATUS_VERSAO_IMPRESSA.length.times do |i|
-			if @@STATUS_VERSAO_IMPRESSA[i] == self[:status_versao_impressa]
-				return i
-			end
-		end
+		status_versao_impressas.index(self.status_versao_impressa)
 	end
 
 	def status_pagamento_to_i
-		@@status_pagamento.length.times do |i|
-			if @@status_pagamento[i] == self[:status_pagamento]
-				return i
-			end
-		end
+		status_pagamentos.index(self.status_pagamento)
 	end
 
 	def muda_status_carteirinha_apartir_status_pagamento
 		#em processamento
-		self.status_versao_impressa = @@STATUS_VERSAO_IMPRESSA[0] if status_pagamento_to_i <= 2
+		self.status_versao_impressa.pagamento! if status_pagamento_to_i <= 2
 	end
 
 	def show_status_carteirinha_apartir_do_status_pagamento
 		case self.status_pagamento_to_i
-			when 0 then @@STATUS_VERSAO_IMPRESSA[0]
-			when 1 then @@STATUS_VERSAO_IMPRESSA[0]
-			when 2 then @@STATUS_VERSAO_IMPRESSA[0]
+			when 0 then status_versao_impressa.pagamento!
+			when 1 then status_versao_impressa.pagamento!
+			when 2 then status_versao_impressa.pagamento!
 		else 
-			@@STATUS_VERSAO_IMPRESSA.from(1)
+			status = status_versao_impressas{|x| x.second}
+			status.from(1)
 		end
 	end
 
 	def gera_dados_se_carteirinha_aprovada
-		if self.status_versao_impressa == @@STATUS_VERSAO_IMPRESSA[2] # Status é 'Aprovada'
+		if self.status_versao_impressa.aprovada? # Status é 'Aprovada'
             # Gera informações  
             self.layout_carteirinha_id = LayoutCarteirinha.last_layout_id                 if self.layout_carteirinha_id.blank?
             self.nao_antes = Time.new                                                     if self.nao_antes.blank?
@@ -274,10 +259,6 @@ class Carteirinha < ActiveRecord::Base
 		end
 	end
 
-	def self.status_versao_impressa
-		@@STATUS_VERSAO_IMPRESSA
-	end
-
 	protected
 		def vencida
 			self.vencimento == "1"	
@@ -292,6 +273,6 @@ class Carteirinha < ActiveRecord::Base
 		end
 
 		def transacao_cancelada
-			@@status_pagamento
+			status_pagamentos{|s| s.second}
 		end
 end

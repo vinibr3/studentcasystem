@@ -142,7 +142,9 @@ ActiveAdmin.register Estudante do
       f.input :rg, label: "RG"
       f.input :expedidor_rg, label: "Expedidor RG"
       f.input :uf_expedidor_rg, collection: Estado.all.map{|e| e.sigla} ,label: "UF Expedidor RG"
-      f.input :data_nascimento, label: "Data de Nascimento", as: :datepicker
+      f.input :data_nascimento, label: "Data de Nascimento", as: :datepicker, datepicker_options: { day_names_min: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
+                                                                                                    month_names_short: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+                                                                                                    year_range: "1930:", show_anim: "slideDown", changeMonth: true, changeYear: true}
       f.input :sexo, collection: Estudante.class_variable_get(:@@GENEROS), label: "Gênero", :as => :radio
       f.input :telefone
       f.input :celular
@@ -194,4 +196,13 @@ ActiveAdmin.register Estudante do
   before_create do |estudante|
     estudante.password = Devise.friendly_token 
   end
+
+  # Actions
+  
+  # Action item que cria a carteirinha para o aluno
+  action_item :new_carteirinha, only: :show do
+    # Faz a requisição no controller 'admin/carteirinha' via 'post' para criar a carteirinha 
+    link_to "Criar Carteirinha", "/admin/carteirinhas?estudante_id=#{resource.id}", method: :post
+  end 
+
 end

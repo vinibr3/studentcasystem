@@ -15,7 +15,6 @@ ActiveAdmin.register InstituicaoEnsino do
 		column :nome
 		column :sigla
 		column :cnpj
-		column "Entidade", :entidade_nome
 		actions
 	end
 
@@ -26,9 +25,6 @@ ActiveAdmin.register InstituicaoEnsino do
 				row :sigla
 				row "CNPJ" do
 					instituicao_ensino.cnpj
-				end
-				row "Entidade" do
-					instituicao_ensino.entidade_nome
 				end
 			end
 		end
@@ -54,7 +50,6 @@ ActiveAdmin.register InstituicaoEnsino do
 			f.input :nome
 			f.input :sigla
 			f.input :cnpj, label: "CNPJ"
-			f.input :entidade_id, collection: Entidade.all.map{|e| [e.nome, e.id]}, prompt: "Selecione a Entidade", as: :select
 		end
 		f.inputs "Endereço" do
 			f.input :logradouro
@@ -62,7 +57,7 @@ ActiveAdmin.register InstituicaoEnsino do
 			f.input :cep, label: "CEP"
 			f.input :complemento
 			f.input :estado_id, collection: Estado.all.map{|e| [e.sigla, e.id]} ,label: "UF", as: :select, :input_html=>{:id=>"uf-select"}, include_blank: false, prompt: "Selecione a UF"
-			f.input :cidade_id, collection: Cidade.where(estado_id: f.object.estado_id).map{|c| [c.nome, c.id]}, as: :select, prompt: "Selecione a Cidade", :input_html=>{:id=>"cidades-select"}
+			f.input :cidade_id, collection: Cidade.where(estado_id: f.object.estado.id).map{|c| [c.nome, c.id]}, as: :select, prompt: "Selecione a Cidade", :input_html=>{:id=>"cidades-select"}
 		end
 		f.actions
 		# Script para escolher 'cidade' a partir de 'uf'

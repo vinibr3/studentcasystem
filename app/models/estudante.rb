@@ -34,8 +34,7 @@ class Estudante < ActiveRecord::Base
 
 	# validações
 	validates :nome, length: { maximum: 70, too_long: "Máximo de 70 caracteres permitidos!"}, 
-	                 		   format:{with: LETRAS, message:"Somente letras é permitido!"},
-	                 		   allow_blank: true
+	                 format:{with: LETRAS, message:"Somente letras é permitido!"}, allow_blank: true
 	validates :email, uniqueness: true, format: {with: EMAIL_REGEX , on: :create}
 	validates :sexo, inclusion: @@GENEROS, allow_blank: true
 	validates :telefone, length:{in: 10..11}, numericality: true, allow_blank: true
@@ -67,11 +66,11 @@ class Estudante < ActiveRecord::Base
 	validates_attachment_content_type :xerox_cpf, :content_type=> FILES_CONTENT_TYPE
 	validates_acceptance_of :termos
     
-    validates_length_of :foto_file_name, :comprovante_matricula_file_name, :xerox_rg_file_name, 
-                        :maximum => 50, :message => "Nome do arquivo deve ser menor que 20 caracteres"
-    # validates_associated :carteirinha, allow_blank: true
-    #validates_associated :instituicao_ensino unless self[:instituicao_ensino_id].blank?
-    #validates_associated :curso unless self.curso_id.blank?
+  validates_length_of :foto_file_name, :comprovante_matricula_file_name, :xerox_rg_file_name, 
+                      :maximum => 50, :message => "Nome do arquivo deve ser menor que 20 caracteres"
+  validates_associated :carteirinhas, allow_blank: true
+  validates_associated :instituicao_ensino, allow_blank: true
+  validates_associated :curso, allow_blank: true
 
 	public
 		def tem_carteirinha
@@ -177,13 +176,14 @@ class Estudante < ActiveRecord::Base
 
 	def atributos_nao_preenchidos
 		nao_preenchidos = Array.new
-		atributos = [:nome, :email, :cpf, :rg, :expedidor_rg, :uf_expedidor_rg, 
-			          :data_nascimento, :sexo, :celular, :logradouro, :numero, 
-			          :cep, :cidade, :instituicao_ensino_id, :curso_id,
-			          :matricula, :foto_file_name, :comprovante_matricula_file_name, 
-			          :xerox_rg_file_name, :xerox_cpf_file_name]
-		atributos.each do |atr|
-			nao_preenchidos << atr if self[atr].blank?
+		atributos = {:nome=>"Nome", :email =>"Email", :cpf=>"CPF", :rg=>"RG", :expedidor_rg=>"Expedidor RG", 
+								 :uf_expedidor_rg=>"UF Expedidor RG", :data_nascimento => "Data de Nascimento", :sexo=> "Sexo", 
+								 :celular=>"Celular", :logradouro=>"Logradouro", :numero =>"Número", :cep =>"CEP", 
+								 :cidade_id=>"Cidade", :instituicao_ensino_id=>"Instituição de Ensino", :curso_id =>"Curso",
+			           :matricula=>"Matrícula", :foto_file_name =>"Foto", :comprovante_matricula_file_name=>"Comprovante de matrícula", 
+			           :xerox_rg_file_name=>"Xerox RG", :xerox_cpf_file_name=>"Xerox CPF"}
+		atributos.keys.each do |key|
+			nao_preenchidos << atributos[key] if self[key].blank?
 		end
 		nao_preenchidos
 	end

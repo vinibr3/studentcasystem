@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161129190426) do
+ActiveRecord::Schema.define(version: 20161203040154) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -311,11 +311,9 @@ ActiveRecord::Schema.define(version: 20161129190426) do
     t.integer  "estado_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.integer  "entidade_id"
   end
 
   add_index "instituicao_ensinos", ["cidade_id"], name: "index_instituicao_ensinos_on_cidade_id", using: :btree
-  add_index "instituicao_ensinos", ["entidade_id"], name: "index_instituicao_ensinos_on_entidade_id", using: :btree
   add_index "instituicao_ensinos", ["estado_id"], name: "index_instituicao_ensinos_on_estado_id", using: :btree
 
   create_table "layout_carteirinhas", force: :cascade do |t|
@@ -380,7 +378,6 @@ ActiveRecord::Schema.define(version: 20161129190426) do
   add_foreign_key "estudantes", "cidades"
   add_foreign_key "estudantes", "entidades"
   add_foreign_key "instituicao_ensinos", "cidades"
-  add_foreign_key "instituicao_ensinos", "entidades"
   add_foreign_key "instituicao_ensinos", "estados"
   add_foreign_key "layout_carteirinhas", "entidades"
 end
