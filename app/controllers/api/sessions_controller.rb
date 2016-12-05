@@ -1,4 +1,4 @@
-class Api::SessionsController < API::AuthenticateBase
+class Api::SessionsController < Api::AuthenticateBase
 
 	# before_action :http_login_password_authentication,  only: [:create]
 

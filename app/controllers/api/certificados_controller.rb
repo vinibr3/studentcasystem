@@ -1,4 +1,4 @@
-class Api::CertificadosController < API::AuthenticateBase
+class Api::CertificadosController < Api::AuthenticateBase
 	before_action :http_base_authentication_with_entidade_data
 
 	def create

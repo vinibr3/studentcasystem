@@ -1,4 +1,4 @@
-class Api::EstudantesController < API::AuthenticateBase
+class Api::EstudantesController < Api::AuthenticateBase
 	before_action :http_token_authentication
 
 	def update

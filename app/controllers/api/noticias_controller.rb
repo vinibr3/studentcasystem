@@ -1,4 +1,4 @@
-class Api::NoticiasController < API::AuthenticateBase
+class Api::NoticiasController < Api::AuthenticateBase
 	def index
 		begin
 			@noticias = Noticia.where("id > #{params[:id]}")
