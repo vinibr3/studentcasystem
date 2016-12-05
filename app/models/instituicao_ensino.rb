@@ -46,5 +46,9 @@ class InstituicaoEnsino < ActiveRecord::Base
     self.estado.sigla if self.estado
   end
 
+  def estado_id
+    self.estado.id if estado
+  end
+
 end
 

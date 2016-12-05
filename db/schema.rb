@@ -211,7 +211,7 @@ ActiveRecord::Schema.define(version: 20161203040154) do
     t.string   "nome"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
-    t.string   "status",     limit: 1
+    t.string   "status",     limit: 1, default: "1"
   end
 
   create_table "estados", force: :cascade do |t|

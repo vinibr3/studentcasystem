@@ -29,7 +29,7 @@ ActiveAdmin.register Escolaridade do
 		f.semantic_errors *f.object.errors.keys
 		f.inputs "Alterar Escolaridade" do
 			f.input :nome
-			f.input :status, as: :select
+			f.input :status, as: :select, include_blank: false
 		end
 		f.actions
 	end
