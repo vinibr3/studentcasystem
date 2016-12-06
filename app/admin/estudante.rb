@@ -157,7 +157,8 @@ ActiveAdmin.register Estudante do
       f.input :xerox_cpf, :hint => "Imagem Atual: #{f.object.xerox_cpf_file_name}", label: "Xerox CPF"
     end
     f.inputs "Dados Estudantis" do
-      f.input :entidade_id, collection: Entidade.all.map{|e| [e.nome, e.id]}, prompt:"Selecione a Entidade", label: "Entidade", include_blank:false
+      f.input :entidade, collection: Entidade.all.map{|e| [e.nome, e.id]}, prompt:"Selecione a Entidade", 
+              label: "Entidade", include_blank: false
       f.input :instituicao_ensino, collection: InstituicaoEnsino.all.map{|i| [i.nome, i.id] }, 
               prompt: "Selecione a Instituição de Ensino", label: "Instituição de Ensino"  
       f.input :escolaridade_id, :as => :select, prompt: "Selecione a Escolaridade", :input_html=>{:id=>"escolaridades-select"},
