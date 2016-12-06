@@ -25,7 +25,7 @@ ActiveAdmin.register Estudante do
     selectable_column
     column :email
     column :nome
-    column :data_nascimento, as: :datepicker
+    column :entidade_nome, "Entidade"
     column :sexo, "Gênero"
     column :telefone
     column :logradouro
@@ -57,15 +57,19 @@ ActiveAdmin.register Estudante do
         row "Xerox CPF" do
           a estudante.xerox_cpf_file_name, href: estudante.xerox_cpf.url
         end
-        row "Gênero", :sexo
+        row "Gênero" do
+          estudante.sexo
+        end
         row :telefone
         row :celular
         row :chave_acesso
-        
       end 
     end 
     panel "Dados Estudantis" do
       attributes_table_for estudante do 
+        row "Entidade" do
+          estudante.entidade_nome
+        end
         row "Instituição Ensino" do 
           estudante.instituicao_ensino_nome
         end
@@ -153,6 +157,7 @@ ActiveAdmin.register Estudante do
       f.input :xerox_cpf, :hint => "Imagem Atual: #{f.object.xerox_cpf_file_name}", label: "Xerox CPF"
     end
     f.inputs "Dados Estudantis" do
+      f.input :entidade_id, collection: Entidade.all.map{|e| [e.nome, e.id]}, prompt:"Selecione a Entidade", label: "Entidade", include_blank:false
       f.input :instituicao_ensino, collection: InstituicaoEnsino.all.map{|i| [i.nome, i.id] }, 
               prompt: "Selecione a Instituição de Ensino", label: "Instituição de Ensino"  
       f.input :escolaridade_id, :as => :select, prompt: "Selecione a Escolaridade", :input_html=>{:id=>"escolaridades-select"},
