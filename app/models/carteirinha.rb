@@ -150,7 +150,7 @@ class Carteirinha < ActiveRecord::Base
 			when 1 then self.pagamento!
 			when 2 then self.pagamento!
 		else 
-			status = @status_versao_impressas{|x| x.second}
+			status = @status_versao_impressas.each{|x| x.second}
 			status.from(1)
 		end
 	end
@@ -170,7 +170,7 @@ class Carteirinha < ActiveRecord::Base
             self.xerox_rg = estudante.xerox_rg                                     if self.xerox_rg.blank?
             self.xerox_cpf = estudante.xerox_cpf                                   if self.xerox_cpf.blank?
             self.comprovante_matricula = estudante.comprovante_matricula           if self.comprovante_matricula.blank?
-       end
+     end
 	end
 
 	def to_blob
@@ -276,7 +276,4 @@ class Carteirinha < ActiveRecord::Base
 			layout.qr_code_posx.blank? && layout.qr_code_posy.blank? && layout.qr_code_width.blank? && layout.qr_code_height.blank?
 		end
 
-		def transacao_cancelada
-			@status_pagamentos{|s| s.second}
-		end
 end
