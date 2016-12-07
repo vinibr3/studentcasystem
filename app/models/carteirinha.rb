@@ -128,31 +128,31 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def status_versao_impressa_to_i
-		status_versao_impressa.index(self.status_versao_impressa)
+		Carteirinha.status_versao_impressas.index(self.status_versao_impressa)
 	end
 
 	def status_pagamento_to_i
-		status_pagamento.index(self.status_pagamento)
+		Carteirinha.status_pagamentos.index(self.status_pagamento)
 	end
 
 	def muda_status_carteirinha_apartir_status_pagamento
 		#em processamento
-		self.status_versao_impressa.pagamento! if status_pagamento_to_i <= 2
+		self.pagamento! if status_pagamento_to_i <= 2
 	end
 
 	def show_status_carteirinha_apartir_do_status_pagamento
 		case self.status_pagamento_to_i
-			when 0 then status_versao_impressa.pagamento!
-			when 1 then status_versao_impressa.pagamento!
-			when 2 then status_versao_impressa.pagamento!
+			when 0 then self.pagamento!
+			when 1 then self.pagamento!
+			when 2 then self.pagamento!
 		else 
-			status = status_versao_impressa{|x| x.second}
+			status = Carteirinha.status_versao_impressas{|x| x.second}
 			status.from(1)
 		end
 	end
 
 	def gera_dados_se_carteirinha_aprovada
-		if self.status_versao_impressa.aprovada? # Status é 'Aprovada'
+		if self.aprovada? # Status é 'Aprovada'
             # Gera informações  
             self.layout_carteirinha_id = LayoutCarteirinha.last_layout_id                 if self.layout_carteirinha_id.blank?
             self.nao_antes = Time.new                                                     if self.nao_antes.blank?
@@ -273,6 +273,6 @@ class Carteirinha < ActiveRecord::Base
 		end
 
 		def transacao_cancelada
-			status_pagamento{|s| s.second}
+			Carteirinha.status_pagamentos{|s| s.second}
 		end
 end
