@@ -19,21 +19,19 @@ class Carteirinha < ActiveRecord::Base
 	STRING_REGEX = /\A[a-z A-Z]+\z/
 	LETRAS = /[A-Z a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+/
 
-	status_versao_impressas: {pagamento: "Pagamento", documentacao: "Documentação", aprovada: "Aprovada", 
+	status_versao_impressas = {pagamento: "Pagamento", documentacao: "Documentação", aprovada: "Aprovada", 
 								   					enviada: "Enviada", entregue: "Entregue", cancelada: "Cancelada", revogada: "Revogada"}
 
-	enum status_versao_impressa: status_versao_impressas
-
-	forma_pagamentos: {cartao_de_credito: "Cartão de crédito", boleto: "Boleto", a_definir: "A definir",
+	forma_pagamentos = {cartao_de_credito: "Cartão de crédito", boleto: "Boleto", a_definir: "A definir",
 										debito_online: "Débito online", saldo_pagseguro: "Saldo PagSeguro", 
 										oi_pago: "Oi Paggo", deposito_em_conta: "Depósito em conta", dinheiro: "Dinheiro"}
 
-	enum forma_pagamento: forma_pagamentos
-	
-	status_pagamentos: {iniciada: "Iniciada", aguardando_pagamento: "Aguardando pagamento", em_analise: "Em análise",
+	status_pagamentos = {iniciada: "Iniciada", aguardando_pagamento: "Aguardando pagamento", em_analise: "Em análise",
 							 				pago: "Pago", disponivel: "Disponível", em_disputa: "Em disputa", devolvida: "Devolvida",
 							 				cancelado: "Cancelada", contestada: "Contestada"}
 
+	enum status_versao_impressa: status_versao_impressas
+	enum forma_pagamento: forma_pagamentos
 	enum status_pagamento: status_pagamentos
 
 	# validações
