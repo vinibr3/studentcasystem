@@ -134,11 +134,19 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def status_versao_impressa_to_i
-		@@status_versao_impressas.index(self.status_versao_impressa)
+		@@status_versao_impressas.each_value do |value|
+			index=0
+			return index if value = self.status_pagamento
+			index++
+		end
 	end
 
 	def status_pagamento_to_i
-		@@status_pagamentos.index(self.status_pagamento)
+		@@status_pagamentos.each_value do |value|
+			index=0
+			return index if value = self.status_pagamento
+			index++
+		end
 	end
 
 	def muda_status_carteirinha_apartir_status_pagamento
