@@ -1,4 +1,6 @@
 class Carteirinha < ActiveRecord::Base
+	attr_reader :status_versao_impressas, :forma_pagamentos, :status_pagamentos
+
 	belongs_to :estudante
 	belongs_to :entidade
 	belongs_to :layout_carteirinha
@@ -19,9 +21,20 @@ class Carteirinha < ActiveRecord::Base
 	STRING_REGEX = /\A[a-z A-Z]+\z/
 	LETRAS = /[A-Z a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+/
 
-	enum status_versao_impressa: status_versao_impressas
-	enum forma_pagamento: forma_pagamentos
-	enum status_pagamento: status_pagamentos
+	@@status_versao_impressas = {pagamento: "Pagamento", documentacao: "Documentação", aprovada: "Aprovada", 
+								   					enviada: "Enviada", entregue: "Entregue", cancelada: "Cancelada", revogada: "Revogada"}
+
+	@@forma_pagamentos = {cartao_de_credito: "Cartão de crédito", boleto: "Boleto", a_definir: "A definir",
+										debito_online: "Débito online", saldo_pagseguro: "Saldo PagSeguro", 
+										oi_pago: "Oi Paggo", deposito_em_conta: "Depósito em conta", dinheiro: "Dinheiro"}							   				
+
+	@@status_pagamentos = {iniciada: "Iniciada", aguardando_pagamento: "Aguardando pagamento", em_analise: "Em análise",
+							 				pago: "Pago", disponivel: "Disponível", em_disputa: "Em disputa", devolvida: "Devolvida",
+							 				cancelado: "Cancelada", contestada: "Contestada"}
+
+	enum status_versao_impressa: @@status_versao_impressas
+	enum forma_pagamento: @@forma_pagamentos
+	enum status_pagamento: @@status_pagamentos
 
 	# validações
 	validates :nome, length: { maximum: 70, too_long: "Máximo de 70 caracteres permitidos"}, format:{with: LETRAS, message:"Somente letras é permitido!"}
@@ -121,11 +134,11 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def status_versao_impressa_to_i
-		status_versao_impressas.index(self.status_versao_impressa)
+		@@status_versao_impressas.index(self.status_versao_impressa)
 	end
 
 	def status_pagamento_to_i
-		status_pagamentos.index(self.status_pagamento)
+		@@status_pagamentos.index(self.status_pagamento)
 	end
 
 	def muda_status_carteirinha_apartir_status_pagamento
@@ -265,21 +278,4 @@ class Carteirinha < ActiveRecord::Base
 			layout.qr_code_posx.blank? && layout.qr_code_posy.blank? && layout.qr_code_width.blank? && layout.qr_code_height.blank?
 		end
 
-	private 
-		def status_versao_impressas
-			status_versao_impressas = {pagamento: "Pagamento", documentacao: "Documentação", aprovada: "Aprovada", 
-								   					enviada: "Enviada", entregue: "Entregue", cancelada: "Cancelada", revogada: "Revogada"}
-		end
-
-		def forma_pagamentos
-			forma_pagamentos = {cartao_de_credito: "Cartão de crédito", boleto: "Boleto", a_definir: "A definir",
-										debito_online: "Débito online", saldo_pagseguro: "Saldo PagSeguro", 
-										oi_pago: "Oi Paggo", deposito_em_conta: "Depósito em conta", dinheiro: "Dinheiro"}
-		end
-
-		def status_pagamentos
-			status_pagamentos = {iniciada: "Iniciada", aguardando_pagamento: "Aguardando pagamento", em_analise: "Em análise",
-							 				pago: "Pago", disponivel: "Disponível", em_disputa: "Em disputa", devolvida: "Devolvida",
-							 				cancelado: "Cancelada", contestada: "Contestada"}
-		end
 end
