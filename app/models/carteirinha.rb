@@ -19,16 +19,22 @@ class Carteirinha < ActiveRecord::Base
 	STRING_REGEX = /\A[a-z A-Z]+\z/
 	LETRAS = /[A-Z a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+/
 
-	enum status_versao_impressa: {pagamento: "Pagamento", documentacao: "Documentação", aprovada: "Aprovada", 
-								   							enviada: "Enviada", entregue: "Entregue", cancelada: "Cancelada", revogada: "Revogada"}
+	status_versao_impressas: {pagamento: "Pagamento", documentacao: "Documentação", aprovada: "Aprovada", 
+								   					enviada: "Enviada", entregue: "Entregue", cancelada: "Cancelada", revogada: "Revogada"}
 
-	enum forma_pagamento: {cartao_de_credito: "Cartão de crédito", boleto: "Boleto", a_definir: "A definir",
-												 debito_online: "Débito online", saldo_pagseguro: "Saldo PagSeguro", 
-												 oi_pago: "Oi Paggo", deposito_em_conta: "Depósito em conta", dinheiro: "Dinheiro"}
+	enum status_versao_impressa: status_versao_impressas
+
+	forma_pagamentos: {cartao_de_credito: "Cartão de crédito", boleto: "Boleto", a_definir: "A definir",
+										debito_online: "Débito online", saldo_pagseguro: "Saldo PagSeguro", 
+										oi_pago: "Oi Paggo", deposito_em_conta: "Depósito em conta", dinheiro: "Dinheiro"}
+
+	enum forma_pagamento: forma_pagamentos
 	
-	enum status_pagamento: {iniciada: "Iniciada", aguardando_pagamento: "Aguardando pagamento", em_analise: "Em análise",
-							 pago: "Pago", disponivel: "Disponível", em_disputa: "Em disputa", devolvida: "Devolvida",
-							 cancelado: "Cancelada", contestada: "Contestada"}
+	status_pagamentos: {iniciada: "Iniciada", aguardando_pagamento: "Aguardando pagamento", em_analise: "Em análise",
+							 				pago: "Pago", disponivel: "Disponível", em_disputa: "Em disputa", devolvida: "Devolvida",
+							 				cancelado: "Cancelada", contestada: "Contestada"}
+
+	enum status_pagamento: status_pagamentos
 
 	# validações
 	validates :nome, length: { maximum: 70, too_long: "Máximo de 70 caracteres permitidos"}, format:{with: LETRAS, message:"Somente letras é permitido!"}
@@ -113,7 +119,7 @@ class Carteirinha < ActiveRecord::Base
 
 	def so_muda_status_versao_impressa_se_pagamento_confirmado
 		if status_pagamento_to_i < 3 # pagamento nao confirmado
-			errors.add(:status_versao_impressa, "pagamento da CIE não foi realizado") if status_versao_impressa_to_i >= 1
+			 errors.add(:status_versao_impressa, "pagamento da CIE não foi realizado") if status_versao_impressa_to_i >= 1
 		end
 	end
 
@@ -128,11 +134,11 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def status_versao_impressa_to_i
-		Carteirinha.status_versao_impressas.index(self.status_versao_impressa)
+		status_versao_impressas.index(self.status_versao_impressa)
 	end
 
 	def status_pagamento_to_i
-		Carteirinha.status_pagamentos.index(self.status_pagamento)
+		status_pagamentos.index(self.status_pagamento)
 	end
 
 	def muda_status_carteirinha_apartir_status_pagamento
@@ -146,7 +152,7 @@ class Carteirinha < ActiveRecord::Base
 			when 1 then self.pagamento!
 			when 2 then self.pagamento!
 		else 
-			status = Carteirinha.status_versao_impressas{|x| x.second}
+			status = status_versao_impressas{|x| x.second}
 			status.from(1)
 		end
 	end
@@ -273,6 +279,6 @@ class Carteirinha < ActiveRecord::Base
 		end
 
 		def transacao_cancelada
-			Carteirinha.status_pagamentos{|s| s.second}
+			status_pagamentos{|s| s.second}
 		end
 end
