@@ -103,7 +103,7 @@ class Carteirinha < ActiveRecord::Base
 
 	def status_take_while
 		index = self.status_versao_impressa_to_i+1
-		statuses = status_versao_impressas{|x| x.second}
+		statuses = status_versao_impressa{|x| x.second}
 		statuses.take index
 	end
 
@@ -128,11 +128,11 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def status_versao_impressa_to_i
-		status_versao_impressas.index(self.status_versao_impressa)
+		status_versao_impressa.index(self.status_versao_impressa)
 	end
 
 	def status_pagamento_to_i
-		status_pagamentos.index(self.status_pagamento)
+		status_pagamento.index(self.status_pagamento)
 	end
 
 	def muda_status_carteirinha_apartir_status_pagamento
@@ -146,7 +146,7 @@ class Carteirinha < ActiveRecord::Base
 			when 1 then status_versao_impressa.pagamento!
 			when 2 then status_versao_impressa.pagamento!
 		else 
-			status = status_versao_impressas{|x| x.second}
+			status = status_versao_impressa{|x| x.second}
 			status.from(1)
 		end
 	end
@@ -273,6 +273,6 @@ class Carteirinha < ActiveRecord::Base
 		end
 
 		def transacao_cancelada
-			status_pagamentos{|s| s.second}
+			status_pagamento{|s| s.second}
 		end
 end
