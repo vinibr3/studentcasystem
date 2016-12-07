@@ -18,6 +18,9 @@ ActiveAdmin.register LayoutCarteirinha do
     	id_column
     	column :anverso_file_name
     	column :verso_file_name
+    	column "Entidade" do |layout|
+    		layout.entidade_nome 
+    	end
     	actions
 	end
 
@@ -31,7 +34,7 @@ ActiveAdmin.register LayoutCarteirinha do
 					a layout_carteirinha.verso_file_name, class: "show-popup-link", href: layout_carteirinha.verso.url
 				end
 				row :entidade do
-					layout_carteirinha.entidade
+					layout_carteirinha.entidade_nome
 				end
 			end
 		end

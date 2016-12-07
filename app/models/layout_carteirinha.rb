@@ -32,6 +32,10 @@ class LayoutCarteirinha < ActiveRecord::Base
 	validates_presence_of :verso, :anverso, :entidade
 	validates_associated :entidade                                   
 
+	def entidade_nome
+		self.entidade.nome if self.entidade
+	end
+
 	def self.instance
 		last
 	end
