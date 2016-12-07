@@ -24,7 +24,7 @@ class Entidade < ActiveRecord::Base
 					  format: {with: STRING_REGEX, message: "Somente letras é permitido"}, allow_blank: false				  
 	validates :email, uniqueness: {message: "Email já utilizado"}, format: {with: EMAIL_REGEX, on: :create}
 	validates :cnpj, numericality: true, length: {is: 14, wrong_length: "14 caracteres."}, allow_blank: true
-	validates :valor_carteirinha, numericality: true
+	validates :valor_carteirinha, numericality: true, allow_blank: false
 	validates :frete_carteirinha, numericality: true, allow_blank: true
 	validates :telefone, numericality: true, length: {in: 10..11, wrong_format: "Mínimo de 10 e máximo 11 caracteres permitidos."}, allow_blank: true
     validates :logradouro, length:{maximum: 50, too_long:"Máximo de #{count} caracteres permitidos."}, allow_blank: true

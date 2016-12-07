@@ -8,7 +8,8 @@ class Curso < ActiveRecord::Base
 	enum status: {ativo: '1', inativo: '0'}
 
 	validates :nome, length: { maximum: 70, too_long: "Máximo de 70 caracteres permitidos!"}
-	validates_associated :escolaridade     
+	validates_associated :escolaridade
+	validates_presence_of :nome, :escolaridade     
 
 	before_save :upcase_all
 

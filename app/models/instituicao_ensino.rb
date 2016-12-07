@@ -18,6 +18,7 @@ class InstituicaoEnsino < ActiveRecord::Base
   validates :complemento, length:{maximum: 50}, allow_blank: true
   validates :numero, length:{maximum: 5}, numericality: true, allow_blank: true
   validates :cep, length:{is: 8, wrong_length: "#{count} caracteres."}, numericality: true, allow_blank: true
+  validates_presence_of :cidade
   validates_associated :cidade, :estado
 
   before_save :to_upcase

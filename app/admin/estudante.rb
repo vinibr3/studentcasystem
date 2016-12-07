@@ -10,7 +10,7 @@ ActiveAdmin.register Estudante do
                 :comprovante_matricula, :xerox_rg, :email, :password, 
                 :celular, :numero, :expedidor_rg, :uf_expedidor_rg,
                 :cidade_inst_ensino, :uf_inst_ensino, :xerox_cpf, 
-                :instituicao_ensino_id, :curso_id, :cidade_id
+                :instituicao_ensino_id, :curso_id, :cidade_id, :entidade_id
 
   filter :email
   filter :nome
@@ -25,7 +25,9 @@ ActiveAdmin.register Estudante do
     selectable_column
     column :email
     column :nome
-    column :entidade_nome, "Entidade"
+    column "Entidade" do |estudante|
+      estudante.entidade_nome
+    end
     column :sexo, "Gênero"
     column :telefone
     column :logradouro

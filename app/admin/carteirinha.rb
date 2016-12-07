@@ -125,7 +125,7 @@ ActiveAdmin.register Carteirinha do
                 f.input :qr_code
                 f.input :certificado
                 f.input :numero_serie
-                f.input :layout_carteirinha_id
+                f.input :layout_carteirinha_id, label:"Layout"
                 f.input :estudante_id, label: "Estudante ID"
             end 
         end
@@ -213,9 +213,9 @@ ActiveAdmin.register Carteirinha do
             c.matricula = @estudante.matricula
             c.instituicao_ensino = @estudante.instituicao_ensino.nome
             c.cidade_inst_ensino = @estudante.instituicao_ensino.cidade.nome
-            c.escolaridade = @estudante.escolaridade.nome
             c.uf_inst_ensino = @estudante.instituicao_ensino.estado.sigla
-            c.curso_serie = @estudante.curso.nome
+            c.escolaridade = @estudante.escolaridade_nome
+            c.curso_serie = @estudante.curso_nome
               
             # Dados de pagamento
             c.valor = @estudante.entidade.valor_carteirinha.to_f+@estudante.entidade.frete_carteirinha.to_f
@@ -224,7 +224,12 @@ ActiveAdmin.register Carteirinha do
             c.forma_pagamento.a_definir!
               
             # Layout 
-            c.layout_carteirinha = @estudante.entidade.layout_carteirinhas.last
+            if @estudante.entidade.layout_carteirinhas
+              c.layout_carteirinha = @estudante.entidade.layout_carteirinhas.last
+            else
+              flash[:alert] = "Não foi possível criar carteirinha. Entidade #{@estudante.entidade.nome} não tem nenhum layout de carteirinha."
+              redirect_to estudante_admin_path @estudante
+            end
           end
 
           if @carteirinha.save! 

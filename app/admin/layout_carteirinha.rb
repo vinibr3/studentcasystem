@@ -1,13 +1,14 @@
 ActiveAdmin.register LayoutCarteirinha do
 	menu if: proc{current_admin_user.super_admin?}, priority: 4, parent: "Configurações"
-	
+	actions :all, except: [:destroy]
+
 	permit_params :anverso, :verso, :nome_posx, :nome_posy, :instituicao_ensino_posx, :instituicao_ensino_posy,
 	              :escolaridade_posx, :escolaridade_posy, :curso_posx, :curso_posy,
 	              :data_nascimento_posx, :data_nascimento_posy, :rg_posx, :rg_posy,
 	              :cpf_posx, :cpf_posy, :codigo_uso_posx, :codigo_uso_posy, 
 	              :nao_depois_posx, :nao_depois_posy, :qr_code_posx, :qr_code_posy,
 	              :qr_code_width, :qr_code_height, :foto_posx, :foto_posy,
-	              :foto_width, :foto_height
+	              :foto_width, :foto_height, :entidade_id
 
 	filter :anverso_file_name
 	filter :verso_file_name
@@ -25,6 +26,12 @@ ActiveAdmin.register LayoutCarteirinha do
 			attributes_table_for layout_carteirinha do
 				row :anverso do 
 					a layout_carteirinha.anverso_file_name, class: "show-popup-link", href: layout_carteirinha.anverso.url
+				end
+				row :verso do 
+					a layout_carteirinha.verso_file_name, class: "show-popup-link", href: layout_carteirinha.verso.url
+				end
+				row :entidade do
+					layout_carteirinha.entidade
 				end
 			end
 		end
@@ -66,13 +73,6 @@ ActiveAdmin.register LayoutCarteirinha do
 				end
 			end
 		end
-		panel "Verso" do 
-			attributes_table_for layout_carteirinha do
-				row :verso do 
-					a layout_carteirinha.verso_file_name, class: "show-popup-link", href: layout_carteirinha.verso.url
-				end
-			end
-		end
 		render inline: "<script type='text/javascript'>$('.show-popup-link').magnificPopup({type: 'image'});</script>"
 	end
 
@@ -81,6 +81,7 @@ ActiveAdmin.register LayoutCarteirinha do
 		f.inputs "Layout", multipart: true do 
 			f.input :anverso, label: "Frente", :hint => "Imagem Atual: #{f.object.anverso_file_name}"
 			f.input :verso, label: "Verso", :hint => "Imagem Atual: #{f.object.verso_file_name}"
+			f.input :entidade, collection: Entidade.all.map{|e| [e.nome, e.id]}, prompt: "Selecione Entidade", include_blank: false
 		end
 		panel "Informações" do
 			attributes_table_for layout_carteirinha do
