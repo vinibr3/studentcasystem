@@ -179,7 +179,7 @@ class Estudante < ActiveRecord::Base
 								 :celular=>"Celular", :logradouro=>"Logradouro", :numero =>"Número", :cep =>"CEP", 
 								 :cidade_id=>"Cidade", :instituicao_ensino_id=>"Instituição de Ensino", :curso_id =>"Curso",
 			           :matricula=>"Matrícula", :foto_file_name =>"Foto", :comprovante_matricula_file_name=>"Comprovante de matrícula", 
-			           :xerox_rg_file_name=>"Xerox RG", :xerox_cpf_file_name=>"Xerox CPF", :entidade=>"Entidade"}
+			           :xerox_rg_file_name=>"Xerox RG", :xerox_cpf_file_name=>"Xerox CPF", :entidade_id=>"Entidade"}
 		atributos.keys.each do |key|
 			nao_preenchidos << atributos[key] if self[key].blank?
 		end
