@@ -1,5 +1,4 @@
 class Carteirinha < ActiveRecord::Base
-	attr_reader :status_versao_impressas, :forma_pagamentos, :status_pagamentos
 
 	belongs_to :estudante
 	belongs_to :entidade
@@ -15,22 +14,20 @@ class Carteirinha < ActiveRecord::Base
 	FILES_NAME_PERMIT = [/png\Z/, /jpe?g\Z/, /pdf\Z/]
 	FILES_CONTENT_TYPE = ['image/jpeg', 'image/png', 'application/pdf']
 
-	#@@STATUS_VERSAO_DIGITAL = ["Pagamento", "Documentação", "Download", "Baixada"]
-	#@@STATUS_VERSAO_IMPRESSA = ["Pagamento", "Documentação", "Aprovada","Enviada", "Entregue", "Cancelada", "Revogada"]
 	EMAIL_REGEX = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/
 	STRING_REGEX = /\A[a-z A-Z]+\z/
 	LETRAS = /[A-Z a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+/
 
 	@@status_versao_impressas = {pagamento: "Pagamento", documentacao: "Documentação", aprovada: "Aprovada", 
-								   					enviada: "Enviada", entregue: "Entregue", cancelada: "Cancelada", revogada: "Revogada"}
+								   					   enviada: "Enviada", entregue: "Entregue", cancelada: "Cancelada", revogada: "Revogada"}
 
 	@@forma_pagamentos = {cartao_de_credito: "Cartão de crédito", boleto: "Boleto", a_definir: "A definir",
-										debito_online: "Débito online", saldo_pagseguro: "Saldo PagSeguro", 
-										oi_pago: "Oi Paggo", deposito_em_conta: "Depósito em conta", dinheiro: "Dinheiro"}							   				
+										    debito_online: "Débito online", saldo_pagseguro: "Saldo PagSeguro", 
+										    oi_pago: "Oi Paggo", deposito_em_conta: "Depósito em conta", dinheiro: "Dinheiro"}		   				
 
 	@@status_pagamentos = {iniciada: "Iniciada", aguardando_pagamento: "Aguardando pagamento", em_analise: "Em análise",
-							 				pago: "Pago", disponivel: "Disponível", em_disputa: "Em disputa", devolvida: "Devolvida",
-							 				cancelado: "Cancelada", contestada: "Contestada"}
+							 				   pago: "Pago", disponivel: "Disponível", em_disputa: "Em disputa", devolvida: "Devolvida",
+							 				   cancelado: "Cancelada", contestada: "Contestada"}
 
 	enum status_versao_impressa: @@status_versao_impressas
 	enum forma_pagamento: @@forma_pagamentos
@@ -164,7 +161,7 @@ class Carteirinha < ActiveRecord::Base
 			when 1 then self.pagamento!
 			when 2 then self.pagamento!
 		else 
-			status = @status_versao_impressas.each{|x| x.second}
+			status = @@status_versao_impressas.each{|x| x.second}
 			status.from(1)
 		end
 	end
