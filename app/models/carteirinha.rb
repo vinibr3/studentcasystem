@@ -136,16 +136,16 @@ class Carteirinha < ActiveRecord::Base
 	def status_versao_impressa_to_i
 		@@status_versao_impressas.each_value do |value|
 			index=0
-			return index if value = self.status_pagamento
-			index++
+			return index if value == self.status_pagamento
+			index=index+1
 		end
 	end
 
 	def status_pagamento_to_i
 		@@status_pagamentos.each_value do |value|
 			index=0
-			return index if value = self.status_pagamento
-			index++
+			return index if value == self.status_pagamento
+			index=index+1
 		end
 	end
 
