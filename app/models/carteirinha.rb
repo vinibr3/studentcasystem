@@ -153,7 +153,7 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def show_status_carteirinha_apartir_do_status_pagamento
-		self.status_pagamento_to_i <= 2 ? Carteirinha.pagamento : @@status_versao_impressas.keep_if{|key,value| value != Carteirinha.pagamento }
+		self.status_pagamento_to_i <= 2 ? Carteirinha.pagamento : @@status_versao_impressas.keep_if{|key,value| key != :pagamento }.each_value{|v| v}
 	end
 
 	def gera_dados_se_carteirinha_aprovada
