@@ -104,7 +104,7 @@ class Carteirinha < ActiveRecord::Base
 	def status_take_while
 		index = self.status_versao_impressa_to_i+1
 		statuses = @@status_versao_impressas.each_value{|v| v}
-		statuses.take index
+		statuses.to_a.take index
 	end
 
 	def solicitacao_cancelada_ou_revogada?
@@ -158,8 +158,8 @@ class Carteirinha < ActiveRecord::Base
 			when 1 then Carteirinha.pagamento
 			when 2 then Carteirinha.pagamento
 		else 
-			status = @@status_versao_impressas.each_value{|v| v}
-			status.from(1)
+			status = @@status_versao_impressas.delete :pagamento
+			status.each_value{|v| v}
 		end
 	end
 
