@@ -103,7 +103,7 @@ class Carteirinha < ActiveRecord::Base
 
 	def status_take_while
 		index = self.status_versao_impressa_to_i+1
-		statuses = status_versao_impressas.each_value{|v| v}
+		statuses = @@status_versao_impressas.each_value{|v| v}
 		statuses.take index
 	end
 
@@ -158,7 +158,7 @@ class Carteirinha < ActiveRecord::Base
 			when 1 then Carteirinha.pagamento
 			when 2 then Carteirinha.pagamento
 		else 
-			status = status_versao_impressas.each_value{|v| v}
+			status = @@status_versao_impressas.each_value{|v| v}
 			status.from(1)
 		end
 	end
