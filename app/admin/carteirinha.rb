@@ -234,7 +234,7 @@ ActiveAdmin.register Carteirinha do
 
           if @carteirinha.save! 
             flash[:success] = "Carteirinha criada para o estudante: #{@estudante.nome}. Altere os dados de pagamento."
-            redirect_to edit_carteirinha_admin_path
+            redirect_to edit_carteirinha_admin_path @carteirinha
           else
             flash[:error] = "Não foi possível criar carteirinha. @carteirinha.errors"
             redirect_to estudante_admin_path @estudante
