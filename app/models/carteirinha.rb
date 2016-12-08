@@ -25,7 +25,7 @@ class Carteirinha < ActiveRecord::Base
 										    debito_online: "Débito online", saldo_pagseguro: "Saldo PagSeguro", 
 										    oi_pago: "Oi Paggo", deposito_em_conta: "Depósito em conta", dinheiro: "Dinheiro"}		   				
 
-	@@status_pagamentos = {iniciada: "Iniciada", aguardando_pagamento: "Aguardando pagamento", em_analise: "Em análise",
+	@@status_pagamentos = {iniciado: "Iniciado", aguardando_pagamento: "Aguardando pagamento", em_analise: "Em análise",
 							 				   pago: "Pago", disponivel: "Disponível", em_disputa: "Em disputa", devolvida: "Devolvida",
 							 				   cancelado: "Cancelada", contestada: "Contestada"}
 
@@ -143,7 +143,7 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def check_status_carteirinha_apartir_status_pagamento
-		status_carteirinha = show_status_carteirinha_apartir_do_status_pagamento
+		status_carteirinha = Carteirinha.show_status_carteirinha_apartir_do_status_pagamento self.status_pagamento_to_i
 		st=false
 		status_carteirinha.each do |status|
 			st = true if self.status_versao_impressa == status[1] 
@@ -163,33 +163,39 @@ class Carteirinha < ActiveRecord::Base
 
 	def status_versao_impressa_to_i
 		index=-1
-		@@status_versao_impressas.each_key do |value|
+		@@status_versao_impressas.each_key do |key|
 			i=0
-			index = i if value == self.status_versao_impressa
+			index = i if key == self.status_versao_impressa.to_sym
 			i=i+1
 		end
 		index
 	end
 
 	def status_pagamento_to_i
+		Carteirinha.status_pagamento_to_i self.status_pagamento
+	end
+
+	def muda_status_carteirinha_apartir_status_pagamento
+		#em processamento
+		self.status_versao_impressa.to_sym = :pagamento if status_pagamento_to_i <= 2
+	end
+
+	def self.status_pagamento_to_i status_pagamento
 		index=-1
-		@@status_pagamentos.each_key do |value|
+		@@status_pagamentos.each_key do |key|
 			i=0
-			index = i if value == self.status_pagamento
+			index = i if key == status_pagamento.to_sym
 			i=i+1
 		end
 		index
 	end
 
-	def muda_status_carteirinha_apartir_status_pagamento
-		#em processamento
-		self.status_versao_impressa = :pagamento if status_pagamento_to_i <= 2
-	end
-
-	def show_status_carteirinha_apartir_do_status_pagamento
-		if self.status_pagamento_to_i <= 2  # iniciada, aguardando_pagamento, em_analise
+	def self.show_status_carteirinha_apartir_do_status_pagamento status_pagamento
+		# Calcula status_pagamento_to_i
+		status_pagamento_to_i = Carteirinha.status_pagamento_to_i status_pagamento
+		if status_pagamento_to_i <= 2  # iniciada, aguardando_pagamento, em_analise
 			[@@status_versao_impressas.first.reverse] # somente pagamento 
-		elsif self.status_pagamento_to_i >=3 && self.status_pagamento_to_i <= 5 # paga , disponível ou em_disputa
+		elsif status_pagamento_to_i >=3 && status_pagamento_to_i <= 5 # paga , disponível ou em_disputa
 			@@status_versao_impressas.map{|k,v| [v,k]} #todas as opções de status_versao impressa
 		else  # 
 			[[@@status_versao_impressa[:cancelada], :cancelada],[@@status_versao_impressa[:revogada], :revogada]]  # devolvida cancelada ou revogada

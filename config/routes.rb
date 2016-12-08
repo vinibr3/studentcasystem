@@ -37,6 +37,9 @@ Rails.application.routes.draw do
     resource :cursos, only: [:show]
   end
 
+  # Rota para obter status_versao_impressas via ajax
+  get 'carteirinhas/status', to: "carteirinhas#status_versao_impressas"
+
   # Rotas de UF/Cidades (usadas para obter lista de cidades)
   resources :estados, only: [:show] do
     resource :cidades, only: [:show]

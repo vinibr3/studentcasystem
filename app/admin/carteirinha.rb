@@ -144,14 +144,26 @@ ActiveAdmin.register Carteirinha do
             #     f.input :estudante_id, label: "Estudante ID"
             # end 
             f.inputs "Dados da Solicitação" do
-                f.input :status_pagamento, as: :select, include_blank: false, prompt: "Selecione status do pagamento", label: "Status do Pagamento"
-                f.input :status_versao_impressa, collection: f.object.show_status_carteirinha_apartir_do_status_pagamento, label: "Status da Solicitação", include_blank: false
+                f.input :status_pagamento, as: :select, include_blank: false, prompt: "Selecione status do pagamento", 
+                        label: "Status do Pagamento", :input_html=>{id:"status-pagamento-select"}
+                f.input :status_versao_impressa, collection: Carteirinha.show_status_carteirinha_apartir_do_status_pagamento f.object.status_pagamento, 
+                        label: "Status da Solicitação", include_blank: false, :input_html=>{id:"status-versao-impressas-select"}
                 f.input :forma_pagamento, as: :select, include_blank: false, prompt: "Selecione forma de pagamento", label: "Forma de Pagamento"
                 f.input :transaction_id, label: "Transação"
                 #f.input :alterado_por, label: "Alterado por"
             end
             f.actions
-
+      render inline: "<script type='text/javascript'>
+        $('#status-pagamento-select').change(function(){
+          var status_pagamento = $('#status-pagamento-select').val();
+          data = '{'carteirinha':{'status_pagamento':'+status_pagamento+'}}';
+          $.ajax({
+            url: 'carteirinhas/status',
+            dataType: 'script',
+            data: data
+          });
+        });
+      </script>"
     end
 
     before_update do |carteirinha|

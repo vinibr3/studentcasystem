@@ -44,8 +44,16 @@ class CarteirinhasController < ApplicationController
 		end			
 	end
 
+	def status_versao_impressas
+		@statuses = 
+		Carteirinha.show_status_carteirinha_apartir_do_status_pagamento carteirinha_params[:status_pagamento]
+		respond_to do |format|
+			format.js
+		end
+	end
+
 	private
 		def carteirinha_params
-			params.require(:carteirinha).permit(:valor_carteirinha, :termos, :frete_carteirinha)
+			params.require(:carteirinha).permit(:valor_carteirinha, :termos, :frete_carteirinha, :status_pagamento)
 		end
 end
