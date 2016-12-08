@@ -101,6 +101,30 @@ class Carteirinha < ActiveRecord::Base
 		end
 	end
 
+	def status_tag_versao_impressa
+		status=""
+		if self.status_versao_impressa_to_i <= 1
+			status = :warning
+		elsif self.status_versao_impressa_to_i >= 2 && self.status_versao_impressa_to_i <= 4 
+			status = :ok
+		elsif self.status_versao_impressa_to_i > 4 
+			status = :error
+		end
+		status
+	end
+
+	def status_tag_status_pagamento
+		status=""
+		if self.status_pagamento_to_i <= 2 
+			status = :warning
+		elsif self.status_pagamento_to_i > 2 && self.status_pagamento_to_i <= 4 
+			status = :ok
+		else self.status_pagamento_to_i > 4 
+			status = :error
+		end
+		status
+	end
+
 	def status_take_while
 		index = self.status_versao_impressa_to_i+1
 		statuses = @@status_versao_impressas.each_value{|v| v}

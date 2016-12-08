@@ -32,11 +32,21 @@ ActiveAdmin.register Carteirinha do
 	index do
 		selectable_column
     	column :nome 
-    	column :curso_serie
-      column :instituicao_ensino
-      column :valor 
-      column :status_pagamento
-      column "Status Pedido", :status_versao_impressa
+    	column "Curso" do |carteirinha|
+        carteirinha.curso_serie
+      end
+      column "Instituição de Ensino" do |carteirinha|
+        carteirinha.instituicao_ensino
+      end
+      column "Valor Pago" do |carteirinha|
+        carteirinha.valor
+      end
+      column "Status do Pagamento" do |carteirinha|
+        status_tag(carteirinha.status_pagamento, carteirinha.status_tag_status_pagamento )
+      end
+      column "Status da Solicitaçao" do |carteirinha|
+        status_tag(carteirinha.status_versao_impressa.humanize, carteirinha.status_tag_versao_impressa)
+      end
       column :alterado_por
       actions
 	end
@@ -87,12 +97,18 @@ ActiveAdmin.register Carteirinha do
         panel "Dados da Solicitaçao" do 
             attributes_table_for carteirinha do
                 row "Status" do 
-                    carteirinha.status_versao_impressa
+                    carteirinha.status_versao_impressa.humanize
                 end
                 row :valor
-                row :forma_pagamento
-                row :status_pagamento
-                row :transaction_id
+                row "Forma Pagamento" do
+                  carteirinha.forma_pagamento.humanize
+                end
+                row "Status Pagamento" do
+                  carteirinha.status_pagamento.humanize
+                end 
+                row "Transação" do
+                  carteirinha.transaction_id
+                end
                 row :alterado_por
             end
         end
@@ -101,7 +117,6 @@ ActiveAdmin.register Carteirinha do
 
     form do |f|
         f.semantic_errors *f.object.errors.keys
-        if current_admin_user.super_admin?
             f.inputs "Dados do Estudante" do
                 f.input :nome 
                 f.input :rg
@@ -118,24 +133,22 @@ ActiveAdmin.register Carteirinha do
                 f.input :matricula
                 f.input :comprovante_matricula, :hint => "Imagem Atual: #{f.object.comprovante_matricula_file_name}"
             end
-            f.inputs "Dados do Documento" do
-                f.input :nao_antes, as: :datepicker
-                f.input :nao_depois, as: :datepicker
-                f.input :codigo_uso
-                f.input :qr_code
-                f.input :certificado
-                f.input :numero_serie
-                f.input :layout_carteirinha_id, label:"Layout"
-                f.input :estudante_id, label: "Estudante ID"
-            end 
-        end
+            # f.inputs "Dados do Documento" do
+            #     f.input :nao_antes, as: :datepicker
+            #     f.input :nao_depois, as: :datepicker
+            #     f.input :codigo_uso
+            #     f.input :qr_code
+            #     f.input :certificado
+            #     f.input :numero_serie
+            #     f.input :layout_carteirinha_id, label:"Layout"
+            #     f.input :estudante_id, label: "Estudante ID"
+            # end 
             f.inputs "Dados da Solicitação" do
-                f.input :status_versao_impressa, collection: f.object.show_status_carteirinha_apartir_do_status_pagamento, label: "Status", include_blank: false
-                f.input :alterado_por, label: "Alterado por"
+                f.input :status_versao_impressa, collection: f.object.show_status_carteirinha_apartir_do_status_pagamento, label: "Status da Solicitação", include_blank: false
                 f.input :forma_pagamento, as: :select, include_blank: false, prompt: "Selecione forma de pagamento", label: "Forma de Pagamento"
                 f.input :status_pagamento, as: :select, include_blank: false, prompt: "Selecione status do pagamento", label: "Status do Pagamento"
-                f.input :status_versao_impressa, as: :select, include_blank: false, prompt: "Selecione Status", label: "Status da Solicitação"
-                f.input :transaction_id 
+                f.input :transaction_id, label: "Transação"
+                #f.input :alterado_por, label: "Alterado por"
             end
             f.actions
 
