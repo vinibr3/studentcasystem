@@ -154,7 +154,7 @@ class Carteirinha < ActiveRecord::Base
 
 	def show_status_carteirinha_apartir_do_status_pagamento
 		self.status_pagamento_to_i <= 2 ? 
-		@@status_versao_impressas[:pagamento].map{|k,v| [v,k]} : @@status_versao_impressas.map{|k,v| [v,k] if k != :pagamento}
+		[@@status_versao_impressas[:pagamento], :pagamento] : @@status_versao_impressas.map{|k,v| [v,k] if k != :pagamento}
 	end
 
 	def gera_dados_se_carteirinha_aprovada
