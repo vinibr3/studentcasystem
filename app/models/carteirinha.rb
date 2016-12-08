@@ -135,7 +135,7 @@ class Carteirinha < ActiveRecord::Base
 
 	def status_versao_impressa_to_i
 		index="3"
-		@@status_versao_impressas.each_value do |value|
+		@@status_versao_impressas.each_key do |value|
 			i=0
 			index = i if value == self.status_versao_impressa
 			i=i+1
@@ -145,7 +145,7 @@ class Carteirinha < ActiveRecord::Base
 
 	def status_pagamento_to_i
 		index="3"
-		@@status_pagamentos.each_value do |value|
+		@@status_pagamentos.each_key do |value|
 			i=0
 			index = i if value == self.status_pagamento
 			i=i+1
