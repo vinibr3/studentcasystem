@@ -149,7 +149,7 @@ class Carteirinha < ActiveRecord::Base
 
 	def muda_status_carteirinha_apartir_status_pagamento
 		#em processamento
-		self.status_versao_impressa = Carteirinha.pagamento if status_pagamento_to_i <= 2
+		self.status_versao_impressa = :pagamento if status_pagamento_to_i <= 2
 	end
 
 	def show_status_carteirinha_apartir_do_status_pagamento
