@@ -42,7 +42,7 @@ class Carteirinha < ActiveRecord::Base
 	validates :instituicao_ensino, length:{maximum: 50, too_long: "Máximo de 50 caracteres permitidos!."}, format: {with: LETRAS}, allow_blank: true
 	validates :cidade_inst_ensino, length:{maximum: 30, too_long:"Máximo de 70 carectetes é permitidos!"}, format:{with: LETRAS}, allow_blank: true
 	validates :curso_serie, length:{maximum: 40, too_long: "Máximo de 40 caracteres permitidos!."}, format:{with: LETRAS}, allow_blank: true
-	validates :termos, acceptance: tru
+	validates :termos, acceptance: true
 	validates :numero_serie, numericality: true, uniqueness: true, allow_blank: true
 	validates :cpf, numericality: true, length:{is: 11, too_long: "Necessário 11 caracteres.",  too_short: "Necessário 11 caracteres."}, allow_blank: true
 	validates :expedidor_rg, length:{maximum: 10, too_long:"Máximo de 10 caracteres permitidos!"}, 
@@ -103,7 +103,7 @@ class Carteirinha < ActiveRecord::Base
 
 	def status_take_while
 		index = self.status_versao_impressa_to_i+1
-		statuses = @@status_versao_impressas{|x| x.second}
+		statuses = status_versao_impressas.each_value{|v| v}
 		statuses.take index
 	end
 
@@ -158,7 +158,7 @@ class Carteirinha < ActiveRecord::Base
 			when 1 then Carteirinha.pagamento
 			when 2 then Carteirinha.pagamento
 		else 
-			status = @@status_versao_impressas.each{|x| x.second}
+			status = status_versao_impressas.each_value{|v| v}
 			status.from(1)
 		end
 	end
@@ -278,5 +278,5 @@ class Carteirinha < ActiveRecord::Base
 		def data_qr_code_blank layout
 			layout.qr_code_posx.blank? && layout.qr_code_posy.blank? && layout.qr_code_width.blank? && layout.qr_code_height.blank?
 		end
-
+end
 end
