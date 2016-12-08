@@ -219,9 +219,8 @@ ActiveAdmin.register Carteirinha do
               
             # Dados de pagamento
             c.valor = @estudante.entidade.valor_carteirinha.to_f+@estudante.entidade.frete_carteirinha.to_f
-            c.pagamento! #status versao impressa
-            c.iniciada!  #status pagamento
-            c.a_definir! #forma pagamento
+            c.status_pagamento = c.iniciada  #status pagamento
+            c.forma_pagamento = c.a_definir  #forma pagamento
               
             # Layout 
             if @estudante.entidade.layout_carteirinhas
