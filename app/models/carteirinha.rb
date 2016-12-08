@@ -157,9 +157,9 @@ class Carteirinha < ActiveRecord::Base
 
 	def show_status_carteirinha_apartir_do_status_pagamento
 		case self.status_pagamento_to_i
-			when 0 then self.pagamento!
-			when 1 then self.pagamento!
-			when 2 then self.pagamento!
+			when 0 then Carteirinha.pagamento
+			when 1 then Carteirinha.pagamento
+			when 2 then Carteirinha.pagamento
 		else 
 			status = @@status_versao_impressas.each{|x| x.second}
 			status.from(1)
