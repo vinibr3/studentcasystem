@@ -36,24 +36,21 @@ class Carteirinha < ActiveRecord::Base
 	# validações
 	validates :nome, length: { maximum: 70, too_long: "Máximo de 70 caracteres permitidos"}, format:{with: LETRAS, message:"Somente letras é permitido!"}
 	validates :instituicao_ensino, length:{maximum: 50}
-	validates :curso_serie, length:{maximum: 30}
+	validates :curso_serie, length:{maximum: 70}
 	validates :matricula, numericality: true, length:{maximum: 30}, allow_blank: true
 	validates :rg, numericality: {only_integer: true}
 	validates :instituicao_ensino, length:{maximum: 50, too_long: "Máximo de 50 caracteres permitidos!."}, format: {with: LETRAS}, allow_blank: true
 	validates :cidade_inst_ensino, length:{maximum: 30, too_long:"Máximo de 70 carectetes é permitidos!"}, format:{with: LETRAS}, allow_blank: true
 	validates :curso_serie, length:{maximum: 40, too_long: "Máximo de 40 caracteres permitidos!."}, format:{with: LETRAS}, allow_blank: true
-	#validates :codigo_uso, allow_blank: true
-	validates :termos, acceptance: true
-	#validates :status_versao_digital, inclusion:{in: %w(Pagamento Documentação Download Baixada)}
-	#validates :valor, length:{maximum: 4}
+	validates :termos, acceptance: tru
 	validates :numero_serie, numericality: true, uniqueness: true, allow_blank: true
 	validates :cpf, numericality: true, length:{is: 11, too_long: "Necessário 11 caracteres.",  too_short: "Necessário 11 caracteres."}, allow_blank: true
 	validates :expedidor_rg, length:{maximum: 10, too_long:"Máximo de 10 caracteres permitidos!"}, 
-							 format:{with:STRING_REGEX, message: "Somente letras é permitido!"}, allow_blank: true
+							 						 format:{with:STRING_REGEX, message: "Somente letras é permitido!"}, allow_blank: true
 	validates :uf_expedidor_rg, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
 	validates :uf_inst_ensino, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
 	validates :escolaridade, length:{maximum: 30, too_long: "Máximo de 30 caracteres permitidos!"},
-							 format:{with:LETRAS, message:"Somente letras é permitido"}, allow_blank: true
+							             format:{with:LETRAS, message:"Somente letras é permitido"}, allow_blank: true
 	#foto
 	validates_attachment_size :foto, :less_than => 1.megabytes
 	validates_attachment_file_name :foto, :matches => [/png\Z/, /jpe?g\Z/]
@@ -62,7 +59,7 @@ class Carteirinha < ActiveRecord::Base
 	validates_attachment_size :xerox_rg, :less_than => 1.megabytes
 	validates_attachment_file_name :xerox_rg, :matches => FILES_NAME_PERMIT
 	validates_attachment_content_type :xerox_rg, :content_type => FILES_CONTENT_TYPE
-	#xerox-cpf
+	#xerox_cpf
 	validates_attachment_size :xerox_cpf, :less_than => 1.megabytes
 	validates_attachment_file_name :xerox_cpf, :matches => FILES_NAME_PERMIT
 	validates_attachment_content_type :xerox_cpf, :content_type => FILES_CONTENT_TYPE
@@ -106,7 +103,7 @@ class Carteirinha < ActiveRecord::Base
 
 	def status_take_while
 		index = self.status_versao_impressa_to_i+1
-		statuses = status_versao_impressa{|x| x.second}
+		statuses = @@status_versao_impressas{|x| x.second}
 		statuses.take index
 	end
 
@@ -250,13 +247,8 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def self.gera_numero_serie(id)
-		last = where(status_versao_impressa: @@STATUS_VERSAO_IMPRESSA[2]).last
-		if last
-			return last.numero_serie if last.id == id
-			return last.id.to_i+1
-		else
-			return 1
-		end
+		last = where.not(numero_serie: nil).last 
+		if last ? last.numero_serie.to_i+1 : 1 
 	end
 
 	def self.gera_codigo_uso
