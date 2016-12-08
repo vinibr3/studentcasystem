@@ -117,22 +117,22 @@ ActiveAdmin.register Carteirinha do
 
     form do |f|
         f.semantic_errors *f.object.errors.keys
-            f.inputs "Dados do Estudante" do
-                f.input :nome 
-                f.input :rg
-                f.input :cpf
-                f.input :data_nascimento, as: :datepicker
-                f.input :foto, :hint => "Imagem Atual: #{f.object.foto_file_name}"
-                f.input :xerox_rg, :hint => "Imagem Atual: #{f.object.xerox_rg_file_name}"
-                f.input :xerox_cpf, :hint => "Imagem Atual: #{f.object.xerox_cpf_file_name}"
-            end
-            f.inputs "Dados Escolares" do
-                f.input :instituicao_ensino, collection: InstituicaoEnsino.all.map{|i| [i.nome, i.nome] }, include_blank: false
-                f.input :curso_serie, collection: Curso.all.map{|c| [c.nome, c.nome]}, include_blank: false, label: "Curso"
-                f.input :escolaridade, collection: Escolaridade.all.map{|e| [e.nome, e.nome]}, include_blank: false, label: "Curso"
-                f.input :matricula
-                f.input :comprovante_matricula, :hint => "Imagem Atual: #{f.object.comprovante_matricula_file_name}"
-            end
+            # f.inputs "Dados do Estudante" do
+            #     f.input :nome 
+            #     f.input :rg
+            #     f.input :cpf
+            #     f.input :data_nascimento, as: :datepicker
+            #     f.input :foto, :hint => "Imagem Atual: #{f.object.foto_file_name}"
+            #     f.input :xerox_rg, :hint => "Imagem Atual: #{f.object.xerox_rg_file_name}"
+            #     f.input :xerox_cpf, :hint => "Imagem Atual: #{f.object.xerox_cpf_file_name}"
+            # end
+            # f.inputs "Dados Escolares" do
+            #     f.input :instituicao_ensino, collection: InstituicaoEnsino.all.map{|i| [i.nome, i.nome] }, include_blank: false
+            #     f.input :curso_serie, collection: Curso.all.map{|c| [c.nome, c.nome]}, include_blank: false, label: "Curso"
+            #     f.input :escolaridade, collection: Escolaridade.all.map{|e| [e.nome, e.nome]}, include_blank: false, label: "Escolaridade"
+            #     f.input :matricula
+            #     f.input :comprovante_matricula, :hint => "Imagem Atual: #{f.object.comprovante_matricula_file_name}"
+            # end
             # f.inputs "Dados do Documento" do
             #     f.input :nao_antes, as: :datepicker
             #     f.input :nao_depois, as: :datepicker
@@ -144,9 +144,9 @@ ActiveAdmin.register Carteirinha do
             #     f.input :estudante_id, label: "Estudante ID"
             # end 
             f.inputs "Dados da Solicitação" do
+                f.input :status_pagamento, as: :select, include_blank: false, prompt: "Selecione status do pagamento", label: "Status do Pagamento"
                 f.input :status_versao_impressa, collection: f.object.show_status_carteirinha_apartir_do_status_pagamento, label: "Status da Solicitação", include_blank: false
                 f.input :forma_pagamento, as: :select, include_blank: false, prompt: "Selecione forma de pagamento", label: "Forma de Pagamento"
-                f.input :status_pagamento, as: :select, include_blank: false, prompt: "Selecione status do pagamento", label: "Status do Pagamento"
                 f.input :transaction_id, label: "Transação"
                 #f.input :alterado_por, label: "Alterado por"
             end

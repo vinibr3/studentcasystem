@@ -68,7 +68,8 @@ class Carteirinha < ActiveRecord::Base
 	validates_attachment_file_name :comprovante_matricula, :matches => FILES_NAME_PERMIT
 	validates_attachment_content_type :comprovante_matricula, :content_type => FILES_CONTENT_TYPE
 
-	validate :so_muda_status_versao_impressa_se_pagamento_confirmado, :nao_avancar_status_se_dados_em_branco
+	validate :so_muda_status_versao_impressa_se_pagamento_confirmado, :nao_avancar_status_se_dados_em_branco,
+					 :check_status_carteirinha_apartir_status_pagamento
 
 	before_update :gera_dados_se_carteirinha_aprovada, :muda_status_carteirinha_apartir_status_pagamento
 
@@ -141,6 +142,15 @@ class Carteirinha < ActiveRecord::Base
 		end
 	end
 
+	def check_status_carteirinha_apartir_status_pagamento
+		status_carteirinha = show_status_carteirinha_apartir_do_status_pagamento
+		st=false
+		status_carteirinha.each do |status|
+			st = true if self.status_versao_impressa == status[1] 
+		end
+		errors.add(:status_versao_impressa, "valor inválido para dado Status de Pagamento: #{self.status_pagamento.humanize} ") unless st
+	end
+
 	def nao_avancar_status_se_dados_em_branco
 		if self.status_versao_impressa_to_i >= 3 # ENVIADA OU ENTREGUE
             variavel = [:nao_antes, :nao_depois, :codigo_uso, :qr_code, :certificado, 
@@ -177,8 +187,13 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def show_status_carteirinha_apartir_do_status_pagamento
-		self.status_pagamento_to_i <= 2 ? 
-		[@@status_versao_impressas.first.reverse] : @@status_versao_impressas.delete_if{|k,v| k.to_sym == :pagamento}.map{|k,v| [v,k]}
+		if self.status_pagamento_to_i <= 2  # iniciada, aguardando_pagamento, em_analise
+			[@@status_versao_impressas.first.reverse] # somente pagamento 
+		elsif self.status_pagamento_to_i >=3 && self.status_pagamento_to_i <= 5 # paga , disponível ou em_disputa
+			@@status_versao_impressas.map{|k,v| [v,k]} #todas as opções de status_versao impressa
+		else  # 
+			[[@@status_versao_impressa[:cancelada], :cancelada],[@@status_versao_impressa[:revogada], :revogada]]  # devolvida cancelada ou revogada
+		end
 	end
 
 	def gera_dados_se_carteirinha_aprovada
