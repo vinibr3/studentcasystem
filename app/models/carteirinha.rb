@@ -142,6 +142,7 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def status_pagamento_to_i
+		puts "STATUS PAGMENTO #{self.status_pagamento}"
 		@@status_pagamentos.each_value do |value|
 			index=0
 			return index if value == self.status_pagamento
