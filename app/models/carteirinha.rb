@@ -134,20 +134,23 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def status_versao_impressa_to_i
+		index="3"
 		@@status_versao_impressas.each_value do |value|
-			index=0
-			return index if value == self.status_pagamento
-			index=index+1
+			i=0
+			index = i if value == self.status_versao_impressa
+			i=i+1
 		end
+		index
 	end
 
 	def status_pagamento_to_i
-		puts "STATUS PAGMENTO #{self.status_pagamento}"
+		index="3"
 		@@status_pagamentos.each_value do |value|
-			index=0
-			return index if value == self.status_pagamento
-			index=index+1
+			i=0
+			index = i if value == self.status_pagamento
+			i=i+1
 		end
+		index
 	end
 
 	def muda_status_carteirinha_apartir_status_pagamento
