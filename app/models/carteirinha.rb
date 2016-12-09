@@ -116,11 +116,12 @@ class Carteirinha < ActiveRecord::Base
 
 	def status_tag_status_pagamento
 		status=""
-		if self.status_pagamento_to_i <= 2 
+		status_pgto_to_i = self.status_pagamento_to_i
+		if status_pgto_to_i <= 2 
 			status = :warning
-		elsif self.status_pagamento_to_i > 2 && self.status_pagamento_to_i <= 4 
+		elsif status_pgto_to_i > 2 && status_pgto_to_i <= 4 
 			status = :ok
-		else self.status_pagamento_to_i > 4 
+		else status_pgto_to_i > 4 
 			status = :error
 		end
 		status
