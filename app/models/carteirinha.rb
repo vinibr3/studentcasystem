@@ -216,8 +216,7 @@ class Carteirinha < ActiveRecord::Base
             self.nao_depois = Time.new(Time.new.year+1, 3, 31).to_date                    if self.nao_depois.blank? 
             self.numero_serie = Carteirinha.gera_numero_serie                             if self.numero_serie.blank?
             self.codigo_uso = Carteirinha.gera_codigo_uso                                 if self.codigo_uso.blank?
-   			self.qr_code = 
-   				"/"+estudante.entidade.url_qr_code.concat(estudante.chave_acesso) 		  if self.qr_code.blank?
+   			self.qr_code = estudante.entidade.url_qr_code.concat("/#{estudante.chave_acesso}") 	if self.qr_code.blank?
             
             # Salva documentação do estudante para a carteirinha
             self.foto = estudante.foto                                             if self.foto.blank?
@@ -313,5 +312,5 @@ class Carteirinha < ActiveRecord::Base
 		def data_qr_code_blank layout
 			layout.qr_code_posx.blank? && layout.qr_code_posy.blank? && layout.qr_code_width.blank? && layout.qr_code_height.blank?
 		end
-end
+
 end
