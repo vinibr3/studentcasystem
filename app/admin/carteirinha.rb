@@ -44,7 +44,7 @@ ActiveAdmin.register Carteirinha do
       column "Status do Pagamento" do |carteirinha|
         status_tag(carteirinha.status_pagamento, :ok )
       end
-      column "Status da Solicitaçao" do |carteirinha|
+      column "Status da Versão Impressa" do |carteirinha|
         status_tag(carteirinha.status_versao_impressa.humanize, carteirinha.status_tag_versao_impressa)
       end
       column :alterado_por
@@ -96,7 +96,7 @@ ActiveAdmin.register Carteirinha do
         end
         panel "Dados da Solicitaçao" do 
             attributes_table_for carteirinha do
-                row "Status" do 
+                row "Status da Versão Impressa" do 
                     carteirinha.status_versao_impressa.humanize
                 end
                 row :valor
@@ -147,7 +147,7 @@ ActiveAdmin.register Carteirinha do
                 f.input :status_pagamento, as: :select, include_blank: false, prompt: "Selecione status do pagamento", 
                         label: "Status do Pagamento", :input_html=>{:id=>"status-pagamento-select"}
                 f.input :status_versao_impressa, collection: Carteirinha.show_status_carteirinha_apartir_do_status_pagamento(f.object.status_pagamento), 
-                        label: "Status da Solicitação", include_blank: false, :input_html=>{:id=>"status-versao-impressas-select"}
+                        label: "Status da Versão Impressa", include_blank: false, :input_html=>{:id=>"status-versao-impressas-select"}
                 f.input :forma_pagamento, as: :select, include_blank: false, prompt: "Selecione forma de pagamento", label: "Forma de Pagamento"
                 f.input :transaction_id, label: "Transação"
                 #f.input :alterado_por, label: "Alterado por"

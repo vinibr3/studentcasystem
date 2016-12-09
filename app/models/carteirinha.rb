@@ -193,14 +193,16 @@ class Carteirinha < ActiveRecord::Base
 
 	def self.show_status_carteirinha_apartir_do_status_pagamento status_pgto
 		# Calcula status_pagamento_to_i
-		status_pagamento_to_i = Carteirinha.status_pagamento_to_i status_pgto
-		if status_pagamento_to_i <= 2  # iniciada, aguardando_pagamento, em_analise
-			[@@status_versao_impressas.first.reverse] # somente pagamento 
-		elsif status_pagamento_to_i >=3 && status_pagamento_to_i <= 5 # paga , disponível ou em_disputa
-			@@status_versao_impressas.map{|k,v| [v,k]} #todas as opções de status_versao impressa
+		status_pgto_to_i = Carteirinha.status_pagamento_to_i status_pgto
+		status=[]
+		if status_pgto_to_i <= 2  # iniciada, aguardando_pagamento, em_analise
+			status = [@@status_versao_impressas.first.reverse] # somente pagamento 
+		elsif status_pgto_to_i >=3 && status_pgto_to_i <= 5 # paga , disponível ou em_disputa
+			status = @@status_versao_impressas.map{|k,v| [v,k]} #todas as opções de status_versao impressa
 		else  # 
-			[[@@status_versao_impressa[:cancelada], :cancelada],[@@status_versao_impressa[:revogada], :revogada]]  # devolvida cancelada ou revogada
+			status = [[@@status_versao_impressa[:cancelada], :cancelada],[@@status_versao_impressa[:revogada], :revogada]]  # devolvida cancelada ou revogada
 		end
+		status
 	end
 
 	def gera_dados_se_carteirinha_aprovada
