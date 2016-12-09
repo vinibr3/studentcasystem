@@ -202,7 +202,7 @@ class Carteirinha < ActiveRecord::Base
 		elsif status_pgto_to_i > 5  # devolvida cancelada ou revogada
 			status = @@status_versao_impressas.select{|k,v| k == :cancelada || k == :revogada || k == :devolvida}.map{|k,v| [v,k]} 
 		end
-		status
+		status=@@status_versao_impressas.map{|k,v| [v,k]}
 	end
 
 	def gera_dados_se_carteirinha_aprovada
