@@ -137,7 +137,7 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def so_muda_status_versao_impressa_se_pagamento_confirmado
-		if status_pagamento_to_i < 3 # pagamento nao confirmado
+		if self.status_pagamento_to_i < 3 # pagamento nao confirmado
 			 errors.add(:status_versao_impressa, "pagamento da CIE não foi realizado") if status_versao_impressa_to_i >= 1
 		end
 	end
@@ -172,7 +172,7 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def status_pagamento_to_i
-		Carteirinha.status_pagamento_to_i self.status_pagamento
+		Carteirinha.status_pagamento_to_i(self.status_pagamento)
 	end
 
 	def muda_status_carteirinha_apartir_status_pagamento
@@ -180,19 +180,19 @@ class Carteirinha < ActiveRecord::Base
 		self.status_versao_impressa.to_sym = :pagamento if status_pagamento_to_i <= 2
 	end
 
-	def self.status_pagamento_to_i status_pagamento
+	def self.status_pagamento_to_i status_pgto
 		index=-1
 		@@status_pagamentos.each_key do |key|
 			i=0
-			index = i if key == status_pagamento.to_sym
+			index = i if key == status_pgto.to_sym
 			i=i+1
 		end
 		index
 	end
 
-	def self.show_status_carteirinha_apartir_do_status_pagamento status_pagamento
+	def self.show_status_carteirinha_apartir_do_status_pagamento status_pgto
 		# Calcula status_pagamento_to_i
-		status_pagamento_to_i = Carteirinha.status_pagamento_to_i status_pagamento
+		status_pagamento_to_i = Carteirinha.status_pagamento_to_i status_pgto
 		if status_pagamento_to_i <= 2  # iniciada, aguardando_pagamento, em_analise
 			[@@status_versao_impressas.first.reverse] # somente pagamento 
 		elsif status_pagamento_to_i >=3 && status_pagamento_to_i <= 5 # paga , disponível ou em_disputa
