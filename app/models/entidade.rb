@@ -19,7 +19,7 @@ class Entidade < ActiveRecord::Base
 
 	#dados entidade
 	validates :nome, length: { maximum: 70, too_long: "Máximo de #{count} caracteres permitidos."}, 
-	                 format: {with: LETRAS, message:"Somente letras é permitidos."}
+	                 format: {with: LETRAS, message:"Somente letras é permitidos."}, allow_blank: false
 	validates :sigla, length: {maximum: 10, too_long: "Máximo de #{count} caracteres permitidos."},
 					  format: {with: STRING_REGEX, message: "Somente letras é permitido"}, allow_blank: false				  
 	validates :email, uniqueness: {message: "Email já utilizado"}, format: {with: EMAIL_REGEX, on: :create}
@@ -34,6 +34,10 @@ class Entidade < ActiveRecord::Base
 	validates :cep, length:{is: 8, wrong_length: "#{count} caracteres."}, numericality: true, allow_blank: true
 	validates :cidade, length: {maximum: 50, too_long: "Máximo de #{count} caracteres permitidos."}, allow_blank: true
 	validates :uf, length: {is: 2, wrong_length: "Máximo de 2 caracteres permitidos."}, format: {with: STRING_REGEX}, allow_blank: true
+	validates :url_qr_code, length: {maximum: 70, too_long: "Máximo de #{count} caracteres permitidos."}, allow_blank: false
+	validates :auth_info_access, length:{maximum: 100, too_long: "Máximo de #{count} caracteres permitidos."}, allow_blank: false
+	validates :crl_dist_points, length:{maximum: 100, too_long: "Máximo de #{count} caracteres permitidos."}, allow_blank: false
+	validates :dominio, length:{maximum: 100, too_long: "Máximo de #{count} caracteres permitidos."}, format:{with: URI.regexp}, allow_blank: false
 	validates_attachment_size :logo, :less_than => 1.megabytes
 	validates_attachment_file_name :logo, :matches => FILES_NAME_PERMIT
 	validates_attachment_content_type :logo, :content_type => FILES_CONTENT_TYPE
@@ -56,6 +60,14 @@ class Entidade < ActiveRecord::Base
 	validates :cep_presidente, length:{is: 8, wrong_length: "8 caracteres."}, numericality: true, allow_blank: true
 	validates :cidade_presidente, length: {maximum: 50, too_long: "Máximo de #{count} caracteres permitidos."}, allow_blank: true
 	validates :uf_presidente, length: {is: 2, wrong_length: "Máximo de 2 caracteres permitidos."}, format: {with: STRING_REGEX}, allow_blank: true
+
+	validates_presence_of :nome, :sigla, :email, :valor_carteirinha, :url_qr_code, :auth_info_access, :crl_dist_points, :dominio 
+
+	before_save :config_url_qr_code_from_dominio
+
+	def config_url_qr_code_from_dominio
+		self.url_qr_code = self.dominio.concat(url_for controller:"certificados", action: "show")  
+	end
 
 	def self.instance
 		entidade = Entidade.last

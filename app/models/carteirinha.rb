@@ -210,19 +210,20 @@ class Carteirinha < ActiveRecord::Base
 	def gera_dados_se_carteirinha_aprovada
 		if self.aprovada? # Status é 'Aprovada'
             # Gera informações  
-            self.layout_carteirinha_id = LayoutCarteirinha.last_layout_id                 if self.layout_carteirinha_id.blank?
+            estudante = self.estudante
+            self.layout_carteirinha = estudante.entidade.layout_carteirinha               if self.layout_carteirinha.blank?
             self.nao_antes = Time.new                                                     if self.nao_antes.blank?
             self.nao_depois = Time.new(Time.new.year+1, 3, 31).to_date                    if self.nao_depois.blank? 
-            self.numero_serie = Carteirinha.gera_numero_serie(self.id)                    if self.numero_serie.blank?
+            self.numero_serie = Carteirinha.gera_numero_serie                             if self.numero_serie.blank?
             self.codigo_uso = Carteirinha.gera_codigo_uso                                 if self.codigo_uso.blank?
-            self.qr_code = Carteirinha.gera_qr_code(self.estudante.chave_acesso)          if self.qr_code.blank?
+   					self.qr_code = estudante.entidade.url_qr_code.concat(estudante.chave_acesso) 	if self.qr_code.blank?
+            
             # Salva documentação do estudante para a carteirinha
-            estudante = self.estudante
             self.foto = estudante.foto                                             if self.foto.blank?
             self.xerox_rg = estudante.xerox_rg                                     if self.xerox_rg.blank?
             self.xerox_cpf = estudante.xerox_cpf                                   if self.xerox_cpf.blank?
             self.comprovante_matricula = estudante.comprovante_matricula           if self.comprovante_matricula.blank?
-     end
+     	end
 	end
 
 	def to_blob
@@ -290,7 +291,7 @@ class Carteirinha < ActiveRecord::Base
 		end
 	end
 
-	def self.gera_numero_serie(id)
+	def self.gera_numero_serie
 		last = where.not(numero_serie: nil).last 
 		if last ? last.numero_serie.to_i+1 : 1 
 	end
@@ -298,17 +299,6 @@ class Carteirinha < ActiveRecord::Base
 	def self.gera_codigo_uso
 		SecureRandom.hex(4).upcase
 	end 
-
-	def self.gera_qr_code chave_acesso
-		entidade = Entidade.instance
-		url_qr_code = entidade.url_qr_code
-		if url_qr_code.blank? || url_qr_code.nil?
-			raise "url_qr_code não informada para a entidade."
-		else
-			url_qr_code.end_with?("/") ? url_qr_code.concat(chave_acesso) : url_qr_code.concat("/#{chave_acesso}")
-			url_qr_code
-		end
-	end
 
 	protected
 		def vencida

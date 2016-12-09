@@ -11,7 +11,7 @@ ActiveAdmin.register Entidade do
 	              :logradouro_presidente, :numero_presidente, :complemento_presidente,
 	              :cep_presidente, :cidade_presidente, :uf_presidente, 
 	              :usuario, :url_qr_code, :token_certificado, 
-	              :url_certificado, :auth_info_access, :crl_dist_points
+	              :auth_info_access, :crl_dist_points, :dominio
 
 	filter :nome
 	filter :sigla
@@ -41,8 +41,8 @@ ActiveAdmin.register Entidade do
 				row :telefone
 				row :usuario, "Chave Pública"
 				row :token_certificado, "Senha"
+				row :dominio, "Domínio"
 				row :url_qr_code, "URl QR-Code"
-				row :url_certificado, "URL Certificado"
 				row :auth_info_access, "Autoridade de Acesso à Informação (URL)"
 				row :crl_dist_points, "CRL Ponto de Distribuição (URL)"
 			end
@@ -94,8 +94,9 @@ ActiveAdmin.register Entidade do
 			f.input :telefone
 			f.input :usuario
 			f.input :token_certificado, label: "Senha"
-			f.input :url_qr_code, label: "URL Qr-Code"
-			f.input :url_certificado, label: "URL Certificado"
+			f.input :dominio, label: "Domínio"
+			# f.input :url_qr_code, label: "URL Qr-Code"
+			# f.input :url_certificado, label: "URL Certificado"
 			f.input :auth_info_access, label: "Autoridade de Acesso à Informação (URL)"
 			f.input :crl_dist_points, label: "CRL Ponto de Distribuição (URL)"
 		end
@@ -127,17 +128,6 @@ ActiveAdmin.register Entidade do
 			f.input :uf_presidente, label: "UF"
 		end
 		f.actions
-	end
-
-	controller do
-		def create 
-			if Entidade.count == 0
-				create!
-			else
-				redirect_to admin_entidades_path
-				flash[:notice] = "Somente uma entidade pode ser cadastrada."
-			end
-		end
 	end
 
 end

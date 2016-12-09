@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161203040154) do
+ActiveRecord::Schema.define(version: 20161209191659) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -198,7 +198,7 @@ ActiveRecord::Schema.define(version: 20161203040154) do
     t.string   "usuario"
     t.string   "url_qr_code"
     t.string   "token_certificado"
-    t.string   "url_certificado"
+    t.string   "dominio"
     t.string   "logo_file_name"
     t.string   "logo_content_type"
     t.integer  "logo_file_size"
@@ -211,7 +211,7 @@ ActiveRecord::Schema.define(version: 20161203040154) do
     t.string   "nome"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
-    t.string   "status",     limit: 1, default: "1"
+    t.string   "status",     limit: 1
   end
 
   create_table "estados", force: :cascade do |t|
