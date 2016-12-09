@@ -239,7 +239,8 @@ class Carteirinha < ActiveRecord::Base
 		draw.annotate(img, 0, 0, lyt.curso_posx, lyt.curso_posy, self.curso_serie.upcase)                                        unless lyt.curso_posx.blank? && lyt.curso_posy.blank? 
 		draw.annotate(img, 0, 0, lyt.data_nascimento_posx, lyt.data_nascimento_posy, self.data_nascimento.strftime("%d/%m/%Y"))  unless lyt.data_nascimento_posx.blank? && lyt.data_nascimento_posy.blank? 
 		draw.annotate(img, 0, 0, lyt.rg_posx, lyt.rg_posy, self.rg)                                                  		 	 unless lyt.rg_posx.blank? && lyt.rg_posy.blank? 
-		draw.annotate(img, 0, 0, lyt.cpf_posx, lyt.cpf_posy, self.cpf)                                                           unless lyt.cpf_posx.blank? && lyt.cpf_posy.blank? 
+		draw.annotate(img, 0, 0, lyt.cpf_posx, lyt.cpf_posy, self.cpf)                                                           unless lyt.cpf_posx.blank? && lyt.cpf_posy.blank?
+		draw.annotate(img, 0, 0, lyt.matricula_posx, lyt.matricula_posy, self.matricula)                                         unless lyt.matricula_posx.blank? && lyt.matricula_posy.blank?                    
 		draw.annotate(img, 0, 0, lyt.nao_depois_posx, lyt.nao_depois_posy, self.nao_depois.strftime("%d/%m/%Y"))                 unless lyt.nao_depois_posx.blank? && lyt.nao_depois_posy.blank?
 		draw.font_weight(700)  # bold                                             			                                             
 		draw.annotate(img, 0, 0, lyt.codigo_uso_posx, lyt.codigo_uso_posy, self.codigo_uso.upcase)                         		 unless lyt.codigo_uso_posx.blank? && lyt.codigo_uso_posy.blank? 

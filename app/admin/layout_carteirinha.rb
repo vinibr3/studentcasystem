@@ -126,7 +126,7 @@ ActiveAdmin.register LayoutCarteirinha do
 					td f.input :codigo_uso_posx, label:"Posição X  "
 					td f.input :codigo_uso_posy, label:"Posição Y  "
 				end
-				row "Não Depois" do 
+				row "Validade" do 
 					td f.input :nao_depois_posx, label:"Posição X  "
 					td f.input :nao_depois_posy, label:"Posição Y  "
 				end
