@@ -146,7 +146,7 @@ class Carteirinha < ActiveRecord::Base
 	def check_status_carteirinha_apartir_status_pagamento
 		status_carteirinha = Carteirinha.show_status_carteirinha_apartir_do_status_pagamento self.status_pagamento
 		st=false
-		status_carteirinha.each do |key|
+		status_carteirinha.each_key do |key|
 			st = true if self.status_versao_impressa.to_sym == key
 		end
 		errors.add(:status_versao_impressa, "valor inválido para dado Status de Pagamento: #{self.status_pagamento.humanize} ") unless st
