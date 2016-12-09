@@ -10,6 +10,7 @@ class LayoutCarteirinha < ActiveRecord::Base
 	FILES_NAME_PERMIT = [/png\Z/, /jpe?g\Z/]
 	FILES_CONTENT_TYPE = ['image/jpeg', 'image/png']
 
+	validates :matricula, numericality: true, length:{maximum: 30}, allow_blank: true
 	validates_attachment_size :verso, :less_than=> 2.megabytes
 	validates_attachment_file_name :verso, :matches => FILES_NAME_PERMIT
 	validates_attachment_content_type :verso, :content_type => FILES_CONTENT_TYPE
@@ -21,33 +22,20 @@ class LayoutCarteirinha < ActiveRecord::Base
 	                          :escolaridade_posx, :escolaridade_posy, :curso_posx, :curso_posy,
 	                          :data_nascimento_posx, :data_nascimento_posy, :rg_posx, :rg_posy, 
 	                          :cpf_posx, :cpf_posy, :codigo_uso_posx, :codigo_uso_posy, 
-	                          :nao_depois_posx, :nao_depois_posy, :qr_code_posx, :qr_code_posy
+	                          :nao_depois_posx, :nao_depois_posy, :qr_code_posx, :qr_code_posy, :matricula_posx, :matricula_posy
 	
 	validates_presence_of :nome_posx, :nome_posy, :instituicao_ensino_posx, :instituicao_ensino_posy,
-	                      :escolaridade_posx, :escolaridade_posy, :curso_posx, :curso_posy,
+	                      :curso_posx, :curso_posy, :matricula_posx, :matricula_posy
 	                      :data_nascimento_posx, :data_nascimento_posy, :rg_posx, :rg_posy, 
-	                      :codigo_uso_posx, :codigo_uso_posy, :foto_posx, :foto_posy, :foto_width, :foto_height,
-	                      :nao_depois_posx, :nao_depois_posy, :qr_code_posx, :qr_code_posy, :qr_code_width, :qr_code_height
+	                      :codigo_uso_posx, :codigo_uso_posy, :foto_posx, :foto_posy, :foto_width, 
+	                      :foto_height, :qr_code_posx, :qr_code_posy, :qr_code_width, :qr_code_height, 
+	                      
 
 	validates_presence_of :verso, :anverso, :entidade
 	validates_associated :entidade                                   
 
 	def entidade_nome
 		self.entidade.nome if self.entidade
-	end
-
-	def self.instance
-		last
-	end
-
-	def self.last_layout_id
-		last = self.instance
-		last.nil? ? 0 : last.id
-	end
-
-	def self.anverso
-		last = self.instance
-		last ? last.anverso : nil
 	end
 
 end

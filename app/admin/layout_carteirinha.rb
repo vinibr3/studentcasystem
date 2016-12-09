@@ -8,7 +8,7 @@ ActiveAdmin.register LayoutCarteirinha do
 	              :cpf_posx, :cpf_posy, :codigo_uso_posx, :codigo_uso_posy, 
 	              :nao_depois_posx, :nao_depois_posy, :qr_code_posx, :qr_code_posy,
 	              :qr_code_width, :qr_code_height, :foto_posx, :foto_posy,
-	              :foto_width, :foto_height, :entidade_id
+	              :foto_width, :foto_height, :entidade_id. :matricula_posx, :matricula_posy
 
 	filter :anverso_file_name
 	filter :verso_file_name
@@ -49,6 +49,7 @@ ActiveAdmin.register LayoutCarteirinha do
 						row :data_nascimento_posx
 						row :rg_posx
 						row :cpf_posx
+						row :matricula_posx
 						row :codigo_uso_posx
 						row :nao_depois_posx
 						row :qr_code_posx
@@ -66,6 +67,7 @@ ActiveAdmin.register LayoutCarteirinha do
 						row :data_nascimento_posy
 						row :rg_posy
 						row :cpf_posy
+						row :matricula_posy
 						row :codigo_uso_posy
 						row :nao_depois_posy
 						row :qr_code_posy
@@ -115,6 +117,10 @@ ActiveAdmin.register LayoutCarteirinha do
 				row "CPF" do 
 					td f.input :cpf_posx, label:"Posição X  "
 					td f.input :cpf_posy, label:"Posição Y  "
+				end
+				row "Matrìcula" do 
+					td f.input :matricula_posx, label:"Posição X  "
+					td f.input :matricula_posy, label:"Posição Y  "
 				end
 				row "Código de Uso" do 
 					td f.input :codigo_uso_posx, label:"Posição X  "
