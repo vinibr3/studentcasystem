@@ -46,7 +46,7 @@ class CarteirinhasController < ApplicationController
 
 	def status_versao_impressas
 		@statuses = 
-		Carteirinha.show_status_carteirinha_apartir_do_status_pagamento carteirinha_params[:status_pagamento]
+		Carteirinha.show_status_carteirinha_apartir_do_status_pagamento params[:status_pagamento]
 		respond_to do |format|
 			format.js
 		end

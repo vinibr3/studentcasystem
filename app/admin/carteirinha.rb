@@ -158,8 +158,7 @@ ActiveAdmin.register Carteirinha do
           var status_pagamento = $('#status-pagamento-select').val();
           $.ajax({
             url: 'carteirinhas/status?status_pagamento='.concat(status_pagamento),
-            dataType: 'ssript',
-            data: data
+            dataType: 'script'
           });
         });
       </script>"
