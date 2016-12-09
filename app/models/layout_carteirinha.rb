@@ -10,7 +10,6 @@ class LayoutCarteirinha < ActiveRecord::Base
 	FILES_NAME_PERMIT = [/png\Z/, /jpe?g\Z/]
 	FILES_CONTENT_TYPE = ['image/jpeg', 'image/png']
 
-	validates :matricula, numericality: true, length:{maximum: 30}, allow_blank: true
 	validates_attachment_size :verso, :less_than=> 2.megabytes
 	validates_attachment_file_name :verso, :matches => FILES_NAME_PERMIT
 	validates_attachment_content_type :verso, :content_type => FILES_CONTENT_TYPE
