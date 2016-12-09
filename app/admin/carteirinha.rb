@@ -156,10 +156,9 @@ ActiveAdmin.register Carteirinha do
       render inline: "<script type='text/javascript'>
         $('#status-pagamento-select').change(function(){
           var status_pagamento = $('#status-pagamento-select').val();
-          data = '{'carteirinha':{'status_pagamento':'+status_pagamento+'}}';
           $.ajax({
-            url: 'carteirinhas/status',
-            dataType: 'script',
+            url: 'carteirinhas/status?status_pagamento='.concat(status_pagamento),
+            dataType: 'ssript',
             data: data
           });
         });
