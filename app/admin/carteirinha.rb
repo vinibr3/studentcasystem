@@ -117,22 +117,24 @@ ActiveAdmin.register Carteirinha do
 
     form do |f|
         f.semantic_errors *f.object.errors.keys
-            # f.inputs "Dados do Estudante" do
-            #     f.input :nome 
-            #     f.input :rg
-            #     f.input :cpf
-            #     f.input :data_nascimento, as: :datepicker
-            #     f.input :foto, :hint => "Imagem Atual: #{f.object.foto_file_name}"
-            #     f.input :xerox_rg, :hint => "Imagem Atual: #{f.object.xerox_rg_file_name}"
-            #     f.input :xerox_cpf, :hint => "Imagem Atual: #{f.object.xerox_cpf_file_name}"
-            # end
-            # f.inputs "Dados Escolares" do
-            #     f.input :instituicao_ensino, collection: InstituicaoEnsino.all.map{|i| [i.nome, i.nome] }, include_blank: false
-            #     f.input :curso_serie, collection: Curso.all.map{|c| [c.nome, c.nome]}, include_blank: false, label: "Curso"
-            #     f.input :escolaridade, collection: Escolaridade.all.map{|e| [e.nome, e.nome]}, include_blank: false, label: "Escolaridade"
-            #     f.input :matricula
-            #     f.input :comprovante_matricula, :hint => "Imagem Atual: #{f.object.comprovante_matricula_file_name}"
-            # end
+            f.inputs "Dados do Estudante" do
+                f.input :nome 
+                f.input :rg
+                f.input :cpf
+                f.input :data_nascimento, as: :datepicker, datepicker_options: { day_names_min: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
+                                                                                                    month_names_short: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+                                                                                                    year_range: "1930:", show_anim: "slideDown", changeMonth: true, changeYear: true}
+                f.input :foto, :hint => "Imagem Atual: #{f.object.foto_file_name}"
+                f.input :xerox_rg, :hint => "Imagem Atual: #{f.object.xerox_rg_file_name}"
+                f.input :xerox_cpf, :hint => "Imagem Atual: #{f.object.xerox_cpf_file_name}"
+            end
+            f.inputs "Dados Escolares" do
+                f.input :instituicao_ensino, collection: InstituicaoEnsino.all.map{|i| [i.nome, i.nome] }, include_blank: false
+                f.input :curso_serie, collection: Curso.all.map{|c| [c.nome, c.nome]}, include_blank: false, label: "Curso"
+                f.input :escolaridade, collection: Escolaridade.all.map{|e| [e.nome, e.nome]}, include_blank: false, label: "Escolaridade"
+                f.input :matricula
+                f.input :comprovante_matricula, :hint => "Imagem Atual: #{f.object.comprovante_matricula_file_name}"
+            end
             # f.inputs "Dados do Documento" do
             #     f.input :nao_antes, as: :datepicker
             #     f.input :nao_depois, as: :datepicker
@@ -150,7 +152,6 @@ ActiveAdmin.register Carteirinha do
                         collection: Carteirinha.show_status_carteirinha_apartir_do_status_pagamento(f.object.status_pagamento).map{|k,v| [v,k]} 
                 f.input :forma_pagamento, as: :select, include_blank: false, prompt: "Selecione forma de pagamento", label: "Forma de Pagamento"
                 f.input :transaction_id, label: "Transação"
-                #f.input :alterado_por, label: "Alterado por"
             end
             f.actions
       render inline: "<script type='text/javascript'>
