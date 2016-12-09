@@ -197,8 +197,10 @@ class Carteirinha < ActiveRecord::Base
 		status=[[]]
 		if status_pgto_to_i <= 2  # iniciada, aguardando_pagamento, em_analise
 			status = @@status_versao_impressas.select{|k,v| k == :pagamento}.map{|k,v| [v,k]} # somente pagamento 
-		elsif status_pgto_to_i >=3 && status_pgto_to_i <= 5 # paga , disponível ou em_disputa
-			status = @@status_versao_impressas.map{|k,v| [v,k]} #todas as opções de status_versao impressa
+		elsif status_pgto_to_i >=3 && status_pgto_to_i <= 4 # paga , disponível
+			status = @@status_versao_impressas.select{|k,v| k != :pagamento}.map{|k,v| [v,k]} #todas as opções de status_versao impressa
+		elsif status_pgto_to_i == 5 # em disputa
+			status = @@status_versao_impressas.select{|k,v| k != :aprovada}.map{|k,v| [v,k]}
 		elsif status_pgto_to_i > 5  # devolvida cancelada ou revogada
 			status = @@status_versao_impressas.select{|k,v| k == :cancelada || k == :revogada || k == :devolvida}.map{|k,v| [v,k]} 
 		end
