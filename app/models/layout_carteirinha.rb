@@ -25,10 +25,10 @@ class LayoutCarteirinha < ActiveRecord::Base
 	                          :nao_depois_posx, :nao_depois_posy, :qr_code_posx, :qr_code_posy, :matricula_posx, :matricula_posy
 	
 	validates_presence_of :nome_posx, :nome_posy, :instituicao_ensino_posx, :instituicao_ensino_posy,
-	                      :curso_posx, :curso_posy, :matricula_posx, :matricula_posy
+	                      :curso_posx, :curso_posy, :matricula_posx, :matricula_posy,
 	                      :data_nascimento_posx, :data_nascimento_posy, :rg_posx, :rg_posy, 
 	                      :codigo_uso_posx, :codigo_uso_posy, :foto_posx, :foto_posy, :foto_width, 
-	                      :foto_height, :qr_code_posx, :qr_code_posy, :qr_code_width, :qr_code_height, 
+	                      :foto_height, :qr_code_posx, :qr_code_posy, :qr_code_width, :qr_code_height 
 	                      
 
 	validates_presence_of :verso, :anverso, :entidade

@@ -8,7 +8,7 @@ ActiveAdmin.register LayoutCarteirinha do
 	              :cpf_posx, :cpf_posy, :codigo_uso_posx, :codigo_uso_posy, 
 	              :nao_depois_posx, :nao_depois_posy, :qr_code_posx, :qr_code_posy,
 	              :qr_code_width, :qr_code_height, :foto_posx, :foto_posy,
-	              :foto_width, :foto_height, :entidade_id. :matricula_posx, :matricula_posy
+	              :foto_width, :foto_height, :entidade_id, :matricula_posx, :matricula_posy
 
 	filter :anverso_file_name
 	filter :verso_file_name
