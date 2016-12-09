@@ -144,7 +144,7 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def check_status_carteirinha_apartir_status_pagamento
-		status_carteirinha = Carteirinha.show_status_carteirinha_apartir_do_status_pagamento self.status_pagamento_to_i
+		status_carteirinha = Carteirinha.show_status_carteirinha_apartir_do_status_pagamento self.status_pagamento
 		st=false
 		status_carteirinha.each do |status|
 			st = true if self.status_versao_impressa == status[1] 
