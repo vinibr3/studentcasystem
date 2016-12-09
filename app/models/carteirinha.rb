@@ -146,8 +146,8 @@ class Carteirinha < ActiveRecord::Base
 	def check_status_carteirinha_apartir_status_pagamento
 		status_carteirinha = Carteirinha.show_status_carteirinha_apartir_do_status_pagamento self.status_pagamento
 		st=false
-		status_carteirinha.each do |status|
-			st = true if self.status_versao_impressa == status[1] 
+		status_carteirinha.each do |key|
+			st = true if self.status_versao_impressa.to_sym == key
 		end
 		errors.add(:status_versao_impressa, "valor inválido para dado Status de Pagamento: #{self.status_pagamento.humanize} ") unless st
 	end
@@ -194,13 +194,13 @@ class Carteirinha < ActiveRecord::Base
 	def self.show_status_carteirinha_apartir_do_status_pagamento status_pgto
 		# Calcula status_pagamento_to_i
 		status_pgto_to_i = Carteirinha.status_pagamento_to_i status_pgto
-		status=[[]]
+		status=[]
 		if status_pgto_to_i <= 2  # iniciada, aguardando_pagamento, em_analise
-			status = @@status_versao_impressas.select{|k,v| k == :pagamento}.map{|k,v| [v,k]} # somente pagamento 
+			status = @@status_versao_impressas.select{|k,v| k == :pagamento} # somente pagamento 
 		elsif status_pgto_to_i >=3 && status_pgto_to_i <= 4 # paga , disponível
-			status = @@status_versao_impressas.select{|k,v| k != :pagamento}.map{|k,v| [v,k]} #todas as opções de status_versao impressa
+			status = @@status_versao_impressas.select{|k,v| k != :pagamento} #todas as opções de status_versao impressa
 		elsif status_pgto_to_i == 5 # em disputa
-			status = @@status_versao_impressas.select{|k,v| k != :aprovada}.map{|k,v| [v,k]}
+			status = @@status_versao_impressas.select{|k,v| k != :aprovada}
 		elsif status_pgto_to_i > 5  # devolvida cancelada ou revogada
 			status = @@status_versao_impressas.select{|k,v| k == :cancelada || k == :revogada || k == :devolvida}.map{|k,v| [v,k]} 
 		end

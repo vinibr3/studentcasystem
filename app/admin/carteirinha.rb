@@ -146,8 +146,8 @@ ActiveAdmin.register Carteirinha do
             f.inputs "Dados da Solicitação" do
                 f.input :status_pagamento, as: :select, include_blank: false, prompt: "Selecione status do pagamento", 
                         label: "Status do Pagamento", :input_html=>{:id=>"status-pagamento-select"}
-                f.input :status_versao_impressa, collection: Carteirinha.show_status_carteirinha_apartir_do_status_pagamento(f.object.status_pagamento), 
-                        label: "Status da Versão Impressa", include_blank: false, :input_html=>{:id=>"status-versao-impressas-select"}
+                f.input :status_versao_impressa, label: "Status da Versão Impressa", include_blank: false, :input_html=>{:id=>"status-versao-impressas-select"},
+                        collection: Carteirinha.show_status_carteirinha_apartir_do_status_pagamento(f.object.status_pagamento).map{|k,v| [v,k]} 
                 f.input :forma_pagamento, as: :select, include_blank: false, prompt: "Selecione forma de pagamento", label: "Forma de Pagamento"
                 f.input :transaction_id, label: "Transação"
                 #f.input :alterado_por, label: "Alterado por"

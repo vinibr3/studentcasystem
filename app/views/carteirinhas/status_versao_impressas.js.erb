@@ -1,1 +1,1 @@
-$("#status-versao-impressas-select").html(null).html("<%= escape_javascript(options_for_select @statuses) %>");
+$("#status-versao-impressas-select").html(null).html("<%= escape_javascript(options_for_select @statuses.map{|k,v| [v,k]}) %>");
