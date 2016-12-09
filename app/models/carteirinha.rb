@@ -214,7 +214,7 @@ class Carteirinha < ActiveRecord::Base
             self.layout_carteirinha = estudante.entidade.layout_carteirinha               if self.layout_carteirinha.blank?
             self.nao_antes = Time.new                                                     if self.nao_antes.blank?
             self.nao_depois = Time.new(Time.new.year+1, 3, 31).to_date                    if self.nao_depois.blank? 
-            self.numero_serie = Carteirinha.gera_numero_serie                             #if self.numero_serie.blank?
+            self.numero_serie = Carteirinha.gera_numero_serie                             if self.numero_serie.blank?
             self.codigo_uso = Carteirinha.gera_codigo_uso                                 if self.codigo_uso.blank?
    			self.qr_code = estudante.entidade.url_qr_code.concat("/#{estudante.chave_acesso}") 	if self.qr_code.blank?
             
