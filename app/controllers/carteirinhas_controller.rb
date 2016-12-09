@@ -1,6 +1,7 @@
 class CarteirinhasController < ApplicationController
 
-	before_action :authenticate_estudante!, except: [:consulta, :show, :carteirinha_image]
+	before_action :authenticate_estudante!, 
+								except: [:consulta, :show, :carteirinha_image, :status_versao_impressas]
 
 	def show
 		
