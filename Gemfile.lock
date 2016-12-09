@@ -37,6 +37,8 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 1.0, >= 1.0.5)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
+    active_admin_datetimepicker (0.3.0)
+      xdan-datetimepicker-rails (~> 2.5.1)
     active_admin_jcrop (0.0.10)
       mini_magick
       rails (> 3.2.0)
@@ -295,6 +297,9 @@ GEM
       execjs (>= 0.3.0, < 3)
     warden (1.2.6)
       rack (>= 1.0)
+    xdan-datetimepicker-rails (2.5.4)
+      jquery-rails
+      rails (>= 3.2.16)
 
 PLATFORMS
   java
@@ -302,6 +307,7 @@ PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
+  active_admin_datetimepicker (~> 0.3.0)
   active_admin_jcrop (~> 0.0.10)
   active_model_serializers (~> 0.9.5)
   activeadmin (= 1.0.0.pre1)

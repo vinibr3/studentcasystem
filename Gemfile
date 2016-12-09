@@ -41,8 +41,8 @@ gem 'koala', '~> 2.3'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 # Gemfile in Rails >= 3.1
-  gem 'activeadmin', '1.0.0.pre1'
-  #gem "meta_search", '>= 1.1.0.pre'
+gem 'activeadmin', '1.0.0.pre1'
+#gem "meta_search", '>= 1.1.0.pre'
 # Use Unicorn as the app server
 # gem 'unicorn'
 # Provider for authorization
@@ -71,6 +71,8 @@ gem 'activeadmin-dragonfly', github: 'stefanoverna/activeadmin-dragonfly'
 gem 'activeadmin-wysihtml5', github: 'stefanoverna/activeadmin-wysihtml5'
 # Paperclip Amazon S3
 gem 'aws-sdk', '< 2.0' # Erro uninitialized constant Paperclip::Storage::S3:AWS for '~> 2.0'
+# Datetimepicker para active admin
+gem 'active_admin_datetimepicker', '~> 0.3.0'
 
 group :production do
   gem 'unicorn'

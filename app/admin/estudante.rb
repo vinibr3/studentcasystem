@@ -1,6 +1,6 @@
 ActiveAdmin.register Estudante do
   menu priority: 2
-  actions :all
+  actions :all, except: [:destroy]
 
   jcropable
 
