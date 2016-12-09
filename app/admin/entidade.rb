@@ -1,5 +1,6 @@
 ActiveAdmin.register Entidade do 
 	menu if: proc{current_admin_user.super_admin?}, priority: 4
+	actions :all, except: [:destroy]
 
 	permit_params :nome, :sigla, :email, :cnpj, :chave_privada, :password,
 	              :instituicao_ensino, :organizational_unit, :valor_carteirinha,
@@ -95,8 +96,7 @@ ActiveAdmin.register Entidade do
 			f.input :usuario
 			f.input :token_certificado, label: "Senha"
 			f.input :dominio, label: "Domínio"
-			# f.input :url_qr_code, label: "URL Qr-Code"
-			# f.input :url_certificado, label: "URL Certificado"
+			f.input :url_qr_code, label: "URL Qr-Code", :hint=>"Domínio da entidade + '/certificados/show'"
 			f.input :auth_info_access, label: "Autoridade de Acesso à Informação (URL)"
 			f.input :crl_dist_points, label: "CRL Ponto de Distribuição (URL)"
 		end

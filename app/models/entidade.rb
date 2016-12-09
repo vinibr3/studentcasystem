@@ -63,11 +63,7 @@ class Entidade < ActiveRecord::Base
 
 	validates_presence_of :nome, :sigla, :email, :valor_carteirinha, :url_qr_code, :auth_info_access, :crl_dist_points, :dominio 
 
-	before_save :config_url_qr_code_from_dominio
-
-	def config_url_qr_code_from_dominio
-		self.url_qr_code = self.dominio.concat(url_for controller:"certificados", action: "show")  
-	end
+	before_create :config_url_qr_code_from_dominio
 
 	def self.instance
 		entidade = Entidade.last
@@ -77,4 +73,9 @@ class Entidade < ActiveRecord::Base
 			raise "Nenhuma entidade Configurada"
 		end
 	end
+
+	private 
+		def config_url_qr_code_from_dominio
+			self.url_qr_code = self.dominio.concat(url_for controller:"certificados", action: "show") if Entidade.count == 1
+		end
 end
