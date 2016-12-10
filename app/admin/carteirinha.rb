@@ -253,16 +253,16 @@ ActiveAdmin.register Carteirinha do
               c.layout_carteirinha = @estudante.entidade.layout_carteirinhas.last
             else
               flash[:alert] = "Não foi possível criar carteirinha. Entidade #{@estudante.entidade.nome} não tem nenhum layout de carteirinha."
-              redirect_to estudante_admin_path @estudante
+              redirect_to @estudante
             end
           end
 
           if @carteirinha.save! 
             flash[:success] = "Carteirinha criada para o estudante: #{@estudante.nome}. Altere os dados de pagamento."
-            redirect_to edit_carteirinha_admin_path @carteirinha
+            redirect_to edit_carteirinha_admin_url @carteirinha
           else
             flash[:error] = "Não foi possível criar carteirinha. @carteirinha.errors"
-            redirect_to estudante_admin_path @estudante
+            redirect_to @estudante
           end
         end
       end
