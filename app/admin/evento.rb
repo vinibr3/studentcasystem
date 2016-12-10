@@ -39,7 +39,7 @@ ActiveAdmin.register Evento do
 		f.semantic_errors *f.object.errors.keys
 		f.inputs "Detalhes do Evento" do
 			f.input :titulo
-			f.input :data, as: :date_time_picker, datepicker_options: { day_names_min: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
+			f.input :data, as: :datetime_select, datepicker_options: { day_names_min: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
                                                             month_names_short: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
                                                             year_range: "1930:", show_anim: "slideDown", changeMonth: true, changeYear: true}
 			f.input :local
