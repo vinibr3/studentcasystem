@@ -9,7 +9,7 @@ class EstudantesController < ApplicationController
 	end	
 
 	def update
-		cidades = Estado.find_by_sigla(estudante_params[:uf]).cidades
+		cidades = Estado.find_by_sigla(estudante_params[:estado]).cidades
 		estudante_params[:cidade_id] = cidades.find_by_nome(estudante_params[:cidade_id]).id
 		if current_estudante.update(estudante_params)
 			flash[:notice] = "Dados salvos com sucesso!"
@@ -36,7 +36,7 @@ class EstudantesController < ApplicationController
 	private
 		def estudante_params
 			params.require(:estudante).permit(:nome, :cpf, :rg, :data_nascimento, :sexo, :telefone,
-											  :logradouro, :complemento, :setor, :cep, :cidade_id, :uf,
+											  :logradouro, :complemento, :setor, :cep, :cidade_id, :estado,
 											  :instituicao_ensino_id, :curso_id, :matricula, :foto, 
 											  :comprovante_matricula, :xerox_rg, :email, :password, 
 											  :celular, :numero, :expedidor_rg, :uf_expedidor_rg, 
