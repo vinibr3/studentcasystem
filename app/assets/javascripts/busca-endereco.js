@@ -5,7 +5,7 @@ $(document).ready(function() {
                 $("#estudante_logradouro").val("");
                 $("#estudante_setor").val("");
                 $("#estudante_cidade_id").val("");
-                $("#estudante_uf").val("");
+                $("#estudante_estado").val("");
                 $("#estudante_complemento").val("");
                 
             }
@@ -33,7 +33,7 @@ $(document).ready(function() {
                                 $("#estudante_logradouro").val(dados.logradouro);
                                 $("#estudante_setor").val(dados.bairro);
                                 $("#estudante_cidade_id").val(dados.localidade);
-                                $("#estudante_uf").val(dados.uf);
+                                $("#estudante_estado").val(dados.uf);
                                 $("#estudante_complemento").val(dados.complemento);
                             } //end if.
                             else {
