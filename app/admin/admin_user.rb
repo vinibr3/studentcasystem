@@ -1,5 +1,5 @@
 ActiveAdmin.register AdminUser do
-  menu if: proc{current_admin_user.super_admin?}, priority: 5, label: "Usuários"
+  menu if: proc{current_admin_user.sim?}, priority: 5, label: "Usuários"
   actions :all, except: [:destroy]
 
   scope "Todos", :all, default: true
@@ -78,20 +78,22 @@ ActiveAdmin.register AdminUser do
             end
           end
         end
-        # panel "Meta Dados" do 
-        #   attributes_table_for admin_user do 
-        #     row :reset_password_token
-        #     row :reset_password_sent_at
-        #     row :remember_created_at
-        #     row :sign_in_count
-        #     row :current_sign_in_at
-        #     row :last_sign_in_at
-        #     row :current_sign_in_ip
-        #     row :last_sign_in_ip
-        #     row :created_at
-        #     row :update_at
-        #   end
-        # end
+        if current_admin_user.sim?
+          panel "Meta Dados" do 
+            attributes_table_for admin_user do 
+              row :reset_password_token
+              row :reset_password_sent_at
+              row :remember_created_at
+              row :sign_in_count
+              row :current_sign_in_at
+              row :last_sign_in_at
+              row :current_sign_in_ip
+              row :last_sign_in_ip
+              row :created_at
+              row :update_at
+            end
+          end
+        end
     end
 
   form do |f|

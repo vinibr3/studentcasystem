@@ -103,39 +103,41 @@ ActiveAdmin.register Estudante do
         row :cep 
       end
     end
-    # if current_admin_user.super_admin?
-    #   panel "Meta Dados" do 
-    #     attributes_table_for estudante do
-    #       row :foto_file_name
-    #       row :foto_content_type
-    #       row :foto_file_size
-    #       row :foto_update_at
-    #       row :comprovante_matricula_file_name
-    #       row :comprovante_matricula_content_type
-    #       row :comprovante_matricula_file_size
-    #       row :comprovante_matricula_update_at
-    #       row :xerox_rg_file_name
-    #       row :xerox_rg_content_type
-    #       row :xerox_rg_file_size
-    #       row :xerox_rg_update_at
-    #       row :provider
-    #       row :uid 
-    #       row :oauth_token
-    #       row :oauth_expires_at
-    #       row :created_at
-    #       row :updated_at
-    #       row :encrypted_password
-    #       row :reset_password_token
-    #       row :reset_password_sent_at
-    #       row :remember_created_at
-    #       row :sign_in_count
-    #       row :current_sign_in_at
-    #       row :last_sign_in_at
-    #       row :current_sign_in_ip
-    #       row :last_sign_in_ip
-    #     end
-    #   end
-    # end
+    if current_admin_user.sim?
+      if current_admin_user.super_admin?
+        panel "Meta Dados" do 
+          attributes_table_for estudante do
+            row :foto_file_name
+            row :foto_content_type
+            row :foto_file_size
+            row :foto_update_at
+            row :comprovante_matricula_file_name
+            row :comprovante_matricula_content_type
+            row :comprovante_matricula_file_size
+            row :comprovante_matricula_update_at
+            row :xerox_rg_file_name
+            row :xerox_rg_content_type
+            row :xerox_rg_file_size
+            row :xerox_rg_update_at
+            row :provider
+            row :uid 
+            row :oauth_token
+            row :oauth_expires_at
+            row :created_at
+            row :updated_at
+            row :encrypted_password
+            row :reset_password_token
+            row :reset_password_sent_at
+            row :remember_created_at
+            row :sign_in_count
+            row :current_sign_in_at
+            row :last_sign_in_at
+            row :current_sign_in_ip
+            row :last_sign_in_ip
+          end
+        end
+      end
+    end
     render inline: "<script type='text/javascript'>$('.show-popup-link').magnificPopup({type: 'image'});</script>"
   end
 

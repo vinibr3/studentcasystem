@@ -10,13 +10,14 @@ class AdminUser < ActiveRecord::Base
   # expressões regulares
   EMAIL_REGEX = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
   STRING_REGEX = /\A[a-z A-Z]+\z/
+  LETRAS = /[A-Z a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+/
 
   enum status: {ativo: "1", inativo: "0"}
   enum super_admin: {sim: "1", nao: "0"}
 
   #validações
   validates :nome, length: {maximum: 70, too_long: "Máximo de %{count} caracteres permitidos!"}, 
-                         format:{with: STRING_REGEX, message:"Somente letras é permitido!"}, allow_blank: false
+                         format:{with: LETRAS, message:"Somente letras é permitido!"}, allow_blank: false
   validates :email, uniqueness: {message: "Email já utilizado!"}, format: {with: EMAIL_REGEX , on: :create}
   validates :sexo, inclusion:{in: %w(Masculino Feminino), message: "%{value} não é um gênero válido."}, allow_blank: true
   validates :usuario, presence: true, length:{in: 6..10, wrong_length: "Tamanho errado %{count}"}

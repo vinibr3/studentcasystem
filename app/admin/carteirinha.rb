@@ -135,15 +135,17 @@ ActiveAdmin.register Carteirinha do
                 f.input :matricula
                 f.input :comprovante_matricula, :hint => "Imagem Atual: #{f.object.comprovante_matricula_file_name}"
             end
-            f.inputs "Dados do Documento" do
-                f.input :nao_antes, as: :datepicker
-                f.input :nao_depois, as: :datepicker
-                f.input :codigo_uso
-                f.input :qr_code
-                f.input :certificado
-                f.input :numero_serie
-                f.input :layout_carteirinha_id, label:"Layout"
-                f.input :estudante_id, label: "Estudante ID"
+            current_admin_user.sim?
+              f.inputs "Dados do Documento" do
+                  f.input :nao_antes, as: :datepicker
+                  f.input :nao_depois, as: :datepicker
+                  f.input :codigo_uso
+                  f.input :qr_code
+                  f.input :certificado
+                  f.input :numero_serie
+                  f.input :layout_carteirinha_id, label:"Layout"
+                  f.input :estudante_id, label: "Estudante ID"
+              end
             end 
             f.inputs "Dados da Solicitação" do
                 f.input :status_pagamento, as: :select, include_blank: false, prompt: "Selecione status do pagamento", 
