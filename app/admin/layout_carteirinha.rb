@@ -51,8 +51,10 @@ ActiveAdmin.register LayoutCarteirinha do
 						row :cpf_posx
 						row :matricula_posx
 						row :codigo_uso_posx
-						row :nao_depois_posx
-						row :qr_code_posx
+						row "VALIDADE POSX" do 
+							layout_carteirinha.nao_depois_posx
+						end
+						row :qr_code_posx 
 						row :qr_code_width
 						row :foto_posx
 						row :foto_width
@@ -69,7 +71,9 @@ ActiveAdmin.register LayoutCarteirinha do
 						row :cpf_posy
 						row :matricula_posy
 						row :codigo_uso_posy
-						row :nao_depois_posy
+						row "VALIDADE POSY" do
+						 layout_carteirinha.nao_depois_posy
+						end
 						row :qr_code_posy
 						row :qr_code_height
 						row :foto_posy

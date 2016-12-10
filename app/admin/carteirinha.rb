@@ -1,7 +1,7 @@
 require 'zip'
 ActiveAdmin.register Carteirinha do
    menu priority: 3
-   actions :all, except: [:new]
+   actions :all, except: [:destroy,:new]
    
    scope "Todas", :all, default: true
 
