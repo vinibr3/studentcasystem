@@ -7,7 +7,7 @@ ActiveAdmin.register Carteirinha do
 
    Carteirinha.status_versao_impressas.each do |status|
     scope status.second do |carteirinha|
-        if current_admin_user.super_admin?
+        if current_admin_user.sim?
           carteirinha.where(status_versao_impressa: status.second)
         else
           carteirinha.where(status_versao_impressa: status.second, alterado_por: current_admin_user.usuario)
@@ -135,7 +135,7 @@ ActiveAdmin.register Carteirinha do
                 f.input :matricula
                 f.input :comprovante_matricula, :hint => "Imagem Atual: #{f.object.comprovante_matricula_file_name}"
             end
-            current_admin_user.sim?
+            if current_admin_user.sim?
               f.inputs "Dados do Documento" do
                   f.input :nao_antes, as: :datepicker
                   f.input :nao_depois, as: :datepicker
