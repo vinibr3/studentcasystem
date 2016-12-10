@@ -1,7 +1,7 @@
 require 'zip'
 ActiveAdmin.register Carteirinha do
    menu priority: 3
-   actions :all, except: [:destroy, :new]
+   actions :all, except: [:new]
    
    scope "Todas", :all, default: true
 
@@ -42,7 +42,7 @@ ActiveAdmin.register Carteirinha do
         carteirinha.valor
       end
       column "Status do Pagamento" do |carteirinha|
-        status_tag(carteirinha.status_pagamento, carteirinha.status_tag_status_pagamento)
+        status_tag(carteirinha.status_pagamento, :ok)
       end
       column "Status da Versão Impressa" do |carteirinha|
         status_tag(carteirinha.status_versao_impressa.humanize, carteirinha.status_tag_versao_impressa)
