@@ -10,30 +10,30 @@
 				</div>			
 				<div class="panel-body" style="word-break: break-all;white-space: normal;">
 					<table>
-						<tr><td colspan="3"><strong>Nome completo:&nbsp;</strong><%= @estudante.nome %></td></tr>
-						<tr><td colspan="3"><strong>E-mail: </strong><%=@estudante.email %> </td></tr>
-						<tr><td colspan="3"><strong>Data Nascimento:</strong><%=@estudante.data_nascimento %> </td></tr>
+						<tr><td colspan="3"><strong>Nome:&nbsp;</strong><%= @estudante.nome %></td></tr>
+						<tr><td colspan="3"><strong>E-mail:&nbsp; </strong><%=@estudante.email %> </td></tr>
+						<tr><td colspan="3"><strong>Data Nascimento:&nbsp;</strong><%=@estudante.data_nascimento %> </td></tr>
 						<tr>
-							<td><strong>RG: </strong><%=@estudante.rg %></td>
-								<td><strong>Expedidor: </strong><%=@estudante.expedidor_rg %>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-								<td><strong>UF: </strong><%=@estudante.uf_expedidor_rg %> </td>
+							<td><strong>RG:&nbsp; </strong><%=@estudante.rg %></td>
+								<td><strong>Expedidor:&nbsp; </strong><%=@estudante.expedidor_rg %>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+								<td><strong>UF:&nbsp; </strong><%=@estudante.uf_expedidor_rg %> </td>
 							</tr>
 						<tr>
-							<td><strong>CPF: </strong><%=@estudante.cpf %></td>
-							<td colspan="2"><strong>Gênero: </strong><%= @estudante.sexo %></td> 
+							<td><strong>CPF:&nbsp; </strong><%=@estudante.cpf %></td>
+							<td colspan="2"><strong>Gênero:&nbsp; </strong><%= @estudante.sexo %></td> 
 						</tr>
 						<tr>
-							<td><strong>Telefone: </strong><%=@estudante.telefone %>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-							<td colspan="2"><strong>Celular: </strong><%=@estudante.celular %> </td> 
+							<td><strong>Telefone:&nbsp; </strong><%=@estudante.telefone %>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							<td colspan="2"><strong>Celular:&nbsp; </strong><%=@estudante.celular %> </td> 
 						</tr>
 						<tr>
-							<td colspan="3"><strong>Foto: </strong><%= @estudante.foto_file_name.nil? ? '*' : @estudante.foto_file_name %> </td>
+							<td colspan="3"><strong>Foto:&nbsp; </strong><%= @estudante.foto_file_name.nil? ? '*' : @estudante.foto_file_name %> </td>
 						</tr>
 						<tr>
-							<td colspan="3"><strong>Xerox RG: </strong><%= @estudante.xerox_rg_file_name.nil? ? '*' : @estudante.xerox_rg_file_name %> </td> 
+							<td colspan="3"><strong>Xerox RG:&nbsp; </strong><%= @estudante.xerox_rg_file_name.nil? ? '*' : @estudante.xerox_rg_file_name %> </td> 
 						</tr>
 						<tr>
-							<td colspan="3"><strong>Xerox CPF: </strong><%= @estudante.xerox_cpf_file_name.nil? ? '*' : @estudante.xerox_cpf_file_name %> </td> 
+							<td colspan="3"><strong>Xerox CPF:&nbsp; </strong><%= @estudante.xerox_cpf_file_name.nil? ? '*' : @estudante.xerox_cpf_file_name %> </td> 
 						</tr>
 					</table>
 				</div>
@@ -45,12 +45,13 @@
 				</div>
 				<div class="panel-body" style="word-break: break-all;white-space: normal;">
 					<table>
-						<tr><td colspan="2"><strong>Instituição de Ensino</strong><%=@estudante.instituicao_ensino.nome if @estudante.instituicao_ensino %> </td></tr>
-						<tr><td colspan="2"><strong>Curso/Série </strong><%=@estudante.curso.nome if @estudante.curso %> </td></tr>
-						<tr><td><strong>Escolaridade: </strong><%=@estudante.escolaridade.nome if @estudante.escolaridade %> </td></tr>
-						<tr><td><strong>Matrícula: </strong><%=@estudante.matricula %> </td></tr>
+						<tr><td colspan="2"><strong>Entidade:&nbsp;</strong><%=@estudante.entidade ? @estudante.entidade.nome : ''%> </td></tr>
+						<tr><td colspan="2"><strong>Instituição de Ensino:&nbsp;</strong><%=@estudante.instituicao_ensino.nome if @estudante.instituicao_ensino %> </td></tr>
+						<tr><td colspan="2"><strong>Curso/Série:&nbsp; </strong><%=@estudante.curso.nome if @estudante.curso %> </td></tr>
+						<tr><td><strong>Escolaridade:&nbsp; </strong><%=@estudante.escolaridade.nome if @estudante.escolaridade %> </td></tr>
+						<tr><td><strong>Matrícula:&nbsp; </strong><%=@estudante.matricula %> </td></tr>
 						<tr>
-							<td colspan="2"><strong>Compr. Matrícula: </strong><%= @estudante.comprovante_matricula_file_name.nil? ? '*' : @estudante.comprovante_matricula_file_name %> 
+							<td colspan="2"><strong>Compr. Matrícula:&nbsp; </strong><%= @estudante.comprovante_matricula_file_name.nil? ? '*' : @estudante.comprovante_matricula_file_name %> 
 							</td>
 						</tr>
 					</table>
@@ -63,15 +64,15 @@
 				</div>
 				<div class="panel-body" style="word-break: break-all;white-space: normal;">
 					<table>
-						<tr><td><strong>CEP: </strong><%=@estudante.cep %> </td> </tr>
+						<tr><td><strong>CEP:&nbsp; </strong><%=@estudante.cep %> </td> </tr>
 						<tr>
-							<td> <strong>Logradouro: </strong><%=@estudante.logradouro %></td> 
+							<td> <strong>Logradouro:&nbsp; </strong><%=@estudante.logradouro %></td> 
 							<td><strong style="margin-left: 15px;">Nº: </strong><%=@estudante.numero %> </td>
 						</tr>
-						<tr><td><strong>Complemento: </strong><%=@estudante.complemento %> </td> </tr>
-						<tr><td><strong>Setor: </strong><%=@estudante.setor %> </td> </tr>
+						<tr><td><strong>Complemento:&nbsp; </strong><%=@estudante.complemento %> </td> </tr>
+						<tr><td><strong>Setor:&nbsp; </strong><%=@estudante.setor %> </td> </tr>
 						<tr>
-							<td><strong>Cidade: </strong><%=@estudante.cidade_nome%> </td> 
+							<td><strong>Cidade:&nbsp; </strong><%=@estudante.cidade_nome%> </td> 
 							<td><strong style="margin-left: 15px;">UF: </strong><%=@estudante.estado_sigla %> </td>
 						</tr>
 					</table>

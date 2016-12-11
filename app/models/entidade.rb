@@ -61,6 +61,8 @@ class Entidade < ActiveRecord::Base
 	validates :cidade_presidente, length: {maximum: 50, too_long: "Máximo de #{count} caracteres permitidos."}, allow_blank: true
 	validates :uf_presidente, length: {is: 2, wrong_length: "Máximo de 2 caracteres permitidos."}, format: {with: STRING_REGEX}, allow_blank: true
 
+	validates_associated :estudantes
+
 	validates_presence_of :nome, :sigla, :email, :valor_carteirinha, :url_qr_code, :auth_info_access, :crl_dist_points, :dominio 
 
 	before_create :config_url_qr_code_from_dominio, :config_usuario_and_token_certificado

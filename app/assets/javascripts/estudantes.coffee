@@ -93,4 +93,13 @@ $(document).ready ->
       limpa_formulário_cep()
     return
   return
-    
+
+# Atualiza lista de cursos a partir da escolaridade selecionada
+ $(document).on 'change', '#escolaridades-select', (evt) ->
+    $.ajax '/escolaridades/'+$("#escolaridades-select").val()+'/cursos',
+      type: 'GET'
+      dataType: 'script'
+      error: (jqXHR, textStatus, errorThrown) ->
+        console.log("AJAX Error: #{textStatus}")
+      success: (data, textStatus, jqXHR) ->
+        console.log("Cursos selecionados!")

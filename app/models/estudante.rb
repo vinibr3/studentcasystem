@@ -67,11 +67,10 @@ class Estudante < ActiveRecord::Base
 	validates_acceptance_of :termos
     
   validates_length_of :foto_file_name, :comprovante_matricula_file_name, :xerox_rg_file_name, 
-                      :maximum => 50, :message => "Nome do arquivo deve ser menor que 20 caracteres"
+                      :maximum => 50, :message => "Nome do arquivo deve ser menor que #{count} caracteres"
   validates_associated :carteirinhas, allow_blank: true
   validates_associated :instituicao_ensino, allow_blank: true
   validates_associated :curso, allow_blank: true
-  validates_associated :entidade, allow_blank: false
   validates_associated :cidade, allow_blank: true
   validates_associated :estado, allow_blank: true
   validates_associated :escolaridade, allow_blank: true
