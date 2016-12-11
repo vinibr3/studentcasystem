@@ -9,12 +9,12 @@
 					<h4 class="modal-title"> Editar Dados Estudantis</h4>
 				</div>
 				<div class="modal-body>" style="margin-top: 23px;">
-				<div class="form-group">
+					<div class="form-group">
 						<%= f.label :instituicao_ensino, "Instituição de Ensino", :class=>'control-label col-sm-4 col-sm-offset-1' %>
-						<div class="col-sm-6"><%= f.collection_select :instituicao_ensino_id, InstituicaoEnsino.all.map{|i| [i.nome, i.id]}, {include_blank: "Selecione Instituição de Ensino"}, :class=>'form-control'%></div>
+						<div class="col-sm-6"><%= f.collection_select :instituicao_ensino_id, InstituicaoEnsino.all, :nome, :id, {prompt: "Selecione Instituição de Ensino", include_blank: false}, {:class=>'form-control'}%></div>
 					</div>
 					<div class="form-group">
-							<%= f.label :curso_id, "Curso/Série", :class=>'control-label col-sm-4 col-sm-offset-1' %>
+						<%= f.label :curso_id, "Curso/Série", :class=>'control-label col-sm-4 col-sm-offset-1' %>
 						<div class="col-sm-6"><%= f.grouped_collection_select :curso_id, Escolaridade.all, :cursos, :nome, :id, :nome, prompt: "Selecione o Curso" , :class=>'form-control'%></div>
 					</div>
 					<div class="form-group">
