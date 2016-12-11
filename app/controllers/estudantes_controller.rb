@@ -9,8 +9,6 @@ class EstudantesController < ApplicationController
 	end	
 
 	def update
-		cidades = Estado.find_by_sigla(estudante_params[:uf]).cidades
-		estudante_params[:cidade_id] = cidades.find_by_nome(estudante_params[:cidade_id]).id
 		if current_estudante.update(estudante_params)
 			flash[:notice] = "Dados salvos com sucesso!"
 			redirect_to current_estudante

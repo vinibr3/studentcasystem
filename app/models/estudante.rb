@@ -72,7 +72,9 @@ class Estudante < ActiveRecord::Base
   validates_associated :instituicao_ensino, allow_blank: true
   validates_associated :curso, allow_blank: true
   validates_associated :entidade, allow_blank: false
-  
+  validates_associated :cidade, allow_blank: true
+  validates_associated :estado, allow_blank: true
+  validates_associated :escolaridade, allow_blank: true
 
 	public
 		def tem_carteirinha
@@ -207,6 +209,10 @@ class Estudante < ActiveRecord::Base
 		self.instituicao_ensino.nome if self.instituicao_ensino
 	end
 
+	def cidade_nome
+		self.cidade.nome if self.cidade
+	end
+
 	def estado_nome
 		estado = self.cidade.estado if self.cidade
 		estado.nome if estado
@@ -215,6 +221,11 @@ class Estudante < ActiveRecord::Base
 	def estado_id
 		estado = self.cidade.estado if self.cidade
 		estado.id if estado
+	end
+
+	def estado_sigla
+		estado = self.cidade.estado if self.cidade
+		estado.sigla if estado
 	end
 
 	def entidade_nome
