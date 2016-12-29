@@ -8,10 +8,10 @@ class Api::EstudantesController < Api::AuthenticateBase
 				if @estudante.update_attributes(estudante_params)
 					head 204
 				else
-					render_erro @estudante.errors, :status => 422
+					render_erro @estudante.errors, 422
 				end
 			else
-				render_erro "Estudante não encontrado. Email: #{params[:estudante][:email]}", :status => 404
+				render_erro "Estudante não encontrado. Email: #{params[:estudante][:email]}", 404
 			end
 		# rescue Exception => ex
 		# 	render json: {errors: ex.message}, :status => 500

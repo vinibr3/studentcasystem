@@ -7,10 +7,10 @@ class Api::RegistrationsController < Api::AuthenticateBase
 			if @estudante.save
 				respond_with @estudante, :status => 201
 			else 
-				render_erro @estudante.errors, :status => 400
+				render_erro @estudante.errors, 400
 			end
 		rescue Exception => ex
-			render_erro ex.message, :status => 500
+			render_erro ex.message, 500
 		end
 	end
 end

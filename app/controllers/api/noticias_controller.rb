@@ -8,7 +8,7 @@ class Api::NoticiasController < Api::AuthenticateBase
 				respond_with @noticias, :status => 200
 			end
 		rescue => ex
-			render_erro ex.message, :status => 500
+			render_erro ex.message, 500
 		end
 	end
 

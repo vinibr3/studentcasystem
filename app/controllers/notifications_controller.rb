@@ -15,7 +15,7 @@ class NotificationsController < ApplicationController
           c.matricula = @estudante.matricula
           c.expedidor_rg = @estudante.expedidor_rg
           c.uf_expedidor_rg = @estudante.uf_expedidor_rg
-          @instituicao = InstituicaoEnsino.find(@estudante.instituicao_ensino_id)
+          @instituicao = @estudante.instituicao_ensino
           c.instituicao_ensino = @instituicao.nome
           c.cidade_inst_ensino = @instituicao.cidade.nome
           c.escolaridade = @estudante.escolaridade.nome
@@ -25,8 +25,8 @@ class NotificationsController < ApplicationController
           c.xerox_rg = @estudante.xerox_rg
           c.xerox_cpf = @estudante.xerox_cpf
           c.comprovante_matricula = @estudante.comprovante_matricula
-          c.status_versao_impressa = Carteirinha.status_versao_impressa[0]
-          c.layout_carteirinha = LayoutCarteirinha.instance
+          c.status_versao_impressa = :pagamento
+          c.layout_carteirinha = @estudante.entidade.layout_carteirinhas.last if @estudante.entidade.layout_carteirinhas
           c.estudante_id = @estudante.id
           c.forma_pagamento = transaction.payment_method.description
           c.status_pagamento = transaction.status.id
@@ -34,7 +34,7 @@ class NotificationsController < ApplicationController
           c.valor = transaction.gross_amount.to_f
         end
         if cart.status_pagamento_to_i <= 2 && transaction.status.id == "3" # status avançou para 'pago'
-            cart.update_attribute(status_versao_impressa: Carteirinha.status_versao_impressa[1]) # muda status para 'Documentação'
+            cart.update_attribute(status_versao_impressa: Carteirinha.status_versao_impressas[1].first) # muda status para 'Documentação'
         end
         cart.update_attribute(:status_pagamento, transaction.status.id)
       end
