@@ -13,7 +13,7 @@ class Api::AuthenticateBase < ApplicationController
 
 		def http_token_authentication
 			authenticate_or_request_with_http_token do |token, options|
-				Estudante.exists?(oauth_token: token, id: params[:id])
+				Estudante.exists?(oauth_token: token, id: params[:estudante][:id])
 			end
 		end
 

@@ -26,6 +26,6 @@ class Api::EstudantesController < Api::AuthenticateBase
 											  :comprovante_matricula, :xerox_rg, :email, :password, 
 											  :celular, :numero, :id, :provider, :oauth_token, :uf,
 											  :uf_inst_ensino, :expedidor_rg, :uf_expedidor_rg, 
-											  :escolaridade)
+											  :escolaridade, :xerox_cpf)
 		end
 end
