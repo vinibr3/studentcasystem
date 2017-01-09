@@ -204,7 +204,8 @@ ActiveAdmin.register Estudante do
   end
 
   before_create do |estudante|
-    estudante.password = Devise.friendly_token 
+    estudante.password = Devise.friendly_token
+    estudante.skip_confirmation!
   end
 
   # Actions
