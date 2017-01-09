@@ -6,7 +6,7 @@ class Api::EstudantesController < Api::AuthenticateBase
 			@estudante = Estudante.find(params[:estudante][:id])
 			if @estudante
 				if @estudante.update_attributes(estudante_params)
-					head 204
+					respond_with @estudante
 				else
 					render_erro @estudante.errors, 422
 				end
@@ -26,6 +26,7 @@ class Api::EstudantesController < Api::AuthenticateBase
 											  :comprovante_matricula, :xerox_rg, :email, :password, 
 											  :celular, :numero, :id, :provider, :oauth_token, :uf,
 											  :uf_inst_ensino, :expedidor_rg, :uf_expedidor_rg, 
-											  :escolaridade, :xerox_cpf)
+											  :escolaridade, :xerox_cpf, :foto_file_name, 
+											  :comprovante_matricula_file_name, :xerox_rg_file_name, :xerox_cpf_file_name)
 		end
 end

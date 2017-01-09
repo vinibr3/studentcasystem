@@ -1,6 +1,6 @@
 class Api::SessionsController < Api::AuthenticateBase
 
-	# before_action :http_login_password_authentication,  only: [:create]
+	before_action :http_login_password_authentication,  only: [:create]
 
 	def create
 		@estudante = Estudante.find_by(email: params[:email])

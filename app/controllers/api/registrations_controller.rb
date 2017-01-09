@@ -13,4 +13,9 @@ class Api::RegistrationsController < Api::AuthenticateBase
 			render_erro ex.message, 500
 		end
 	end
+
+	private 
+		def estudante_params
+			params.require(:estudante).permit(:email, :password, :password_confirmation)
+		end
 end

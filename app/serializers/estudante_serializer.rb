@@ -1,9 +1,10 @@
 class EstudanteSerializer < ActiveModel::Serializer
   ActiveModel::Serializer.root = false
   attributes :type, :id, :nome, :email,:encrypted_password, :data_nascimento,
-  			 :cpf, :rg, :sexo, :telefone, :celular, :foto_file_name, :xerox_rg_file_name, 
-  			 :xerox_cpf_file_name,:instituicao_ensino, :curso, :matricula, 
-  			 :comprovante_matricula_file_name,:oauth_token, :oauth_expires_at, 
+  			 :cpf, :rg, :sexo, :telefone, :celular, :foto, :foto_file_name,
+  			 :xerox_rg, :xerox_rg_file_name, :xerox_cpf, :xerox_cpf_file_name, 
+  			 :comprovante_matricula, :comprovante_matricula_file_name, 
+  			 :instituicao_ensino, :curso, :matricula, :oauth_token, :oauth_expires_at, 
   			 :provider, :endereco, :carteirinha_valida
 
  	def carteirinha_valida

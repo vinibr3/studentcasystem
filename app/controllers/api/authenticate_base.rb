@@ -19,8 +19,6 @@ class Api::AuthenticateBase < ApplicationController
 
 		def http_login_password_authentication
 			authenticate_or_request_with_http_basic do |email, password|
-				puts "Email: #{email}"
-				puts "password: #{password}"
 				estudante = Estudante.find_by_email(email)
 				estudante && estudante.valid_password?(password)
 			end
