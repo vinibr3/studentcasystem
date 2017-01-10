@@ -2,7 +2,6 @@ class Api::RegistrationsController < Api::AuthenticateBase
 	before_action :http_base_authentication
 
 	def create
-		begin
 			email = registration_params[:email]
 			if Estudante.exists?(email: email)
 				render_erro "Email já utilizado.", 200
@@ -14,9 +13,6 @@ class Api::RegistrationsController < Api::AuthenticateBase
 					render_erro @estudante.errors, 400
 				end
 			end
-		rescue Exception => ex
-			render_erro ex.message, 500
-		end
 	end
 
 	private 
