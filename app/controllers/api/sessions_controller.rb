@@ -5,9 +5,12 @@ class Api::SessionsController < Api::AuthenticateBase
 	def create
 		@estudante = Estudante.find_by(email: params[:email])
 		if @estudante
-			respond_with @estudante, :status => 200
-		else
-			render_erro "Estudante não encontrado. Email : #{params[:email]}", 404
+			if @estudante.confirmed?
+				respond_with @estudante, status => 200
+			else
+				@estudante.send_confirmation_instructions
+				render_erro "Antes de continuar confirme seu email. Instruções enviadas para #{estudante.email}.", 200
+			end
 		end
 	end
 

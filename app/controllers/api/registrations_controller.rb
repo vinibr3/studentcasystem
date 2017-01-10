@@ -4,7 +4,13 @@ class Api::RegistrationsController < Api::AuthenticateBase
 	def create
 			email = registration_params[:email]
 			if Estudante.exists?(email: email)
-				render_erro "Email já utilizado.", 200
+				estudante = Estudante.find_by_email(email: email)
+				if estudante.confirmed?
+					render_erro "Email já utilizado.", 200
+				else
+					estudante.send_confirmation_instructions
+					render_erro "Antes de continuar confirme seu email. Instruções enviadas para #{estudante.email}.", 200
+				end
 			else
 				@estudante = Estudante.new(registration_params)
 				if @estudante.save!
