@@ -1,5 +1,5 @@
 class Api::RegistrationsController < Api::AuthenticateBase
-	#before_action :http_base_authentication
+	before_action :http_base_authentication
 
 	def create
 			data = registration_params
