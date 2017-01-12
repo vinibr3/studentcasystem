@@ -1,8 +1,9 @@
 class Api::RegistrationsController < Api::AuthenticateBase
-	before_action :http_base_authentication
+	#before_action :http_base_authentication
 
 	def create
-			email = registration_params[:email]
+			data = registration_params
+			email = data[:email]
 			if Estudante.exists?(email: email)
 				estudante = Estudante.find_by_email(email)
 				if estudante.confirmed?

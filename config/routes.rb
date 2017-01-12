@@ -65,7 +65,7 @@ Rails.application.routes.draw do
     get 'carteirinhas',          to: 'carteirinhas#index'
     get 'sessions/new',          to: 'sessions#create'   
     get 'sessions/new/facebook', to: 'sessions#facebook'
-    post 'registration/',        to: 'registrations#create' 
+    post 'registration',         to: 'registrations#create' 
     resources :noticias, only:[:index]
 
     # Certificado de atributo
