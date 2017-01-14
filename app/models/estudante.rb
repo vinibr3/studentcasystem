@@ -119,7 +119,7 @@ class Estudante < ActiveRecord::Base
 	end
 
 	def self.koala(access_token)
-		facebook = Koala::Facebook::API.new(access_token, ENV['FACEBOOK_APP_SECRET'])
+		facebook = Koala::Facebook::API.new(access_token, ENV['MOBILEAPP_FACEBOOK_APP_SECRET'])
 		auth = facebook.get_object("me?fields=id,name,email,birthday,gender,location,education")
 	end
 

@@ -1,6 +1,7 @@
 class Api::SessionsController < Api::AuthenticateBase
 
 	before_action :http_login_password_authentication,  only: [:create]
+	before_action :http_basic_authenticate, only: [:facebook]
 
 	def create
 		@estudante = Estudante.find_by(email: params[:email])
@@ -15,7 +16,7 @@ class Api::SessionsController < Api::AuthenticateBase
 	end
 
 	def facebook
-    begin
+    	begin
 	    @estudante = Estudante.first_or_create_from_koala(params[:access_token])
 			if @estudante.persisted? 
 				respond_with @estudante, :status => 200

@@ -35,7 +35,6 @@ class Api::AuthenticateBase < ApplicationController
 	protected 
 		def http_base_authentication
 			authenticate_or_request_with_http_basic do | username , password |
-				puts 'USERNAME #{username}, #{password}'
 				username == ENV['STUDENTCASYSTEM_API_USERNAME'] && password == ENV['STUDENTCASYSTEM_API_PASSWORD']
 				# "adminuser:c430b1d23b6cd314543e5931a998b0e6" Base64 => YWRtaW51c2VyOmM0MzBiMWQyM2I2Y2QzMTQ1NDNlNTkzMWE5OThiMGU2
 			end
