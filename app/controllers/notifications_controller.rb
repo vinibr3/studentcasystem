@@ -1,9 +1,9 @@
 class NotificationsController < ApplicationController
   skip_before_filter :verify_authenticity_token, only: :create
-  before_filter :set_cors_header
+  before_filter :set_cors_headers
 
   def create
-    transaction = PagSeguro::Transaction.find_by_code(params[:notificationCode])
+    transaction = PagSeguro::Transaction.find_by_code(permitted_params[:notificationCode])
     @estudante = Estudante.find(transaction.reference)
 
     if transaction.errors.empty?
@@ -37,7 +37,9 @@ class NotificationsController < ApplicationController
         if cart.status_pagamento_to_i <= 2 && transaction.status.id == "3" # status avançou para 'pago'
             cart.update_attribute(status_versao_impressa: Carteirinha.status_versao_impressas[1].first) # muda status para 'Documentação'
         end
-        cart.update_attribute(:status_pagamento, transaction.status.id)
+        status_pagamentos = Carteirinha.status_pagamentos.map{|k,v| k}
+        index = transaction.status.id
+        cart.update_attribute(:status_pagamento, status_pagamentos[index]) if index_in_bounds
       end
     end
       render nothing: true, status: 200
@@ -50,6 +52,10 @@ class NotificationsController < ApplicationController
 
     def set_cors_headers
       headers['Access-Control-Allow-Origin'] = 'https://sandbox.pagseguro.uol.com.br'
+    end
+
+    def index_in_bounds index, size
+      index >= 0 && index < size
     end
 
 end
