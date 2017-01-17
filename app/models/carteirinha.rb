@@ -129,8 +129,8 @@ class Carteirinha < ActiveRecord::Base
 
 	def status_take_while
 		index = self.status_versao_impressa_to_i+1
-		statuses = @@status_versao_impressas.each_value{|v| v}
-		statuses.to_a.take index
+		statuses = @@status_versao_impressas.map{|k,v| v}
+		statuses.take index
 	end
 
 	def solicitacao_cancelada_ou_revogada?

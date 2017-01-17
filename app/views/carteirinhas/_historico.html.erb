@@ -7,7 +7,7 @@
 			<div>
 			    <div>
 					 <span><strong>Valor Pago:&nbsp;</strong>R$<%=  carteirinha.valor %></span><br>
-					 <span><strong>Forma de Pagamento:&nbsp;</strong><%=  carteirinha.forma_pagamento %></span><br> 
+					 <span><strong>Forma de Pagamento:&nbsp;</strong><%=  carteirinha.forma_pagamento.humanize %></span><br> 
 					 <span><strong>Transação:&nbsp;</strong><%=  carteirinha.transaction_id %> </span><br>
 			    </div>
 			    <div class="progress">
@@ -16,7 +16,7 @@
 			    	<% else %>
 			    		<% carteirinha.status_take_while.each do |status| %>
 				    		<div class="progress-bar progress-bar-success" role="progress-bar" style="width: 20%">
-				    			<%= status %>
+				    			<%= status.humanize %>
 			    			</div>
 			    		<% end %>
 			    	<% end %>   	
