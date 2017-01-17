@@ -11,8 +11,8 @@
 #   stripe_publishable_key: pk_live_9lcthxpSIHbGwmdO941O1XVU
 
 production:
- PAGSEGURO_URL_NOTIFICATION: 'http://46.101.84.54/payment/notifications'
- PAGSEGURO_URL_CALLBACK: 'http://46.101.84.54'
+ PAGSEGURO_URL_NOTIFICATION: 'http://162.243.96.101/payment/notifications'
+ PAGSEGURO_URL_CALLBACK: 'http://162.243.96.101/payment/confirmacao'
  PAGSEGURO_TOKEN: '8EA9624D2D454FFD9FF2B48C2E939380'
  PAGSEGURO_EMAIL: 'vinicius.deoliveira@outlook.com'
  PAGSEGURO_ENVIRONMENT: 'sandbox'
