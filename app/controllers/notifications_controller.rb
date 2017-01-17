@@ -3,12 +3,12 @@ class NotificationsController < ApplicationController
   before_filter :set_cors_headers
 
   def create
-    @transaction = PagSeguro::Transaction.find_by_notification_code(params[:notificationCode])
+    transaction = PagSeguro::Transaction.find_by_notification_code(params[:notificationCode])
 
-    if @transaction.errors.empty?
-      @estudante = Estudante.find(@transaction.reference)
+    if transaction.errors.empty?
+      estudante = Estudante.find(transaction.reference)
       if transaction.status.id.to_i <= 3 # status pagamento é anterior ou igual a 'Pago'
-        cart = Carteirinha.where(transaction_id: @transaction.code.to_s).first_or_create! do |c|
+        cart = Carteirinha.where(transaction_id: transaction.code.to_s).first_or_create! do |c|
           c.nome = @estudante.nome                                             
           c.rg = @estudante.rg
           c.cpf = @estudante.cpf
@@ -29,16 +29,16 @@ class NotificationsController < ApplicationController
           c.status_versao_impressa = :pagamento
           c.layout_carteirinha = @estudante.entidade.layout_carteirinhas.last if @estudante.entidade.layout_carteirinhas
           c.estudante_id = @estudante.id
-          c.forma_pagamento = @transaction.payment_method.description
-          c.status_pagamento = @transaction.status.id
-          c.transaction_id = @transaction.code
-          c.valor = @transaction.gross_amount.to_f
+          c.forma_pagamento = transaction.payment_method.description
+          c.status_pagamento = transaction.status.id
+          c.transaction_id = transaction.code
+          c.valor = transaction.gross_amount.to_f
         end
-        if cart.status_pagamento_to_i <= 2 && @transaction.status.id == "3" # status avançou para 'pago'
+        if cart.status_pagamento_to_i <= 2 && transaction.status.id == "3" # status avançou para 'pago'
             cart.update_attribute(status_versao_impressa: Carteirinha.status_versao_impressas[1].first) # muda status para 'Documentação'
         end
         status_pagamentos = Carteirinha.status_pagamentos.map{|k,v| k}
-        index = @transaction.status.id
+        index = transaction.status.id
         cart.update_attribute(:status_pagamento, status_pagamentos[index]) if index_in_bounds
       end
     end
