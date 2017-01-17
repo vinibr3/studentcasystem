@@ -1,6 +1,7 @@
 class NotificationsController < ApplicationController
   skip_before_filter :verify_authenticity_token, only: :create
-  
+  before_filter :set_cors_header
+
   def create
     transaction = PagSeguro::Transaction.find_by_code(params[:notificationCode])
     @estudante = Estudante.find(transaction.reference)
@@ -44,7 +45,11 @@ class NotificationsController < ApplicationController
 
   private
     def notifications_params
-      params.require(:notifications).permit(:notificationCode, :notificationType)
+      params.permit(:notificationCode, :notificationType)
+    end
+
+    def set_cors_headers
+      headers['Access-Control-Allow-Origin'] = 'https://sandbox.pagseguro.uol.com.br'
     end
 
 end

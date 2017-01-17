@@ -69,7 +69,7 @@ class Carteirinha < ActiveRecord::Base
 	validates_attachment_content_type :comprovante_matricula, :content_type => FILES_CONTENT_TYPE
 
 	validate :so_muda_status_versao_impressa_se_pagamento_confirmado, :nao_avancar_status_se_dados_em_branco,
-					 :check_status_carteirinha_apartir_status_pagamento
+			 :check_status_carteirinha_apartir_status_pagamento
 
 	before_update :gera_dados_se_carteirinha_aprovada, :muda_status_carteirinha_apartir_status_pagamento
 
