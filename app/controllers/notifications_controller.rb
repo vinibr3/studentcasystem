@@ -43,7 +43,7 @@ class NotificationsController < ApplicationController
       end
       render nothing: true, status: 200
     else
-      render nothing: true, status: 404
+      render json: @transaction.errors, status: 200
     end
       
   end
