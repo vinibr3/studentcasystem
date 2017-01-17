@@ -6,7 +6,7 @@ class NotificationsController < ApplicationController
     transaction = PagSeguro::Transaction.find_by_notification_code(params[:notificationCode])
 
     if transaction.errors.empty?
-      estudante = Estudante.find(transaction.reference)
+      @estudante = Estudante.find(transaction.reference)
       if transaction.status.id.to_i <= 3 # status pagamento é anterior ou igual a 'Pago'
         cart = Carteirinha.where(transaction_id: transaction.code.to_s).first_or_create! do |c|
           c.nome = @estudante.nome                                             
