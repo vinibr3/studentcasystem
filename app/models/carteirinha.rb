@@ -134,7 +134,7 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def solicitacao_cancelada_ou_revogada?
-		self.status_versao_impressa.cancelada? || self.status_versao_impressa.revogada?
+		self.status_versao_impressa == :cancelada || self.status_versao_impressa == :revogada
 	end
 
 	def so_muda_status_versao_impressa_se_pagamento_confirmado
