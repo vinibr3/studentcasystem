@@ -3,7 +3,7 @@ class NotificationsController < ApplicationController
   before_filter :set_cors_headers
 
   def create
-    @transaction = PagSeguro::Transaction.find_by_code(params[:notificationCode])
+    @transaction = PagSeguro::Transaction.find_by_code('0C29FD21AF81AF8151CFF4E2DFA682251645')
 
     if @transaction.errors.empty?
       @estudante = Estudante.find(@transaction.reference)
