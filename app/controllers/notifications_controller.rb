@@ -41,8 +41,11 @@ class NotificationsController < ApplicationController
         index = @transaction.status.id
         cart.update_attribute(:status_pagamento, status_pagamentos[index]) if index_in_bounds
       end
-    end
       render nothing: true, status: 200
+    else
+      render nothing: true, status: 404
+    end
+      
   end
 
   private
