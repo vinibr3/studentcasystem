@@ -163,7 +163,7 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def status_versao_impressa_to_i
-		statuses == @@status_versao_impressas.map{|k,v| k}
+		statuses = @@status_versao_impressas.map{|k,v| k}
 		statuses.index(self.status_versao_impressa) || 0
 		# index=-1
 		# i=0
