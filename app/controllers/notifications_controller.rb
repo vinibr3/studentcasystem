@@ -32,7 +32,7 @@ class NotificationsController < ApplicationController
           c.transaction_id = transaction.code
           c.valor = transaction.gross_amount.to_f
           c.set_forma_pagamento_by_type(transaction.payment_method.type_id)
-          c.set_status_pagamento_by_code(transaction.status.code)
+          c.set_status_pagamento_by_code(transaction.status.id)
         end
         if cart.status_pagamento_to_i <= 2 && transaction.status.id == "3" # status avançou para 'pago'
             cart.update_attribute(status_versao_impressa: Carteirinha.status_versao_impressas[1].first) # muda status para 'Documentação'
