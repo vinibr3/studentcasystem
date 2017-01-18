@@ -35,7 +35,8 @@ class NotificationsController < ApplicationController
           c.set_status_pagamento_by_code(transaction.status.id)
         end
         if cart.status_pagamento_to_i <= 2 && transaction.status.id == "3" # status avançou para 'pago'
-            cart.update_attribute(status_versao_impressa: Carteirinha.status_versao_impressas[1].first) # muda status para 'Documentação'
+            statuses = Carteirinha.status_versao_impressas.map{|k,v| k}
+            cart.update_attribute(status_versao_impressa: statuses[1]) # muda status para 'Documentação'
         end
         cart.set_status_pagamento_by_code(transaction.status.id)
         cart.save
