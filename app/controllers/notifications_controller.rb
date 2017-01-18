@@ -38,7 +38,8 @@ class NotificationsController < ApplicationController
             statuses = Carteirinha.status_versao_impressas.map{|k,v|}
             cart.status_versao_impressa = statuses[1] # muda status para 'Documentação'
         end
-        cart.set_status_pagamento_by_code(transaction.status.id)
+        c.set_forma_pagamento_by_type(transaction.payment_method.type_id)
+        c.set_status_pagamento_by_code(transaction.status.id)
         cart.save
       end
     end
