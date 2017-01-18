@@ -185,7 +185,7 @@ class Carteirinha < ActiveRecord::Base
 
 	def self.status_pagamento_to_i status_pgto
 		statuses = @@status_pagamentos.map{|k,v| k}
-		statuses.index(self.status_pagamento) || 0
+		statuses.index(status_pgto) || 0
 		# index=-1
 		# i=0
 		# @@status_pagamentos.each_key do |key|
