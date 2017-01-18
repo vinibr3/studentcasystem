@@ -29,17 +29,16 @@ class NotificationsController < ApplicationController
           c.status_versao_impressa = :pagamento
           c.layout_carteirinha = @estudante.entidade.layout_carteirinhas.last if @estudante.entidade.layout_carteirinhas
           c.estudante_id = @estudante.id
-          c.forma_pagamento = transaction.payment_method.description
-          c.status_pagamento = transaction.status.id
           c.transaction_id = transaction.code
           c.valor = transaction.gross_amount.to_f
+          c.set_forma_pagamento_by_type(transaction.payment_method.type_id)
+          c.set_status_pagamento_by_code(transaction.status.code)
         end
         if cart.status_pagamento_to_i <= 2 && transaction.status.id == "3" # status avançou para 'pago'
             cart.update_attribute(status_versao_impressa: Carteirinha.status_versao_impressas[1].first) # muda status para 'Documentação'
         end
-        status_pagamentos = Carteirinha.status_pagamentos.map{|k,v| k}
-        index = transaction.status.id
-        cart.update_attribute(:status_pagamento, status_pagamentos[index]) if index_in_bounds
+        cart.set_status_pagamento_by_code(transaction.status.code)
+        cart.save
       end
     end
     render nothing: true, status: 200
