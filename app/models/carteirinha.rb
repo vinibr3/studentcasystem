@@ -151,7 +151,7 @@ class Carteirinha < ActiveRecord::Base
 		# status_carteirinha.map{|k,v| k} do |key|
 		# 	st = true if self.status_versao_impressa.to_sym == key
 		# end
-		errors.add(:status_versao_impressa, "valor inválido para dado Status de Pagamento: #{self.status_pagamento.humanize} ") if index != nil
+		errors.add(:status_versao_impressa, "valor inválido para dado Status de Pagamento: #{self.status_pagamento.humanize} ") unless index
 	end
 
 	def nao_avancar_status_se_dados_em_branco
