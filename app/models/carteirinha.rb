@@ -168,7 +168,7 @@ class Carteirinha < ActiveRecord::Base
 		index=-1
 		i=0
 		@@status_versao_impressas.each_key do |key|
-			index=i if key == self.status_versao_impressa
+			index=i if key == self.status_versao_impressa.to_sym
 			i=i+1
 		end
 		index
@@ -189,7 +189,7 @@ class Carteirinha < ActiveRecord::Base
 		index=-1
 		i=0
 		@@status_pagamentos.each_key do |key|
-			index=i if key == status_pgto
+			index=i if key == status_pgto.to_sym
 			i=i+1
 		end
 		index
