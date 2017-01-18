@@ -7,7 +7,6 @@ class NotificationsController < ApplicationController
 
     if transaction.errors.empty?
       @estudante = Estudante.find(transaction.reference)
-      if transaction.status.id.to_i <= 3 # status pagamento é anterior ou igual a 'Pago'
         cart = Carteirinha.where(transaction_id: transaction.code.to_s).first_or_create! do |c|
           c.nome = @estudante.nome                                             
           c.rg = @estudante.rg
@@ -38,10 +37,8 @@ class NotificationsController < ApplicationController
             statuses = Carteirinha.status_versao_impressas.map{|k,v|}
             cart.status_versao_impressa = statuses[1] # muda status para 'Documentação'
         end
-        cart.set_forma_pagamento_by_type(transaction.payment_method.type_id)
         cart.set_status_pagamento_by_code(transaction.status.id)
         cart.save
-      end
     end
     render nothing: true, status: 200
   end
