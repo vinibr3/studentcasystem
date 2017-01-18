@@ -163,15 +163,15 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def status_versao_impressa_to_i
-		statuses = @@status_versao_impressas.map{|k,v| k}
-		statuses.index(self.status_versao_impressa) || 0
-		# index=-1
-		# i=0
-		# @@status_versao_impressas.each_key do |key|
-		# 	index=i if key == self.status_versao_impressa.to_sym
-		# 	i=i+1
-		# end
-		# index
+		# statuses = @@status_versao_impressas.map{|k,v| k}
+		# statuses.index(self.status_versao_impressa) || 0
+		index=-1
+		i=0
+		@@status_versao_impressas.each_key do |key|
+			index=i if key == self.status_versao_impressa
+			i=i+1
+		end
+		index
 	end
 
 	def status_pagamento_to_i
@@ -184,15 +184,15 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def self.status_pagamento_to_i status_pgto
-		statuses = @@status_pagamentos.map{|k,v| k}
-		statuses.index(status_pgto) || 0
-		# index=-1
-		# i=0
-		# @@status_pagamentos.each_key do |key|
-		# 	index=i if key == status_pgto.to_sym
-		# 	i=i+1
-		# end
-		# index
+		# statuses = @@status_pagamentos.map{|k,v| k}
+		# statuses.index(status_pgto) || 0
+		index=-1
+		i=0
+		@@status_pagamentos.each_key do |key|
+			index=i if key == status_pgto
+			i=i+1
+		end
+		index
 	end
 
 	def set_status_pagamento_by_code code
