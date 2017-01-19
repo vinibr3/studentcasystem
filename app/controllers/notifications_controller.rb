@@ -8,7 +8,7 @@ class NotificationsController < ApplicationController
     transaction = PagSeguro::Transaction.find_by_notification_code(params[:notificationCode])
     if transaction.errors.empty?
       @estudante = Estudante.find(transaction.reference)
-      perform_async(transaction, @estudante)
+      NotificationsController.perform_async(transaction, @estudante)
     end
     render nothing: true, status: 200
   end
