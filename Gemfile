@@ -55,7 +55,7 @@ gem 'omniauth-facebook'
 # Gerencia variaveis de ambiente
 gem 'figaro', '~> 1.1', '>= 1.1.1'
 # Edita imagens
-#gem 'rmagick', '~> 2.15', '>= 2.15.4'
+gem 'rmagick', '~> 2.15', '>= 2.15.4'
 # Verifica certificados ou fornece um quando não há
 #gem 'certified', '~> 1.0'
 # Gera arquivo .zip
@@ -73,9 +73,11 @@ gem 'activeadmin-wysihtml5', github: 'stefanoverna/activeadmin-wysihtml5'
 gem 'aws-sdk', '< 2.0' # Erro uninitialized constant Paperclip::Storage::S3:AWS for '~> 2.0'
 # Datetimepicker para active admin
 gem 'active_admin_datetimepicker', '~> 0.3.0'
+# Processamento em background
+gem 'sidekiq', '~> 4.2', '>= 4.2.9'
 
 group :production do
- #gem 'unicorn'
+ gem 'unicorn'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
