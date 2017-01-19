@@ -37,7 +37,7 @@ class Entidade < ActiveRecord::Base
 	#validates :url_qr_code, length: {maximum: 70, too_long: "Máximo de #{count} caracteres permitidos."}, format:{with: URI.regexp} ,allow_blank: false
 	#validates :auth_info_access, length:{maximum: 100, too_long: "Máximo de #{count} caracteres permitidos."}, format:{with: URI.regexp}, allow_blank: false
 	#validates :crl_dist_points, length:{maximum: 100, too_long: "Máximo de #{count} caracteres permitidos."}, format:{with: URI.regexp}, allow_blank: false
-	validates :dominio, length:{maximum: 100, too_long: "Máximo de #{count} caracteres permitidos."}, format:{with: URI.regexp}, allow_blank: false
+	#validates :dominio, length:{maximum: 100, too_long: "Máximo de #{count} caracteres permitidos."}, format:{with: URI.regexp}, allow_blank: false
 	validates_attachment_size :logo, :less_than => 1.megabytes
 	validates_attachment_file_name :logo, :matches => FILES_NAME_PERMIT
 	validates_attachment_content_type :logo, :content_type => FILES_CONTENT_TYPE

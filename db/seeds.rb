@@ -42,7 +42,7 @@ AdminUser.create!(nome: "Super Admin", email: 'doti@doti.com.br', password: 'adm
 #Entidade
 entidade = Entidade.create!(nome: "Entidade", email: "contato@entidade.com", cnpj:"12345678912345", sigla: "ENT",
                             valor_carteirinha: 25, cep: "11111111", nome_presidente: "Presidente", 
-                            email_presidente: "email@email.com") unless Entidade.exists?(nome: "Entidade")
+                            email_presidente: "email@email.com", dominio: "https://www.entidade.org.br", url_auth_info: "https://www.entidade.com.br", crl_dist_points: "https://entidade.com.br") unless Entidade.exists?(nome: "Entidade")
 # Instituições de Ensino
 # inst = InstituicaoEnsino.create!(nome: "Universidade Estadual do Piauí", sigla: "UESPI", cnpj: "12345678912345", logradouro: "Rua 1", 
 #                            complemento: "jardins", numero: "123", cep:"74916170", cidade: Cidade.find(3103), estado: Estado.find(17), entidade: entidade)
