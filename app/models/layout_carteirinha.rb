@@ -33,7 +33,7 @@ class LayoutCarteirinha < ActiveRecord::Base
 	                      
 
 
-	validates_presence_of :verso, :anverso, :entidade
+	validates_presence_of :anverso, :entidade
 	validates_associated :entidade                                   
 
 	def entidade_nome
