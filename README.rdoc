@@ -6,10 +6,53 @@ application up and running.
 Things you may want to cover:
 
 * Ruby version
+	
+	4.0+
 
 * System dependencies
+	
+	O sistema foi desenvolvido para executar com suas plenas funcionalidades quando instalado em ambiente Ubuntu 14.4+.
+	
+	A gem 'rmagick' e 'Paperclip' têm como dependencia a biblioteca de processamento de imagens ImageMagick
+	
+	On Ubuntu, you can run:
+
+	sudo apt-get install libmagickwand-dev
+
+	A gem 'rmagick' tem como dependencia a biblioteca de processamento de imagens 
 
 * Configuration
+
+Configure as variáveis para os ambientes test, development e production  no arquivo config/application.yml 
+
+Exemplo:
+
+ PAGSEGURO_URL_NOTIFICATION: 'http://[ip | domínio]/payment/notifications'  # Alterar somente o IP ou Domínio da aplicação
+ PAGSEGURO_URL_CALLBACK: 'http://[ip | domínio]/payment/confirmacao'		# Alterar somente o IP ou Domínio da aplicação
+ PAGSEGURO_TOKEN: ''														# Token de acesso da conta do pagseguro
+ PAGSEGURO_EMAIL: ''							# Email de acesso da conta do pagseguro
+ PAGSEGURO_ENVIRONMENT: ''          # Ambiente de execução do pagseguro: 'sandbox' para teste ou 'production' para produção
+ FACEBOOK_APP_ID: '' # ID do aplicativo do facebook que permite o login pelo sistema web
+ FACEBOOK_APP_SECRET: '' # SECRET do aplicativo do facebook que permite o login pelo sistema web
+ MOBILEAPP_FACEBOOK_APP_ID: '' # ID do aplicativo do facebook que permite o login pelo aplicativo mobile, quando utilizado
+ MOBILEAPP_FACEBOOK_APP_SECRET: '' # SECRET do aplicativo do facebook que permite o login pelo aplicativo mobile, quando utilizado
+ STUDENTCASYSTEM_DATABASE_USER: '' # Usuario do postgres no servidor. Usuário padrão: 'rails'
+ STUDENTCASYSTEM_DATABASE_PASSWORD: '' # Senha do postgres no servidor.
+ STUDENTCASYSTEM_EMAIL_USER: '' # Email padrão para envio de e-mails, tanto para o DeviceMailer quanto para outros Mailers
+ STUDENTCASYSTEM_EMAIL_SMTP: '' # 
+ STUDENTCASYSTEM_EMAIL_PORT: ''
+ STUDENTCASYSTEM_EMAIL_DOMAIN: '' # Domínio do e-mail, ex: gmail.com
+ STUDENTCASYSTEM_EMAIL_PASSWORD: '' # Senha do email 
+ STUDENTCASYSTEM_EMAIL_SITE_DOMAIN: '' # Domínio de onde será enviado o e-mail, domínio do site da entidade ou IP, incluindo 'http://'
+ STUDENTCASYSTEM_API_USERNAME: 'adminuser' # Domínio
+ STUDENTCASYSTEM_API_PASSWORD: 'c430b1d23b6cd314543e5931a998b0e6'
+ STUDENTCASYSTEM_NOME_ENTIDADE: 'Nome Entidade' # Inserir o nome da entidade que aparecerá no activeadmin
+ STUDENTCASYSTEM_LOGO_ENTIDADE: 'logo.png'      # Inserir o nome da imagem que contem a logo da entidade. Será mostrada no activeadmin
+ RECAPTCHA_PUBLIC_KEY:  ''
+ RECAPTCHA_PRIVATE_KEY: ''
+ AMAZON_S3_BUCKET: ''
+ AMAZON_S3_ACCESS_KEY_ID: ''
+ AMAZON_S3_SECRET_ACCESS_KEY_ID: ''
 
 * Database creation
 

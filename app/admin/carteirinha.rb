@@ -28,6 +28,7 @@ ActiveAdmin.register Carteirinha do
   filter :nome
 	filter :numero_serie
   filter :transaction_id
+  filter :alterado_por, label: 'Alterado Por'
 	
 	index do
 		selectable_column
@@ -267,14 +268,15 @@ ActiveAdmin.register Carteirinha do
         end
       end
 
-      def update(options={}, &block)
-        if resource.status_versao_impressa != params[:carteirinha][:status_versao_impressa]  
-          #EstudanteNotificacoes.status_notificacoes(@carteirinha).deliver_now if resource.update_attributes(permitted_params[:carteirinha])
-        end
-        super do |success, failure| 
-          block.call(success, failure) if block
-          failure.html { render :edit }
-        end
-      end
+      # Permite envio de notificações para o aluno quando alterado o status da carteirinha 
+      # def update(options={}, &block) 
+      #   if resource.status_versao_impressa != params[:carteirinha][:status_versao_impressa]  
+      #     #EstudanteNotificacoes.status_notificacoes(@carteirinha).deliver_now if resource.update_attributes(permitted_params[:carteirinha])
+      #   end
+      #   super do |success, failure| 
+      #     block.call(success, failure) if block
+      #     failure.html { render :edit }
+      #   end
+      # end
     end
 end

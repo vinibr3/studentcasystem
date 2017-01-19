@@ -54,9 +54,9 @@ class Api::AuthenticateBase < ApplicationController
 		end
 
 		def http_base_authentication_with_entidade_data
-			entidade = Entidade.instance
+			entidade = Entidade.first
 			authenticate_or_request_with_http_basic do |username, password|
-				username == "doti" && password == entidade.token_certificado
+				password == entidade.token_certificado
 			end
 		end
 

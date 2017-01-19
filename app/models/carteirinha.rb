@@ -147,10 +147,6 @@ class Carteirinha < ActiveRecord::Base
 		status_carteirinha = Carteirinha.show_status_carteirinha_apartir_do_status_pagamento self.status_pagamento
 		status_carteirinha = status_carteirinha.map{|k,v| k}
 		index = status_carteirinha.index(self.status_versao_impressa.to_sym)
-		# st=false
-		# status_carteirinha.map{|k,v| k} do |key|
-		# 	st = true if self.status_versao_impressa.to_sym == key
-		# end
 		errors.add(:status_versao_impressa, "valor inválido para dado Status de Pagamento: #{self.status_pagamento.humanize} ") unless index
 	end
 
@@ -165,8 +161,6 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def status_versao_impressa_to_i
-		# statuses = @@status_versao_impressas.map{|k,v| k}
-		# statuses.index(self.status_versao_impressa) || 0
 		index=-1
 		i=0
 		@@status_versao_impressas.each_key do |key|
@@ -186,8 +180,6 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def self.status_pagamento_to_i status_pgto
-		# statuses = @@status_pagamentos.map{|k,v| k}
-		# statuses.index(status_pgto) || 0
 		index=-1
 		i=0
 		@@status_pagamentos.each_key do |key|
@@ -341,5 +333,4 @@ class Carteirinha < ActiveRecord::Base
 		def data_qr_code_blank layout
 			layout.qr_code_posx.blank? && layout.qr_code_posy.blank? && layout.qr_code_width.blank? && layout.qr_code_height.blank?
 		end
-
 end

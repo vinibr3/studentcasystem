@@ -75,24 +75,24 @@ entidade = Entidade.create!(nome: "Entidade", email: "contato@entidade.com", cnp
   Curso.create!(nome: (i+1).to_s.concat("º ANO"), escolaridade: ensino_medio)
  end
 
- #Cursos / Graduação
-  curso1 = Curso.create!(nome: "Agronomia", escolaridade: graduacao)
-  curso2 = Curso.create!(nome: "Administração", escolaridade: graduacao)
-  curso3 = Curso.create!(nome: "Engenharia Civíl", escolaridade: graduacao)
-  curso4 = Curso.create!(nome: "Ciência Da Computação", escolaridade: graduacao)
-  Curso.create!(nome: "Engenharia Civíl", escolaridade: graduacao)
-  Curso.create!(nome: "Ciência Da Computação", escolaridade: graduacao)
- #Cursos / Pós-graduação
-  Curso.create!(nome: "Agronomia", escolaridade: pos_graduacao)
-  Curso.create!(nome: "Administração", escolaridade: pos_graduacao)
-  Curso.create!(nome: "Engenharia Civíl", escolaridade: pos_graduacao)
-  Curso.create!(nome: "Ciência Da Computação", escolaridade: pos_graduacao)
- #Cursos / Mestrado
-  Curso.create!(nome: "Agronomia", escolaridade: mestrado)
-  Curso.create!(nome: "Administração", escolaridade: mestrado)
-  Curso.create!(nome: "Engenharia Civíl", escolaridade: mestrado)
- #Cursos / Doutorado
-  Curso.create!(nome: "Agronomia", escolaridade: doutorado)
-  Curso.create!(nome: "Administração", escolaridade: doutorado)
- #Cursos / Pós-Doutorado
-  Curso.create!(nome: "Agronomia", escolaridade: pos_doutorado)
+ # #Cursos / Graduação
+ #  curso1 = Curso.create!(nome: "Agronomia", escolaridade: graduacao)
+ #  curso2 = Curso.create!(nome: "Administração", escolaridade: graduacao)
+ #  curso3 = Curso.create!(nome: "Engenharia Civíl", escolaridade: graduacao)
+ #  curso4 = Curso.create!(nome: "Ciência Da Computação", escolaridade: graduacao)
+ #  Curso.create!(nome: "Engenharia Civíl", escolaridade: graduacao)
+ #  Curso.create!(nome: "Ciência Da Computação", escolaridade: graduacao)
+ # #Cursos / Pós-graduação
+ #  Curso.create!(nome: "Agronomia", escolaridade: pos_graduacao)
+ #  Curso.create!(nome: "Administração", escolaridade: pos_graduacao)
+ #  Curso.create!(nome: "Engenharia Civíl", escolaridade: pos_graduacao)
+ #  Curso.create!(nome: "Ciência Da Computação", escolaridade: pos_graduacao)
+ # #Cursos / Mestrado
+ #  Curso.create!(nome: "Agronomia", escolaridade: mestrado)
+ #  Curso.create!(nome: "Administração", escolaridade: mestrado)
+ #  Curso.create!(nome: "Engenharia Civíl", escolaridade: mestrado)
+ # #Cursos / Doutorado
+ #  Curso.create!(nome: "Agronomia", escolaridade: doutorado)
+ #  Curso.create!(nome: "Administração", escolaridade: doutorado)
+ # #Cursos / Pós-Doutorado
+ #  Curso.create!(nome: "Agronomia", escolaridade: pos_doutorado)

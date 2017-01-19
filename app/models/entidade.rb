@@ -80,4 +80,10 @@ class Entidade < ActiveRecord::Base
 		def config_url_qr_code_from_dominio
 			self.url_qr_code = self.dominio.concat(url_for controller:"certificados", action: "show") if Entidade.count == 1
 		end
+
+		def config_usuario_and_token_certificado
+			self.usuario = self.sigla
+			self.token_certificado = Devise.frindly_token
+		end
+
 end

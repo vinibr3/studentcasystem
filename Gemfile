@@ -74,7 +74,7 @@ gem 'aws-sdk', '< 2.0' # Erro uninitialized constant Paperclip::Storage::S3:AWS 
 # Datetimepicker para active admin
 gem 'active_admin_datetimepicker', '~> 0.3.0'
 # Processamento em background
-gem 'sidekiq', '~> 4.2', '>= 4.2.9'
+#gem 'sidekiq', '~> 4.2', '>= 4.2.9'
 
 group :production do
  gem 'unicorn'
