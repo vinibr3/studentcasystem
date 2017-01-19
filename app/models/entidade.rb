@@ -63,7 +63,7 @@ class Entidade < ActiveRecord::Base
 
 	validates_associated :estudantes
 
-	validates_presence_of :nome, :sigla, :email, :valor_carteirinha, :url_qr_code, :auth_info_access, :crl_dist_points, :dominio 
+	validates_presence_of :nome, :sigla, :email, :valor_carteirinha, :auth_info_access, :crl_dist_points, :dominio 
 
 	before_create :config_url_qr_code_from_dominio, :config_usuario_and_token_certificado
 
