@@ -54,9 +54,7 @@ Rails.application.configure do
       access_key_id: ENV["AMAZON_S3_ACCESS_KEY_ID"],
       secret_access_key: ENV["AMAZON_S3_SECRET_ACCESS_KEY_ID"],
       s3_region: ENV["AMAZON_S3_REGION"]
-    }, 
-    url: 's3_domain_url',
-    path: "/:class/:id/:attachment/:style/:filename",
-    s3_host_name: "#{ENV["AMAZON_S3_REGION"]}.amazonaws.com"
+    },
+    s3_host_name: "s3-#{ENV["AMAZON_S3_REGION"]}.amazonaws.com"
   }
 end
