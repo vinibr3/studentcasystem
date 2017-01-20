@@ -189,15 +189,6 @@ class Carteirinha < ActiveRecord::Base
 		index
 	end
 
-	def set_status_pagamento_by_code code
-		statuses = @@status_pagamentos.map{|k,v| k}
-		if 1 < code.to_i && code.to_i < 7
-			self.status_pagamento = statuses[code.to_i]
-		else
-			self.status_pagamento = statuses[0] # Iniciado
-		end
-	end
-
 	def set_forma_pagamento_by_type type
 		formas = @@forma_pagamentos.map{|k,v| k}
 		case type
@@ -231,7 +222,7 @@ class Carteirinha < ActiveRecord::Base
 		if self.aprovada? # Status é 'Aprovada'
             # Gera informações  
             estudante = self.estudante
-            self.layout_carteirinha = estudante.entidade.layout_carteirinha               if self.layout_carteirinha.blank?
+            self.layout_carteirinha = estudante.entidade.layout_carteirinhas.first               if self.layout_carteirinha.blank?
             self.nao_antes = Time.new                                                     if self.nao_antes.blank?
             self.nao_depois = Time.new(Time.new.year+1, 3, 31).to_date                    if self.nao_depois.blank? 
             self.numero_serie = Carteirinha.gera_numero_serie                             if self.numero_serie.blank?
