@@ -14,7 +14,7 @@ class NotificationsController < ApplicationController
             statuses = Carteirinha.status_versao_impressas.map{|k,v|}
             carteirinha.update(status_versao_impressa: statuses[1]) # muda status para 'Documentação'
           end
-          render nothing:, status: 201
+          render nothing: true, status: 201
         else
           estudante.carteirinhas.build do |c|
             c.nome = estudante.nome                                             
