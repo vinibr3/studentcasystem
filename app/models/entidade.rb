@@ -1,6 +1,8 @@
 class Entidade < ActiveRecord::Base
+	
+	url_path = "/admin/:class/:id/:attachment/:style/:filename"
 
-	has_attached_file :logo, :styles => {:original => {}}
+	has_attached_file :logo, :styles => {:original => {}}, :path => "#{url_path}"
 	has_attached_file :configuracao, :styles => {:original => {}}
 	
 	has_many :estudantes
@@ -59,13 +61,9 @@ class Entidade < ActiveRecord::Base
 	validates :cidade_presidente, length: {maximum: 50, too_long: "Máximo de #{count} caracteres permitidos."}, allow_blank: true
 	validates :uf_presidente, length: {is: 2, wrong_length: "Máximo de 2 caracteres permitidos."}, format: {with: STRING_REGEX}, allow_blank: true
 
-	validates_associated :estudantes
-
 	validates_presence_of :nome, :sigla, :email, :valor_carteirinha, :auth_info_access, :crl_dist_points, :dominio, :url_qr_code 
 
-	before_validation :config_data_from_dominio
 	before_create :config_data_from_dominio
-	before_update :config_data_from_dominio
 
 	def self.instance
 		entidade = Entidade.last
@@ -78,10 +76,7 @@ class Entidade < ActiveRecord::Base
 
 	private 
 		def config_data_from_dominio 
-			self.url_qr_code = self.dominio.concat('/certificados/')
-			self.crl_dist_points = self.dominio.concat('/certificados/lista.crl')
-			self.auth_info_access = self.dominio.concat('/certificados/aia.crt')
-			self.usuario = self.sigla
+			self.usuario = self.sigla unless self.usuario
 			self.token_certificado = Devise.friendly_token unless self.token_certificado 
 		end
 

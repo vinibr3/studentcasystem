@@ -9,6 +9,5 @@ class Cidade < ActiveRecord::Base
   validates_format_of :nome, with: LETRAS, message: "Formato inválido"
   validates_length_of :nome, in: 1..40, wrong_length: "Mínimo de 1 e máximo de 40"
   validates_uniqueness_of :nome
-  validates_associated :estado
 
 end

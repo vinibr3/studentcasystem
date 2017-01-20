@@ -2,8 +2,10 @@ class LayoutCarteirinha < ActiveRecord::Base
 	has_many :carteirinhas
 	belongs_to :entidade
 
-	has_attached_file :verso, :styles => {:original => {}}
-	has_attached_file :anverso, :styles => {:original => {}}
+	url_path = "/admin/:class/:id/:attachment/:style/:filename"
+
+	has_attached_file :verso, :styles => {:original => {}}, :path => "#{url_path}"
+	has_attached_file :anverso, :styles => {:original => {}}, :path => "#{url_path}"
 
 	FILES_NAME_PERMIT = [/png\Z/, /jpe?g\Z/]
 	FILES_CONTENT_TYPE = ['image/jpeg', 'image/png']
@@ -29,7 +31,7 @@ class LayoutCarteirinha < ActiveRecord::Base
 	                      :codigo_uso_posx, :codigo_uso_posy, :foto_posx, :foto_posy, :foto_width, 
 	                      :foto_height, :qr_code_posx, :qr_code_posy, :qr_code_width, :qr_code_height 
 	                      
-	validates_presence_of :anverso, :entidade                                 
+	validates_presence_of :anverso, :entidade                                  
 
 	def entidade_nome
 		self.entidade.nome if self.entidade

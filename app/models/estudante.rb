@@ -13,10 +13,12 @@ class Estudante < ActiveRecord::Base
 	has_one :estado, through: :cidade
 	has_one :escolaridade, through: :curso
 
+	url_path = "/default/:class/:id/:attachment/:style/:filename"
+
 	has_attached_file :foto, :styles => {:original => {}}
-	has_attached_file :comprovante_matricula, :styles => {:original => {}}
-	has_attached_file :xerox_rg, :styles => {:original => {}}
-	has_attached_file :xerox_cpf, :styles => {:original => {}} 
+	has_attached_file :comprovante_matricula, :styles => {:original => {}}, :path => "#{url_path}"
+	has_attached_file :xerox_rg, :styles => {:original => {}}, :path => "#{url_path}"
+	has_attached_file :xerox_cpf, :styles => {:original => {}}, :path => "#{url_path}"
 	
 	FILES_NAME_PERMIT = [/png\Z/, /jpe?g\Z/, /pdf\Z/]
 	FILES_CONTENT_TYPE = ['image/jpeg', 'image/png', 'application/pdf']
@@ -66,13 +68,7 @@ class Estudante < ActiveRecord::Base
     
   validates_length_of :foto_file_name, :comprovante_matricula_file_name, :xerox_rg_file_name, 
                       :maximum => 50, :message => "Nome do arquivo deve ser menor que #{count} caracteres"
-  validates_associated :carteirinhas, allow_blank: true
-  validates_associated :instituicao_ensino, allow_blank: true
-  validates_associated :curso, allow_blank: true
-  validates_associated :cidade, allow_blank: true
-  validates_associated :estado, allow_blank: true
-  validates_associated :escolaridade, allow_blank: true
-
+  
 	public
 		def tem_carteirinha
 			!self.carteirinha.last.nil?

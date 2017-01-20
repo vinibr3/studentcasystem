@@ -49,7 +49,9 @@ ActiveAdmin.register AdminUser do
             row :rg
             row :expedidor_rg
             row :uf_expedidor_rg
-            row :data_nascimento
+            row "Data Nascimento" do |estudante|
+              estudante.data_nascimento 
+            end
             row "Gênero" do
               admin_user.sexo
             end
@@ -112,7 +114,9 @@ ActiveAdmin.register AdminUser do
       f.input :rg, label:"RG"
       f.input :expedidor_rg, label:"Expedidor RG"
       f.input :uf_expedidor_rg, label:"UF Expedidor RG"
-      f.input :data_nascimento, label: "Data Nascimento"
+      f.input :data_nascimento, label: "Data de Nascimento", as: :datepicker, datepicker_options: { day_names_min: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
+                                                                                                    month_names_short: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+                                                                                                    year_range: "1930:", show_anim: "slideDown", changeMonth: true, changeYear: true}
       f.input :sexo, as: :radio, collection: ["Masculino", "Feminino"], label: "Gênero"
       f.input :celular
       f.input :telefone

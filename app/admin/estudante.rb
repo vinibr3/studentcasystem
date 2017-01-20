@@ -28,7 +28,9 @@ ActiveAdmin.register Estudante do
     column "Entidade" do |estudante|
       estudante.entidade_nome
     end
-    column :sexo, "Gênero"
+    column "Gênero" do |estudante|
+      estudante.sexo
+    end
     column :telefone
     column :logradouro
     column "Cidade" do |estudante|

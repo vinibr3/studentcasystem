@@ -116,7 +116,9 @@ ActiveAdmin.register Entidade do
 			f.input :rg_presidente, label: "RG"
 			f.input :expedidor_rg_presidente, label: "Expedidor RG"
 			f.input :uf_expedidor_rg_presidente, label: "UF Expedidor"
-			f.input :data_nascimento_presidente, label: "Data Nascimento",as: :datepicker
+			f.input :data_nascimento_presidente, label: "Data Nascimento", as: :datepicker, datepicker_options: { day_names_min: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
+                                                                                                    month_names_short: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+                                                                                                    year_range: "1930:", show_anim: "slideDown", changeMonth: true, changeYear: true}
 			f.input :sexo_presidente, label: "Sexo"
 			f.input :celular_presidente, label: "Celular"
 			f.input :telefone_presidente, label: "Telefone"

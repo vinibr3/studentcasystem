@@ -47,6 +47,7 @@ Rails.application.configure do
   #Paperclip.options[:command_path] = 'C:\ImageMagick'
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
   config.paperclip_defaults = {
     storage: :s3,
     s3_credentials: {
@@ -57,4 +58,5 @@ Rails.application.configure do
     },
     s3_host_name: "s3-#{ENV["AMAZON_S3_REGION"]}.amazonaws.com"
   }
+
 end
