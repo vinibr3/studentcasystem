@@ -13,12 +13,10 @@ class Estudante < ActiveRecord::Base
 	has_one :estado, through: :cidade
 	has_one :escolaridade, through: :curso
 
-	url_path = "/default/:class/:id/:attachment/:style/:filename"
-
-	has_attached_file :foto, :styles => {:original => {}}, :path => "#{url_path}"
-	has_attached_file :comprovante_matricula, :styles => {:original => {}}, :path => "#{url_path}"
-	has_attached_file :xerox_rg, :styles => {:original => {}}, :path => "#{url_path}"
-	has_attached_file :xerox_cpf, :styles => {:original => {}}, :path => "#{url_path}"
+	has_attached_file :foto, :styles => {:original => {}}
+	has_attached_file :comprovante_matricula, :styles => {:original => {}}
+	has_attached_file :xerox_rg, :styles => {:original => {}}
+	has_attached_file :xerox_cpf, :styles => {:original => {}} 
 	
 	FILES_NAME_PERMIT = [/png\Z/, /jpe?g\Z/, /pdf\Z/]
 	FILES_CONTENT_TYPE = ['image/jpeg', 'image/png', 'application/pdf']

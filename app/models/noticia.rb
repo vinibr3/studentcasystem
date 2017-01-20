@@ -4,9 +4,7 @@ class Noticia < ActiveRecord::Base
 	FILES_CONTENT_TYPE = ['image/jpeg', 'image/png']
 	LETRAS = /[A-Z a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+/
 
-	url_path = "/admin/:class/:id/:attachment/:style/:filename"
-
-	has_attached_file :foto, :path => "#{url_path}"
+	has_attached_file :foto
 
 	validates :titulo, length:{maximum: 40, too_long: "Máximo de 40 caracteres permitidos."}
 	validates :autor, length:{maximum: 40, too_long: "Máximo de 40 caracteres permitidos."}, format:{with: LETRAS }

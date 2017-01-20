@@ -2,10 +2,8 @@ class LayoutCarteirinha < ActiveRecord::Base
 	has_many :carteirinhas
 	belongs_to :entidade
 
-	url_path = "/admin/:class/:id/:attachment/:style/:filename"
-
-	has_attached_file :verso, :styles => {:original => {}}, :path => "#{url_path}"
-	has_attached_file :anverso, :styles => {:original => {}}, :path => "#{url_path}"
+	has_attached_file :verso, :styles => {:original => {}}
+	has_attached_file :anverso, :styles => {:original => {}}
 
 	FILES_NAME_PERMIT = [/png\Z/, /jpe?g\Z/]
 	FILES_CONTENT_TYPE = ['image/jpeg', 'image/png']

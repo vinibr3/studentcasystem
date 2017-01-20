@@ -1,8 +1,6 @@
 class Entidade < ActiveRecord::Base
-	
-	url_path = "/admin/:class/:id/:attachment/:style/:filename"
 
-	has_attached_file :logo, :styles => {:original => {}}, :path => "#{url_path}"
+	has_attached_file :logo, :styles => {:original => {}}
 	has_attached_file :configuracao, :styles => {:original => {}}
 	
 	has_many :estudantes

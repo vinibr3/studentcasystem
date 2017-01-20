@@ -4,12 +4,10 @@ class Carteirinha < ActiveRecord::Base
 	belongs_to :entidade
 	belongs_to :layout_carteirinha
 
-	url_path = "/default/:class/:id/:attachment/:style/:filename"
-
-	has_attached_file :foto, :styles => {:original => {}}, :path => "#{url_path}"
-	has_attached_file :xerox_cpf, :styles => {:original => {}}, :path => "#{url_path}"
-	has_attached_file :xerox_rg, :styles => {:original => {}}, :path => "#{url_path}"
-	has_attached_file :comprovante_matricula, :styles => {:original => {}}, :path => "#{url_path}"
+	has_attached_file :foto, :styles => {:original => {}}
+	has_attached_file :xerox_cpf, :styles => {:original => {}}
+	has_attached_file :xerox_rg, :styles => {:original => {}}
+	has_attached_file :comprovante_matricula, :styles => {:original => {}}
 
 	FILES_NAME_PERMIT = [/png\Z/, /jpe?g\Z/, /pdf\Z/]
 	FILES_CONTENT_TYPE = ['image/jpeg', 'image/png', 'application/pdf']
@@ -26,8 +24,8 @@ class Carteirinha < ActiveRecord::Base
 										    oi_pago: "Oi Paggo", deposito_em_conta: "Depósito em conta", dinheiro: "Dinheiro"}		   				
 
 	@@status_pagamentos = {iniciado: "Iniciado", aguardando_pagamento: "Aguardando pagamento", em_analise: "Em análise",
-							 				   pago: "Pago", disponivel: "Disponível", em_disputa: "Em disputa", devolvida: "Devolvida",
-							 				   cancelado: "Cancelada", contestada: "Contestada"}
+							 				   pago: "Pago", disponivel: "Disponível", em_disputa: "Em disputa", devolvido: "Devolvido",
+							 				   cancelado: "Cancelado", contestado: "Contestado"}
 
 	enum status_versao_impressa: @@status_versao_impressas
 	enum forma_pagamento: @@forma_pagamentos
