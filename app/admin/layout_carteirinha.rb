@@ -8,7 +8,7 @@ ActiveAdmin.register LayoutCarteirinha do
 	              :cpf_posx, :cpf_posy, :codigo_uso_posx, :codigo_uso_posy, 
 	              :nao_depois_posx, :nao_depois_posy, :qr_code_posx, :qr_code_posy,
 	              :qr_code_width, :qr_code_height, :foto_posx, :foto_posy,
-	              :foto_width, :foto_height, :entidade_id, :matricula_posx, :matricula_posy
+	              :foto_width, :foto_height, :entidade_id, :matricula_posx, :matricula_posy, :tamanho_fonte
 
 	filter :anverso_file_name
 	filter :verso_file_name
@@ -35,6 +35,9 @@ ActiveAdmin.register LayoutCarteirinha do
 				end
 				row :entidade do
 					layout_carteirinha.entidade_nome
+				end
+				row "Tamanho da Fonte" do
+					layout_carteirinha.tamanho_fonte
 				end
 			end
 		end
@@ -91,6 +94,7 @@ ActiveAdmin.register LayoutCarteirinha do
 			f.input :anverso, label: "Frente", :hint => "Imagem Atual: #{f.object.anverso_file_name}"
 			f.input :verso, label: "Verso", :hint => "Imagem Atual: #{f.object.verso_file_name}"
 			f.input :entidade, collection: Entidade.all.map{|e| [e.nome, e.id]}, prompt: "Selecione Entidade", include_blank: false
+			f.input :tamanho_fonte, label: "Tamanho da Fonte"
 		end
 		panel "Informações" do
 			attributes_table_for layout_carteirinha do

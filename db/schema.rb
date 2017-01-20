@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161209220337) do
+ActiveRecord::Schema.define(version: 20170120215716) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -356,6 +356,7 @@ ActiveRecord::Schema.define(version: 20161209220337) do
     t.integer  "entidade_id"
     t.integer  "matricula_posx"
     t.integer  "matricula_posy"
+    t.integer  "tamanho_fonte"
   end
 
   add_index "layout_carteirinhas", ["entidade_id"], name: "index_layout_carteirinhas_on_entidade_id", using: :btree

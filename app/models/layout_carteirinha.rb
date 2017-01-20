@@ -23,7 +23,7 @@ class LayoutCarteirinha < ActiveRecord::Base
 	                          :qr_code_posx, :qr_code_posy, :matricula_posx, :matricula_posy
 	                                                 
 	validates_numericality_of :escolaridade_posy, :escolaridade_posx, :cpf_posy, :cpf_posx, 
-														:nao_depois_posy, :nao_depois_posx, allow_blank: true
+							  :nao_depois_posy, :nao_depois_posx, :tamanho_fonte, allow_blank: true
 
 	validates_presence_of :nome_posx, :nome_posy, :instituicao_ensino_posx, :instituicao_ensino_posy,
 	                      :curso_posx, :curso_posy, :matricula_posx, :matricula_posy,
@@ -31,7 +31,7 @@ class LayoutCarteirinha < ActiveRecord::Base
 	                      :codigo_uso_posx, :codigo_uso_posy, :foto_posx, :foto_posy, :foto_width, 
 	                      :foto_height, :qr_code_posx, :qr_code_posy, :qr_code_width, :qr_code_height 
 	                      
-	validates_presence_of :anverso, :entidade                                  
+	validates_presence_of :anverso, :entidade, :tamnho_fonte                                  
 
 	def entidade_nome
 		self.entidade.nome if self.entidade
