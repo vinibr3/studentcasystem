@@ -180,13 +180,8 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def self.status_pagamento_to_i status_pgto
-		index=-1
-		i=0
-		@@status_pagamentos.each_key do |key|
-			index=i if key == status_pgto.to_sym
-			i=i+1
-		end
-		index
+		statuses = @@status_pagamentos.map{|k,v| k}
+		index = statuses.index(status_pgto.to_sym)
 	end
 
 	def self.status_pagamento_by_code code
