@@ -40,8 +40,6 @@ class AdminUser < ActiveRecord::Base
   validates :password, :password_confirmation, presence: true, on: :create
   validates :password, confirmation: true
 
-  validates_associated :cidade
-
   def cidade_nome
     self.cidade.nome if self.cidade
   end
