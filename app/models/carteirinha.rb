@@ -192,23 +192,25 @@ class Carteirinha < ActiveRecord::Base
 	def self.status_pagamento_by_code code
  		statuses = Carteirinha.status_pagamentos.map{|k,v| k}
  		if 1 < code.to_i && code.to_i < 7
- 			self.status_pagamento = statuses[code.to_i]
+ 			return statuses[code.to_i]
  		else
- 			self.status_pagamento = statuses[0] # Iniciado
+ 			return statuses[0] # Iniciado
  		end
  	end
 
 	def self.forma_pagamento_by_type type
 		formas = Carteirinha.forma_pagamentos.map{|k,v| k}
+		forma = ''
 		case type
-		when "1" then self.forma_pagamento = formas[0] # Cartão de Crédito
-		when "2" then self.forma_pagamento = formas[1] # Boleto
-		when "3" then self.forma_pagamento = formas[3] # Débito on-line
-		when "4" then self.forma_pagamento = formas[4] # Saldo Pag-seguro
-		when "5" then self.forma_pagamento = formas[5] # Oi pago
-		when "7" then self.forma_pagamento = formas[6] # Depósito em conta
-		else self.forma_pagamento = formas[2] # a definir
-		end 
+		when "1" then forma = formas[0] # Cartão de Crédito
+		when "2" then forma = formas[1] # Boleto
+		when "3" then forma = formas[3] # Débito on-line
+		when "4" then forma = formas[4] # Saldo Pag-seguro
+		when "5" then forma = formas[5] # Oi pago
+		when "7" then forma = formas[6] # Depósito em conta
+		else forma = formas[2] # a definir
+		end
+		forma 
 	end
 
 	def self.show_status_carteirinha_apartir_do_status_pagamento status_pgto
