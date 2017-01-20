@@ -181,7 +181,7 @@ class Carteirinha < ActiveRecord::Base
 
 	def self.status_pagamento_to_i status_pgto
 		statuses = @@status_pagamentos.map{|k,v| k}
-		index = statuses.index(status_pgto.to_sym)
+		statuses.index(status_pgto.to_sym)
 	end
 
 	def self.status_pagamento_by_code code
