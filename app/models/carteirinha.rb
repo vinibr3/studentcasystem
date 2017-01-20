@@ -247,7 +247,7 @@ class Carteirinha < ActiveRecord::Base
 		lyt = self.layout_carteirinha
 		img = Magick::Image.read(lyt.anverso.url)
 		img = img.first
-		width = self.tamanho_fonte
+		width = lyt.tamanho_fonte
 		# Desenha os dados (texto) no layout
 		draw = Magick::Draw.new
 		draw.annotate(img, width, width, lyt.nome_posx, lyt.nome_posy, self.nome.upcase)                                            	 unless lyt.nome_posx.blank? || lyt.nome_posy.blank? 
