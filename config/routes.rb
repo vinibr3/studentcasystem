@@ -53,7 +53,7 @@ Rails.application.routes.draw do
   get 'carteirinhas/image', to:'carteirinhas#carteirinha_image'
   post 'carteirinhas/consulta',   to:"carteirinhas#consulta", as: :consulta_carteirinha
 
-  get 'certificados/:chave_acesso', to:"certificados#show"
+  get 'certificados/:chave_acesso', to:"certificados#show" # Não alterar
 
   resources :eventos, only: [:show]
 

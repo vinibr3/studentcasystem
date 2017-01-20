@@ -34,7 +34,7 @@ class Entidade < ActiveRecord::Base
 	validates :cep, length:{is: 8, wrong_length: "#{count} caracteres."}, numericality: true, allow_blank: true
 	validates :cidade, length: {maximum: 50, too_long: "Máximo de #{count} caracteres permitidos."}, allow_blank: true
 	validates :uf, length: {is: 2, wrong_length: "Máximo de 2 caracteres permitidos."}, format: {with: STRING_REGEX}, allow_blank: true
-	#validates :url_qr_code, length: {maximum: 70, too_long: "Máximo de #{count} caracteres permitidos."}, format:{with: URI.regexp} ,allow_blank: false
+	validates :url_qr_code, length: {maximum: 70, too_long: "Máximo de #{count} caracteres permitidos."}, format:{with: URI.regexp} ,allow_blank: false
 	validates :auth_info_access, length:{maximum: 100, too_long: "Máximo de #{count} caracteres permitidos."}, format:{with: URI.regexp}, allow_blank: false
 	validates :crl_dist_points, length:{maximum: 100, too_long: "Máximo de #{count} caracteres permitidos."}, format:{with: URI.regexp}, allow_blank: false
 	validates :dominio, length:{maximum: 100, too_long: "Máximo de #{count} caracteres permitidos."}, format:{with: URI.regexp}, allow_blank: false
@@ -63,9 +63,11 @@ class Entidade < ActiveRecord::Base
 
 	validates_associated :estudantes
 
-	validates_presence_of :nome, :sigla, :email, :valor_carteirinha, :auth_info_access, :crl_dist_points, :dominio 
+	validates_presence_of :nome, :sigla, :email, :valor_carteirinha, :auth_info_access, :crl_dist_points, :dominio, :url_qr_code 
 
-	before_create :config_url_qr_code_from_dominio, :config_usuario_and_token_certificado
+	before_validation :config_data_from_dominio
+	before_create :config_data_from_dominio
+	before_update :config_data_from_dominio
 
 	def self.instance
 		entidade = Entidade.last
@@ -77,13 +79,12 @@ class Entidade < ActiveRecord::Base
 	end
 
 	private 
-		def config_url_qr_code_from_dominio
-			self.url_qr_code = self.dominio.concat(url_for controller:"certificados", action: "show") if Entidade.count == 1
-		end
-
-		def config_usuario_and_token_certificado
+		def config_data_from_dominio 
+			self.url_qr_code = self.dominio.concat('/certificados/')
+			self.crl_dist_points = self.dominio.concat('/certificados/lista.crl')
+			self.auth_info_access = self.dominio.concat('/certificados/aia.crt')
 			self.usuario = self.sigla
-			self.token_certificado = Devise.friendly_token
+			self.token_certificado = Devise.friendly_token unless self.token_certificado 
 		end
 
 end

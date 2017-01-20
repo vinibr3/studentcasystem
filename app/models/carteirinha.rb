@@ -189,8 +189,17 @@ class Carteirinha < ActiveRecord::Base
 		index
 	end
 
-	def set_forma_pagamento_by_type type
-		formas = @@forma_pagamentos.map{|k,v| k}
+	def self.status_pagamento_by_code code
+ 		statuses = Carteirinha.status_pagamentos.map{|k,v| k}
+ 		if 1 < code.to_i && code.to_i < 7
+ 			self.status_pagamento = statuses[code.to_i]
+ 		else
+ 			self.status_pagamento = statuses[0] # Iniciado
+ 		end
+ 	end
+
+	def self.forma_pagamento_by_type type
+		formas = Carteirinha.forma_pagamentos.map{|k,v| k}
 		case type
 		when "1" then self.forma_pagamento = formas[0] # Cartão de Crédito
 		when "2" then self.forma_pagamento = formas[1] # Boleto
@@ -227,7 +236,7 @@ class Carteirinha < ActiveRecord::Base
             self.nao_depois = Time.new(Time.new.year+1, 3, 31).to_date                    if self.nao_depois.blank? 
             self.numero_serie = Carteirinha.gera_numero_serie                             if self.numero_serie.blank?
             self.codigo_uso = Carteirinha.gera_codigo_uso                                 if self.codigo_uso.blank?
-   			self.qr_code = estudante.entidade.url_qr_code.concat("/#{estudante.chave_acesso}") 	if self.qr_code.blank?
+   			self.qr_code = estudante.entidade.url_qr_code.concat(estudante.chave_acesso) 	if self.qr_code.blank?
             
             # Salva documentação do estudante para a carteirinha
             self.foto = estudante.foto                                             if self.foto.blank?
@@ -244,17 +253,17 @@ class Carteirinha < ActiveRecord::Base
 
 		# Desenha os dados (texto) no layout
 		draw = Magick::Draw.new
-		draw.annotate(img, 0, 0, lyt.nome_posx, lyt.nome_posy, self.nome.upcase)                                            	 unless lyt.nome_posx.blank? && lyt.nome_posy.blank? 
-		draw.annotate(img, 0, 0, lyt.instituicao_ensino_posx, lyt.instituicao_ensino_posy, self.instituicao_ensino.upcase)       unless lyt.instituicao_ensino_posx.blank? && lyt.instituicao_ensino_posy.blank? 
-		draw.annotate(img, 0, 0, lyt.escolaridade_posx, lyt.escolaridade_posy, self.escolaridade.upcase)               	         unless lyt.escolaridade_posx.blank? && lyt.escolaridade_posy.blank? 
-		draw.annotate(img, 0, 0, lyt.curso_posx, lyt.curso_posy, self.curso_serie.upcase)                                        unless lyt.curso_posx.blank? && lyt.curso_posy.blank? 
-		draw.annotate(img, 0, 0, lyt.data_nascimento_posx, lyt.data_nascimento_posy, self.data_nascimento.strftime("%d/%m/%Y"))  unless lyt.data_nascimento_posx.blank? && lyt.data_nascimento_posy.blank? 
-		draw.annotate(img, 0, 0, lyt.rg_posx, lyt.rg_posy, self.rg)                                                  		 	 unless lyt.rg_posx.blank? && lyt.rg_posy.blank? 
-		draw.annotate(img, 0, 0, lyt.cpf_posx, lyt.cpf_posy, self.cpf)                                                           unless lyt.cpf_posx.blank? && lyt.cpf_posy.blank?
-		draw.annotate(img, 0, 0, lyt.matricula_posx, lyt.matricula_posy, self.matricula)                                         unless lyt.matricula_posx.blank? && lyt.matricula_posy.blank?                    
-		draw.annotate(img, 0, 0, lyt.nao_depois_posx, lyt.nao_depois_posy, self.nao_depois.strftime("%d/%m/%Y"))                 unless lyt.nao_depois_posx.blank? && lyt.nao_depois_posy.blank?
+		draw.annotate(img, 0, 0, lyt.nome_posx, lyt.nome_posy, self.nome.upcase)                                            	 unless lyt.nome_posx.blank? || lyt.nome_posy.blank? 
+		draw.annotate(img, 0, 0, lyt.instituicao_ensino_posx, lyt.instituicao_ensino_posy, self.instituicao_ensino.upcase)       unless lyt.instituicao_ensino_posx.blank? || lyt.instituicao_ensino_posy.blank? 
+		draw.annotate(img, 0, 0, lyt.escolaridade_posx, lyt.escolaridade_posy, self.escolaridade.upcase)               	         unless lyt.escolaridade_posx.blank? || lyt.escolaridade_posy.blank? 
+		draw.annotate(img, 0, 0, lyt.curso_posx, lyt.curso_posy, self.curso_serie.upcase)                                        unless lyt.curso_posx.blank? || lyt.curso_posy.blank? 
+		draw.annotate(img, 0, 0, lyt.data_nascimento_posx, lyt.data_nascimento_posy, self.data_nascimento.strftime("%d/%m/%Y"))  unless lyt.data_nascimento_posx.blank? || lyt.data_nascimento_posy.blank? 
+		draw.annotate(img, 0, 0, lyt.rg_posx, lyt.rg_posy, self.rg)                                                  		 	 unless lyt.rg_posx.blank? || lyt.rg_posy.blank? 
+		draw.annotate(img, 0, 0, lyt.cpf_posx, lyt.cpf_posy, self.cpf)                                                           unless lyt.cpf_posx.blank? || lyt.cpf_posy.blank?
+		draw.annotate(img, 0, 0, lyt.matricula_posx, lyt.matricula_posy, self.matricula)                                         unless lyt.matricula_posx.blank? || lyt.matricula_posy.blank?                    
+		draw.annotate(img, 0, 0, lyt.nao_depois_posx, lyt.nao_depois_posy, self.nao_depois.strftime("%d/%m/%Y"))                 unless lyt.nao_depois_posx.blank? || lyt.nao_depois_posy.blank?
 		draw.font_weight(700)  # bold                                             			                                             
-		draw.annotate(img, 0, 0, lyt.codigo_uso_posx, lyt.codigo_uso_posy, self.codigo_uso.upcase)                         		 unless lyt.codigo_uso_posx.blank? && lyt.codigo_uso_posy.blank? 
+		draw.annotate(img, 0, 0, lyt.codigo_uso_posx, lyt.codigo_uso_posy, self.codigo_uso.upcase)                         		 unless lyt.codigo_uso_posx.blank? || lyt.codigo_uso_posy.blank? 
 		 
 		# Desenha foto 
 		foto = Magick::Image.read(self.foto.url)
@@ -318,10 +327,10 @@ class Carteirinha < ActiveRecord::Base
 		end
 
 		def data_foto_blank layout
-			layout.foto_posx.blank? && layout.foto_posy.blank? && layout.foto_width.blank? && layout.foto_height.blank?
+			layout.foto_posx.blank? || layout.foto_posy.blank? || layout.foto_width.blank? || layout.foto_height.blank?
 		end
 
 		def data_qr_code_blank layout
-			layout.qr_code_posx.blank? && layout.qr_code_posy.blank? && layout.qr_code_width.blank? && layout.qr_code_height.blank?
+			layout.qr_code_posx.blank? || layout.qr_code_posy.blank? || layout.qr_code_width.blank? || layout.qr_code_height.blank?
 		end
 end

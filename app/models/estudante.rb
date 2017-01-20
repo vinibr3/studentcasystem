@@ -74,6 +74,8 @@ class Estudante < ActiveRecord::Base
   validates_associated :cidade, allow_blank: true
   validates_associated :estado, allow_blank: true
   validates_associated :escolaridade, allow_blank: true
+  
+  validates_presence_of :entidade
 
 	public
 		def tem_carteirinha
