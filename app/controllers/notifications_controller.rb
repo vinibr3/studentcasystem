@@ -12,7 +12,7 @@ class NotificationsController < ApplicationController
           @carteirinha.status_pagamento = Carteirinha.status_pagamento_by_code(transaction.status.id)
           if carteirinha.status_pagamento_to_i <= 2 && transaction.status.id == "3" # status avançou para 'pago'
             # statuses = Carteirinha.status_versao_impressas.map{|k,v| k}
-            # carteirinha.update(status_versao_impressa: statuses[1]) # muda status para 'Documentação'
+             carteirinha.update(status_versao_impressa: statuses[1]) # muda status para 'Documentação'
           end
         else
           estudante.carteirinhas.build do |c|
