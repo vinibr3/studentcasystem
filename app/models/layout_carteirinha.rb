@@ -31,7 +31,7 @@ class LayoutCarteirinha < ActiveRecord::Base
 	                      :codigo_uso_posx, :codigo_uso_posy, :foto_posx, :foto_posy, :foto_width, 
 	                      :foto_height, :qr_code_posx, :qr_code_posy, :qr_code_width, :qr_code_height 
 	                      
-	validates_presence_of :anverso, :entidade, :tamnho_fonte                                  
+	validates_presence_of :anverso, :entidade, :tamanho_fonte                                  
 
 	def entidade_nome
 		self.entidade.nome if self.entidade
