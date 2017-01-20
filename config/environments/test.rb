@@ -57,6 +57,6 @@ Rails.application.configure do
     }, 
     url: 's3_domain_url',
     path: "/:class/:id/:attachment/:style/:filename",
-    s3_host_name: '#{ENV["AMAZON_S3_REGION"]}.amazonaws.com'
+    s3_host_name: "#{ENV["AMAZON_S3_REGION"]}.amazonaws.com"
   }
 end
