@@ -15,7 +15,7 @@ class NotificationsController < ApplicationController
              @carteirinha.update(status_versao_impressa: statuses[1]) # muda status para 'Documentação'
           end
         else
-          estudante.carteirinhas.build do |c|
+          estudante.carteirinhas.create! do |c|
             c.nome = estudante.nome                                             
             c.rg = estudante.rg
             c.cpf = estudante.cpf
