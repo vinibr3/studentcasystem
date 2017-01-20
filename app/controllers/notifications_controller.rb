@@ -7,7 +7,7 @@ class NotificationsController < ApplicationController
     if transaction.errors.empty?
       estudante = Estudante.find(transaction.reference)
       if estudante
-        @carteirinha = estudante.carteirinhas.where(transaction_id: transaction.code.to_s)
+        @carteirinha = estudante.carteirinhas.where(transaction_id: transaction.code.to_s).first
         if @carteirinha
           @carteirinha.status_pagamento = Carteirinha.status_pagamento_by_code(transaction.status.id)
           if carteirinha.status_pagamento_to_i <= 2 && transaction.status.id == "3" # status avançou para 'pago'
