@@ -247,20 +247,21 @@ class Carteirinha < ActiveRecord::Base
 		lyt = self.layout_carteirinha
 		img = Magick::Image.read(lyt.anverso.url)
 		img = img.first
-		width = lyt.tamanho_fonte
+		
 		# Desenha os dados (texto) no layout
 		draw = Magick::Draw.new
-		draw.annotate(img, width, width, lyt.nome_posx, lyt.nome_posy, self.nome.upcase)                                            	 unless lyt.nome_posx.blank? || lyt.nome_posy.blank? 
-		draw.annotate(img, width, width, lyt.instituicao_ensino_posx, lyt.instituicao_ensino_posy, self.instituicao_ensino.upcase)       unless lyt.instituicao_ensino_posx.blank? || lyt.instituicao_ensino_posy.blank? 
-		draw.annotate(img, width, width, lyt.escolaridade_posx, lyt.escolaridade_posy, self.escolaridade.upcase)               	         unless lyt.escolaridade_posx.blank? || lyt.escolaridade_posy.blank? 
-		draw.annotate(img, width, width, lyt.curso_posx, lyt.curso_posy, self.curso_serie.upcase)                                        unless lyt.curso_posx.blank? || lyt.curso_posy.blank? 
-		draw.annotate(img, width, width, lyt.data_nascimento_posx, lyt.data_nascimento_posy, self.data_nascimento.strftime("%d/%m/%Y"))  unless lyt.data_nascimento_posx.blank? || lyt.data_nascimento_posy.blank? 
-		draw.annotate(img, width, width, lyt.rg_posx, lyt.rg_posy, self.rg)                                                  		 	 unless lyt.rg_posx.blank? || lyt.rg_posy.blank? 
-		draw.annotate(img, width, width, lyt.cpf_posx, lyt.cpf_posy, self.cpf)                                                           unless lyt.cpf_posx.blank? || lyt.cpf_posy.blank?
-		draw.annotate(img, width, width, lyt.matricula_posx, lyt.matricula_posy, self.matricula)                                         unless lyt.matricula_posx.blank? || lyt.matricula_posy.blank?                    
-		draw.annotate(img, width, width, lyt.nao_depois_posx, lyt.nao_depois_posy, self.nao_depois.strftime("%d/%m/%Y"))                 unless lyt.nao_depois_posx.blank? || lyt.nao_depois_posy.blank?
+		draw.font_size = lyt.tamanho_fonte
+		draw.annotate(img, 0, 0, lyt.nome_posx, lyt.nome_posy, self.nome.upcase)                                            	 unless lyt.nome_posx.blank? || lyt.nome_posy.blank? 
+		draw.annotate(img, 0, 0, lyt.instituicao_ensino_posx, lyt.instituicao_ensino_posy, self.instituicao_ensino.upcase)       unless lyt.instituicao_ensino_posx.blank? || lyt.instituicao_ensino_posy.blank? 
+		draw.annotate(img, 0, 0, lyt.escolaridade_posx, lyt.escolaridade_posy, self.escolaridade.upcase)               	         unless lyt.escolaridade_posx.blank? || lyt.escolaridade_posy.blank? 
+		draw.annotate(img, 0, 0, lyt.curso_posx, lyt.curso_posy, self.curso_serie.upcase)                                        unless lyt.curso_posx.blank? || lyt.curso_posy.blank? 
+		draw.annotate(img, 0, 0, lyt.data_nascimento_posx, lyt.data_nascimento_posy, self.data_nascimento.strftime("%d/%m/%Y"))  unless lyt.data_nascimento_posx.blank? || lyt.data_nascimento_posy.blank? 
+		draw.annotate(img, 0, 0, lyt.rg_posx, lyt.rg_posy, self.rg)                                                  		 	 unless lyt.rg_posx.blank? || lyt.rg_posy.blank? 
+		draw.annotate(img, 0, 0, lyt.cpf_posx, lyt.cpf_posy, self.cpf)                                                           unless lyt.cpf_posx.blank? || lyt.cpf_posy.blank?
+		draw.annotate(img, 0, 0, lyt.matricula_posx, lyt.matricula_posy, self.matricula)                                         unless lyt.matricula_posx.blank? || lyt.matricula_posy.blank?                    
+		draw.annotate(img, 0, 0, lyt.nao_depois_posx, lyt.nao_depois_posy, self.nao_depois.strftime("%d/%m/%Y"))                 unless lyt.nao_depois_posx.blank? || lyt.nao_depois_posy.blank?
 		draw.font_weight(700)  # bold                                             			                                             
-		draw.annotate(img, width, width, lyt.codigo_uso_posx, lyt.codigo_uso_posy, self.codigo_uso.upcase)                         		 unless lyt.codigo_uso_posx.blank? || lyt.codigo_uso_posy.blank? 
+		draw.annotate(img, 0, 0, lyt.codigo_uso_posx, lyt.codigo_uso_posy, self.codigo_uso.upcase)                         		 unless lyt.codigo_uso_posx.blank? || lyt.codigo_uso_posy.blank? 
 		 
 		# Desenha foto 
 		foto = Magick::Image.read(self.foto.url)
