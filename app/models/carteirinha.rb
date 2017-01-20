@@ -250,7 +250,7 @@ class Carteirinha < ActiveRecord::Base
 		
 		# Desenha os dados (texto) no layout
 		draw = Magick::Draw.new
-		draw.font_size = lyt.tamanho_fonte
+		draw.pointsize = lyt.tamanho_fonte
 		draw.annotate(img, 0, 0, lyt.nome_posx, lyt.nome_posy, self.nome.upcase)                                            	 unless lyt.nome_posx.blank? || lyt.nome_posy.blank? 
 		draw.annotate(img, 0, 0, lyt.instituicao_ensino_posx, lyt.instituicao_ensino_posy, self.instituicao_ensino.upcase)       unless lyt.instituicao_ensino_posx.blank? || lyt.instituicao_ensino_posy.blank? 
 		draw.annotate(img, 0, 0, lyt.escolaridade_posx, lyt.escolaridade_posy, self.escolaridade.upcase)               	         unless lyt.escolaridade_posx.blank? || lyt.escolaridade_posy.blank? 
