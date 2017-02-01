@@ -17,6 +17,8 @@ gem 'therubyrhino'
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
+# Remove bugs de turbolinks para jquery
+#gem 'jquery-turbolinks', '~> 2.1'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
@@ -33,7 +35,6 @@ gem 'devise', '~> 3.4.1'
 gem 'devise-i18n'
 # magnific-popup
 gem 'magnific-popup-rails', '~> 1.1'
-
 # Oferece funcionalidades para serialização de modelos
 gem 'active_model_serializers', '~> 0.9.5'
 # Graph Facebook API rails
@@ -75,6 +76,10 @@ gem 'aws-sdk', '< 2.0' # Erro uninitialized constant Paperclip::Storage::S3:AWS 
 gem 'active_admin_datetimepicker', '~> 0.3.0'
 # Processamento em background
 #gem 'sidekiq', '~> 4.2', '>= 4.2.9'
+# Permite upload file via ajax
+gem 'remotipart', '~> 1.3', '>= 1.3.1'
+# Jquery FileUpload
+gem 'jquery-fileupload-rails', '~> 0.4.7'
 
 group :production do
  gem 'unicorn'

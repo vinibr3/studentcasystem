@@ -14,4 +14,7 @@
 //= require bootstrap-sprockets
 //= require turbolinks
 //= require magnific-popup
+//= require jquery.remotipart
+//= require jquery-fileupload/basic
+//= require bootstrap-filestyle.min.js
 //= require_tree .

@@ -7,7 +7,7 @@
 					</button>
 					<h4 class="modal-title"> Editar Dados Cadastrais</h4>
 				</div>
-				<%= form_for(@estudante, html:{method: :put, class:'form-horizontal', role: 'form', :multipart => true}) do |f| %>
+				<%= form_for(@estudante, html:{method: :put, class:'form-horizontal', role: 'form', :multipart => true, id: 'dados_do_estudante'}) do |f| %>
 				<div class="modal-body>" style="margin-top: 15px;">
 						<div class="form-group">
 							<%= f.label :nome, :class=>'control-label col-sm-3 col-sm-offset-1' %>
@@ -38,32 +38,20 @@
 							<%= f.label :cpf, "CPF", :class=>'control-label col-sm-3 col-sm-offset-1'%>
 							<div class="col-sm-7"><%= f.text_field :cpf, :class=>'form-control'%></div>
 						</div>
-						<div class="field form-group">
+						<div class="form-group">
 							<%= f.label "Gênero", :class=>'control-label col-sm-3 col-sm-offset-1'%>
 							<div class="col-sm-7">
-								<%= f.radio_button :sexo, 'Masculino' %>Masculino </span>&nbsp;
-								<%= f.radio_button :sexo, 'Feminino' %>Feminino </span>
+								<%= f.radio_button :sexo, 'Masculino' %><span> Masculino </span>&nbsp;
+								<%= f.radio_button :sexo, 'Feminino' %><span>Feminino </span>
 							</div>
 						</div>
-						<div class="field form-group">
+						<div class="form-group">
 							<%= f.label :telefone, :class=>'control-label col-sm-3 col-sm-offset-1'%>
 							<div class="col-sm-7"><%= f.text_field :telefone, :class=>'form-control'%></div>
 						</div>
-						<div class="field form-group">
+						<div class="form-group">
 							<%= f.label :celular, :class=>'control-label col-sm-3 col-sm-offset-1'%>
 							<div class="col-sm-7"><%= f.text_field :celular, :class=>'form-control'%></div>
-						</div>
-						<div class="field form-group">
-							<%= f.label :foto, :class=>'control-label col-sm-3 col-sm-offset-1'%>
-							<div class="col-sm-7"><%= f.file_field :foto %></div>
-						</div>
-						<div class="field form-group">
-							<%= f.label :xerox_rg, "Xerox RG", :class=>'control-label col-sm-3 col-sm-offset-1'%>
-							<div class="col-sm-7"><%= f.file_field :xerox_rg %></div>
-						</div>
-						<div class="field form-group">
-							<%= f.label :xerox_cpf, "Xerox CPF", :class=>'control-label col-sm-3 col-sm-offset-1'%>
-							<div class="col-sm-7"><%= f.file_field :xerox_cpf %></div>
 						</div>
 				</div>
 				<div class="modal-footer">

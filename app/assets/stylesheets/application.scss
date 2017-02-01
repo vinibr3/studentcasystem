@@ -49,3 +49,22 @@ body{
     color: #468847;
     text-align: left;
  }
+
+ .progress-input-file {
+    margin: 4px 0px 0px 0px;
+    height: 12px;
+}
+
+.progress-bar-input-file{
+    font-size: 11px;
+    line-height: 15px;
+    min-width: 2em;
+}
+
+.filename-progressbar {
+    font-size: 0.8em;
+}
+
+.filename-link {
+    font-size: 1em;
+}

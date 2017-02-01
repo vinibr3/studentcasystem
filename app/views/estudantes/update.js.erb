@@ -1,0 +1,14 @@
+<% if current_estudante.errors.empty? %>
+	<% if @atribute_updated == 'foto' %>
+		$("#link-foto").html("<%= j link_to current_estudante.foto_file_name, current_estudante.foto.url %>");
+	<% elsif @atribute_updated == 'xerox_rg' %>
+		$("#link-xerox-rg").html("<%= j link_to current_estudante.xerox_rg_file_name, current_estudante.xerox_rg.url %>");
+	<% elsif @atribute_updated == 'xerox_cpf' %>
+		$("#link-xerox-cpf").html("<%= j link_to current_estudante.xerox_cpf_file_name, current_estudante.xerox_cpf.url %>");
+	<% elsif @atribute_updated == 'comprovante_matricula' %>
+		$("#link-comprovante-matricula").html("<%= j link_to current_estudante.comprovante_matricula_file_name, current_estudante.comprovante_matricula.url %>");
+	<% end %>
+<% else %>
+	alert("Não foi possível salvar alterações. Errors: <%= @estudante_errors %>");
+<% end %>
+

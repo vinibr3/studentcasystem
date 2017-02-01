@@ -26,15 +26,6 @@
 							<td><strong>Telefone:&nbsp; </strong><%=@estudante.telefone %>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 							<td colspan="2"><strong>Celular:&nbsp; </strong><%=@estudante.celular %> </td> 
 						</tr>
-						<tr>
-							<td colspan="3"><strong>Foto:&nbsp; </strong><%= @estudante.foto_file_name.nil? ? '*' : @estudante.foto_file_name %> </td>
-						</tr>
-						<tr>
-							<td colspan="3"><strong>Xerox RG:&nbsp; </strong><%= @estudante.xerox_rg_file_name.nil? ? '*' : @estudante.xerox_rg_file_name %> </td> 
-						</tr>
-						<tr>
-							<td colspan="3"><strong>Xerox CPF:&nbsp; </strong><%= @estudante.xerox_cpf_file_name.nil? ? '*' : @estudante.xerox_cpf_file_name %> </td> 
-						</tr>
 					</table>
 				</div>
 				<div class="panel-heading">
@@ -77,4 +68,154 @@
 						</tr>
 					</table>
 				</div>
+				<div class="panel-heading">
+					<span class="glyphicon glyphicon-paperclip" style="color: #FFF"> </span>&nbsp;Anexos
+				</div>
+				<div class="panel-body" style="word-break: break-all;white-space: normal;">
+					<%= form_for(@estudante, html:{method: :put, class:'form-horizontal', role: 'form', :multipart => true, remote: true}) do |f| %>
+						<div class="form-group" id="form-group-foto">
+								<div class="col-sm-4">
+									<%= f.file_field :foto, accept:'image/png,image/jpeg'%>
+								</div>
+								<div class="col-sm-8">
+									<div class="link" id="link-foto">
+										<%= link_to @estudante.foto_file_name.blank? ? "" : @estudante.foto_file_name , @estudante.foto.url %>
+									</div>
+									<span class="input-placeholder"> </span>
+									<div class="progress progress-input-file hide" id="progress-foto">
+										<div class="progress-bar progress-bar-input-file progress-bar-success progress-bar-striped" role="progress-bar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style=""> 0% </div>
+									</div>
+								</div>
+						</div>
+						<div class="form-group" id="form-group-xerox-rg">
+								<div class="col-sm-4">
+									<%= f.file_field :xerox_rg, accept:'image/png,image/jpeg,application/pdf' %>
+								</div>
+								<div class="col-sm-8">
+									<div class="link" id="link-xerox-rg">
+										<%= link_to @estudante.xerox_rg_file_name.blank? ? "" : @estudante.xerox_rg_file_name, @estudante.xerox_rg.url, :target=>"_blank" %>
+									</div>
+									<span class="input-placeholder"> </span>
+									<div class="progress progress-input-file hide" id="progress-xerox-rg">
+										<div class="progress-bar progress-bar-input-file progress-bar-success progress-bar-striped" role="progress-bar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style=""> 0% </div>
+									</div>
+								</div>
+						</div>
+						<div class="form-group" id="form-group-xerox-cpf">
+								<div class="col-sm-4">
+									<%= f.file_field :xerox_cpf %>
+								</div>
+								<div class="col-sm-8">
+									<div class="link" id="link-xerox-cpf">
+										<%= link_to @estudante.xerox_cpf_file_name.blank? ? "" : @estudante.xerox_cpf_file_name , @estudante.xerox_cpf.url, :target=>"_blank" %>
+									</div>
+									<span class="input-placeholder"> </span>
+									<div class="progress progress-input-file hide" id="progress-xerox-cpf">
+										<div class="progress-bar progress-bar-input-file progress-bar-success progress-bar-striped" role="progress-bar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style=""> 0% </div>
+									</div>
+								</div>
+						</div>
+						<div class="form-group" id="form-group-comp-matricula">
+								<div class="col-sm-4">
+									<%= f.file_field :comprovante_matricula %>
+								</div>
+								<div class="col-sm-8">
+									<div class="link" id="link-comprovante-matricula">
+										<%= link_to @estudante.comprovante_matricula_file_name.blank? ? "" : @estudante.comprovante_matricula_file_name, @estudante.comprovante_matricula.url, :target=>"_blank" %>
+									</div>
+									<span class="input-placeholder"> </span>
+									<div class="progress progress-input-file hide" id="progress-comp-matricula">
+										<div class="progress-bar progress-bar-input-file progress-bar-success progress-bar-striped" role="progress-bar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style=""> 0% </div>
+									</div>
+								</div>
+						</div>
+					<% end %>
+				</div>
 			</div>
+			<script type="text/javascript">
+			
+				$(document).on('page:change', function() {
+				  
+				 $('#estudante_foto').filestyle(filestyleconf("Foto", "glyphicon glyphicon-picture"));
+				 $('#estudante_xerox_rg').filestyle(filestyleconf("Xerox RG", "glyphicon glyphicon-file"));
+				 $('#estudante_xerox_cpf').filestyle(filestyleconf("Xerox CPF", "glyphicon glyphicon-file"));
+				 $('#estudante_comprovante_matricula').filestyle(filestyleconf("Comp. Matrícula", "glyphicon glyphicon-file"));
+
+
+				  function fileuploadbind(elem){
+				 	
+				 	var wrapper = elem.find('.progress-input-file'); console.log("Wrapper "+wrapper);
+					var link_file_name = elem.find('.input-placeholder');
+					var progress_bar = wrapper.find('.progress-bar-input-file');console.log("progress "+progress_bar)
+
+				 	elem.fileupload({
+				    dataType: 'script',
+				  	add: function(e, data){
+				      resetProgress();
+				      types = /(\.|\/)(jpe?g|png|pdf)$/i;
+							file = data.files[0];
+							if(types.test(file.type) || types.test(file.name)){
+								if(file.size/1024 > 1024){
+									alert("Arquivo de ser menor que 1MB.");
+								}else{
+									link_file_name.text(file.name);
+									data.submit();
+								}
+							}else{
+								alert("Extensão de arquivos invlálidas. Permitidos: .png, .jpeg, .pdf");
+							}
+				    }});
+				  
+					  elem.on('fileuploadstart', function(e){
+					    progress_bar.css('width', '0%').text('0%');
+					    wrapper.removeClass('hide').addClass('show');
+					    console.log("Upload Iniciado");
+					  });
+					  
+					  elem.on('fileuploaddone', function(e, data){
+					   	hideItens();
+					   	console.log("Upload Concluído");
+					  });
+					  
+					  elem.on('fileuploadprogressall', function(e,data){
+					    var progress = parseInt(data.loaded / data.total * 100, 10);
+					    progress_bar.css('width', progress+'%').text(progress+'%');
+					    console.log("Progress All");
+					  });
+
+					  elem.on('fileuploadfail', function(e, data){
+					  	resetProgress();
+					  	alert("Erro ao enviar arquivo");
+					  });
+
+					  function resetProgress(){
+					  	progress_bar.css('width','0%').text('0%').removeClass('hide').addClass('show');
+					  	link_file_name.text('').removeClass('hide').addClass('show');
+					  }
+
+					  function hideItens(){
+					  	wrapper.removeClass('show').addClass('hide');
+					  	link_file_name.removeClass('show').addClass('hide');
+					  }
+				  }
+
+				 function filestyleconf(btnText, iconName){
+				 	return {
+				      input: false,
+				      buttonText: btnText,
+				      buttonName: 'btn-info',
+				      iconName: iconName,
+				      buttonBefore: true,
+				      badge: false
+				    }
+				 }
+
+				 fileuploadbind($("#form-group-foto"));
+				 fileuploadbind($("#form-group-xerox-rg"));
+				 fileuploadbind($("#form-group-xerox-cpf"));
+				 fileuploadbind($("#form-group-comp-matricula"));
+
+				 $('#link-foto').find("a").magnificPopup({type: 'image'});
+
+				});
+			</script>
